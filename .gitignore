@@ -1,0 +1,6 @@
+/vendor/*
+/data/*
+*.md
+*.xml
+*.phar
+

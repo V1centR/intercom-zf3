@@ -1,0 +1,124 @@
+body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+}
+
+.clear{
+    clear: both;
+}
+
+.container1320{
+    max-width: 1320px;
+    margin: auto;
+    padding: 15px;
+}
+
+.lateral-nav{
+
+    /*somente na página de categoria*/
+
+}
+
+.frame-product{
+    border: 1px solid #f5f5f5;
+    width: 23%;
+    height: 360px;
+    padding: 2px;
+    float: left;
+    margin-right: 12px;
+}
+
+.frame-product .product-thumb {
+    background-color: #f5f5f5;
+    height: 60%;
+
+}
+
+.frame-product .product-title{
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.frame-product .prev-price {
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 6px;
+}
+
+.frame-product .current-price {
+    font-size: 28px;
+    margin-top: 6px;
+}
+
+.frame-product .drop-price {
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+footer{
+    background-color: #3c3c3c;
+    color: #ffffff;
+    height: 500px;
+}
+
+.info-container{
+    margin: 0 auto;
+    max-width: 1320px;
+}
+
+.info-container li{
+    list-style: none;
+}
+
+.info{
+    width: 20%;
+    padding-top: 100px;
+    margin-left: 10px;
+    float: left;
+}
+
+.info.first{
+    margin-left: 1%;
+}
+
+ul li.title{
+    font-size: 23px;
+    list-style: none;
+}
+
+.credit-cards-container{
+
+    border: 1px solid #ffffff;
+    padding: 10px;
+}
+
+/***################################ ****/
+
+.zf-green {
+    color: #68b604;
+}
+
+.btn-success {
+    background-color: #57a900;
+    background-image: -moz-linear-gradient(top, #70d900, #57a900);
+    background-image: -ms-linear-gradient(top, #70d900, #57a900);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#70d900), to(#57a900));
+    background-image: -webkit-linear-gradient(top, #70d900, #57a900);
+    background-image: -o-linear-gradient(top, #70d900, #57a900);
+    background-image: linear-gradient(top, #70d900, #57a900);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#70d900', endColorstr='#57a900', GradientType=0);
+}
+
+.btn-success:hover,
+.btn-success:active,
+.btn-success.active,
+.btn-success.disabled,
+.btn-success[disabled] {
+    background-color: #57a900;
+}
+
+div.container a.navbar-brand > img {
+    display: inline;
+    margin-right: 4px;
+    margin-top: -2px;
+}

@@ -19,9 +19,9 @@ return [
     'Zend\Hydrator',
     'Zend\Router',
     'Zend\Validator',
-//    'Application',
     'ZendDeveloperTools',
     'DoctrineModule',
     'DoctrineORMModule',
+//    'Application',
     'Shopping',
 ];

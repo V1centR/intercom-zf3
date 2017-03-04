@@ -17,7 +17,7 @@ return array(
             ),
         )
     ),
-    'dependencies' => [
+    'service_manager' => [
 
         'factories' => [
 

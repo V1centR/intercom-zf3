@@ -2,38 +2,38 @@
 
 namespace Shopping\Controller;
 
+use Doctrine\ORM\EntityManager;
+use DoctrineModule\ServiceFactory\AbstractDoctrineServiceFactory;
 use Interop\Container\ContainerInterface;
+use Shopping\Entity\Produto;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\ServiceManager\ServiceManager;
 use Zend\View\Model\ViewModel;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
-use Shopping\Entity\Produto;
+
 
 class IndexController extends AbstractActionController
 {
 
     /**
+     * Entity manager
      * @var Doctrine/EntityManager
      */
-    protected $em;
+    private $entityManager;
 
-//    public function __construct($em)
-//    {
-//        $this->em = $em;
-//
-//    }
+    public function __construct($entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
 
     public function indexAction()
     {
+        $query = $this->entityManager->getRepository(Produto::class)
+            ->findAll();
 
-//       $em = $this->em('doctrine.entity_manager.orm_default');
-//        $em = $this->get('doctrine.entitymanager.orm_default');
-//
-        $testeProdutos = $this->em->getRepository(Produto::class)->findAll();
-
-
-     print_r($testeProdutos);
+       foreach ($query as $key){
+           echo $key->getNome()."<br>";
+       }
 
         return new ViewModel([
             'slide1' => 'OK',

@@ -10,7 +10,6 @@ namespace Shopping;
 use Shopping\Controller\Factory\IndexControllerFactory;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
-use Zend\ServiceManager\Factory\InvokableFactory;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 
 return [
@@ -49,12 +48,20 @@ return [
         'doctype'                  => 'HTML5',
         'not_found_template'       => 'error/404',
         'exception_template'       => 'error/index',
+//        'template_map' => [
+//            'layout/layout'           => __DIR__ . '/../view/layout/layout.phtml',
+//            'shopping/index/index' => __DIR__ . '/../view/shopping/index/index.phtml',
+//            'error/404'               => __DIR__ . '/../view/error/404.phtml',
+//            'error/index'             => __DIR__ . '/../view/error/index.phtml',
+//        ],
         'template_map' => [
-            'layout/layout'           => __DIR__ . '/../view/layout/layout.phtml',
-            'shopping/index/index' => __DIR__ . '/../view/shopping/index/index.phtml',
-            'error/404'               => __DIR__ . '/../view/error/404.phtml',
-            'error/index'             => __DIR__ . '/../view/error/index.phtml',
+            'layout/layout'           => __DIR__ . '/../view/templates/'.TEMPLATE.'/layout/layout.phtml',
+            'shopping/index/index' => __DIR__ . '/../view/templates/'.TEMPLATE.'/index.phtml',
+            'error/404'               => __DIR__ . '/../view/templates/'.TEMPLATE.'/error/404.phtml',
+            'error/index'             => __DIR__ . '/../view/templates/'.TEMPLATE.'/error/index.phtml',
+            'menu' => __DIR__ . '/../view/templates/'.TEMPLATE.'/menu.phtml',
         ],
+
         'template_path_stack' => [
             __DIR__ . '/../view',
         ],

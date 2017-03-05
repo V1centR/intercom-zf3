@@ -11,21 +11,21 @@
     <div class="carousel-inner" role="listbox">
 
         <?php
-            $setActive = 0;
-            $slideActive = '';
+        $setActive = 0;
+        $slideActive = '';
 
-            foreach ($slides as $slideData){
-                if($setActive === 0){
-                    $slideActive = ' active';
-                }
-                echo '
+        foreach ($slides as $slideData){
+            if($setActive === 0){
+                $slideActive = ' active';
+            }
+            echo '
                     <div class="item '.$slideActive.'">
                        <img src="/directory/'.DB_PROFILE.'/images/'.$slideData->getImagemId()->getId().'.'.$slideData->getImagemId()->getExt().'">
                     </div>
                 ';
-                $setActive = 1;
-                $slideActive = '';
-            }
+            $setActive = 1;
+            $slideActive = '';
+        }
         ?>
     </div>
 
@@ -48,12 +48,12 @@
 </div>
 
 <div class="panel panel-default">
-<!--    #####Frame de produtos #############-->
+    <!--    #####Frame de produtos #############-->
     <div class="panel-body">
         <?php
 
-            foreach ($products as $productInfo){
-                echo '                
+        foreach ($products as $productInfo){
+            echo '                
                         <div class="frame-product">
                             <div class="product-thumb">photo</div>
                             <div class="product-title">'.substr($productInfo["nome"],0,50).'</div>
@@ -63,12 +63,12 @@
                         </div>                
                 
                 ';
-            }
+        }
         ?>
         <div class="clear"></div>
 
     </div>
-<!--    ### final frame produtos ####-->
+    <!--    ### final frame produtos ####-->
 </div>
 
 
@@ -78,26 +78,25 @@
     </div>
 </div>
 
-    <div class="panel panel-default">
-        <!--    #####Frame de produtos #############-->
-        <div class="panel-body">
-            <?php
+<div class="panel panel-default">
+    <!--    #####Frame de produtos #############-->
+    <div class="panel-body">
+        <?php
 
-            foreach ($products as $productInfo){
-                echo '                
-                        <div class="frame-product">
-                            <div class="product-thumb">photo</div>
-                            <div class="product-title">'.substr($productInfo["nome"],0,50).'</div>
-                            <div class="prev-price">De <strike>R$ '.$productInfo["precounitario"].'</strike></div>
-                            <div class="current-price">R$ '.$productInfo["precopromocional"].'</div>
-                            <div class="drop-price">10x '.$productInfo["precopromocional"] / 10 .' sem juros!</div>
-                        </div>                
-                
+        foreach ($products as $productInfo){
+            echo '                
+                    <div class="frame-product">
+                        <div class="product-thumb">photo</div>
+                        <div class="product-title">'.substr($productInfo["nome"],0,50).'</div>
+                        <div class="prev-price">De <strike>R$ '.$productInfo["precounitario"].'</strike></div>
+                        <div class="current-price">R$ '.$productInfo["precopromocional"].'</div>
+                        <div class="drop-price">10x '.$productInfo["precopromocional"] / 10 .' sem juros!</div>
+                    </div>                
                 ';
-            }
-            ?>
-            <div class="clear"></div>
+        }
+        ?>
+        <div class="clear"></div>
 
-        </div>
-        <!--    ### final frame produtos ####-->
     </div>
+    <!--    ### final frame produtos ####-->
+</div>

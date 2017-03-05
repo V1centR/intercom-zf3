@@ -166,10 +166,5 @@ class Banners
         $this->imagemid = $imagemid;
         return $this;
     }
-
-
-
-
-
 }
 

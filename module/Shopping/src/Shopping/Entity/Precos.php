@@ -69,6 +69,130 @@ class Precos
      */
     private $tabelaprecoid;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
+    /**
+     * @param int $id
+     * @return Precos
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrecounitario()
+    {
+        return $this->precounitario;
+    }
+
+    /**
+     * @param string $precounitario
+     * @return Precos
+     */
+    public function setPrecounitario($precounitario)
+    {
+        $this->precounitario = $precounitario;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPromocao()
+    {
+        return $this->promocao;
+    }
+
+    /**
+     * @param string $promocao
+     * @return Precos
+     */
+    public function setPromocao($promocao)
+    {
+        $this->promocao = $promocao;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrecopromocional()
+    {
+        return $this->precopromocional;
+    }
+
+    /**
+     * @param string $precopromocional
+     * @return Precos
+     */
+    public function setPrecopromocional($precopromocional)
+    {
+        $this->precopromocional = $precopromocional;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPercdesconto()
+    {
+        return $this->percdesconto;
+    }
+
+    /**
+     * @param string $percdesconto
+     * @return Precos
+     */
+    public function setPercdesconto($percdesconto)
+    {
+        $this->percdesconto = $percdesconto;
+        return $this;
+    }
+
+    /**
+     * @return Produto
+     */
+    public function getProdutoid()
+    {
+        return $this->produtoid;
+    }
+
+    /**
+     * @param Produto $produtoid
+     * @return Precos
+     */
+    public function setProdutoid($produtoid)
+    {
+        $this->produtoid = $produtoid;
+        return $this;
+    }
+
+    /**
+     * @return Tabelaprecos
+     */
+    public function getTabelaprecoid()
+    {
+        return $this->tabelaprecoid;
+    }
+
+    /**
+     * @param Tabelaprecos $tabelaprecoid
+     * @return Precos
+     */
+    public function setTabelaprecoid($tabelaprecoid)
+    {
+        $this->tabelaprecoid = $tabelaprecoid;
+        return $this;
+    }
 }
 

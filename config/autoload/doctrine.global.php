@@ -12,7 +12,7 @@ return array(
                 'params' => array(
                     'host' => '127.0.0.1',
                     'port' => '3306',
-                    'dbname' => 'db1',
+                    'dbname' => DB_PROFILE,
                     'charset'  => 'utf8',
                 ),
             ),

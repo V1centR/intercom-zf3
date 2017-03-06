@@ -9,8 +9,10 @@ namespace Shopping;
 
 use Shopping\Controller\Factory\IndexControllerFactory;
 use Zend\Router\Http\Literal;
+use Shopping\view\varejo\Helper\Menu;
 use Zend\Router\Http\Segment;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
     'router' => [
@@ -42,6 +44,26 @@ return [
             Controller\IndexController::class => IndexControllerFactory::class,
         ],
     ],
+
+    'view_helpers' => [
+
+        'factories' => [
+           Menu::class => InvokableFactory::class,
+        ],
+        'aliases' => [
+            'mainMenu' => Menu::class,
+        ]
+    ],
+
+//    'service_manager' => [
+//
+//        'services' => [
+//
+//
+//        ]
+//
+//    ],
+
     'view_manager' => [
         'display_not_found_reason' => true,
         'display_exceptions'       => true,

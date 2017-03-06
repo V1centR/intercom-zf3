@@ -3,6 +3,7 @@
 namespace Shopping\Controller;
 
 use Shopping\Entity\Banners;
+use Shopping\Entity\Categorias;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,6 +19,7 @@ class IndexController extends AbstractActionController
     public function __construct($entityManager)
     {
         $this->entityManager = $entityManager;
+        $getCategorias = $this->entityManager->getRepository(Categorias::class)->getCategorias();
     }
 
     public function indexAction()
@@ -41,6 +43,7 @@ class IndexController extends AbstractActionController
 //        foreach ($bannersSlides as $slideData){
 //            echo $slideData->getImagemId()->getId()."<br>";
 //        }
+
 
         return new ViewModel([
             'slide1' => 'OK',

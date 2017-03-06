@@ -24,6 +24,7 @@ ul.dropdown a,
 ul.dropdown span {
  display: block;
  padding: 5px 30px;
+ height: 60px;
 }
 
 
@@ -35,7 +36,9 @@ ul.dropdown li {
 
 ul.dropdown ul a,
 ul.dropdown ul span { /* POI: override abstract a, span */
- padding: 8px;
+
+	background-color: #ffffff;
+	height: 50px;
 }
 
 
@@ -53,7 +56,8 @@ ul.dropdown ul *.dir {
 /* -- Custom -- */
 
 ul.dropdown ul a {
- width: 133px;
+ width: 200px;
+ padding: 12px;
 }
 
 ul.dropdown ul a.dir {
@@ -91,5 +95,15 @@ ul.dropdown li:hover > a.dir:hover {
 ul.submenu li {
 	background-color: #FFFFFF;
 	color: #1a1a1a;
+
+}
+
+ul.dropdown-horizontal li a.dir{
+
+	/*background-color: #ff0000;*/
+	vertical-align: bottom;
+	text-align: center;
+	padding-top: 10px;
+	width: 120px;
 
 }

@@ -7,6 +7,11 @@
 
 namespace Shopping;
 
+use Zend\ModuleManager\ModuleManager;
+use Zend\Mvc\MvcEvent;
+use Zend\ServiceManager\ServiceManager;
+use Shopping\Entity\Categorias;
+
 class Module
 {
     const VERSION = '3.0.2dev';
@@ -15,4 +20,22 @@ class Module
     {
         return include __DIR__ . '/../config/module.config.php';
     }
+
+
+//    public function onBootstrap(MvcEvent $e)
+//    {
+//        $services = $e->getApplication()->getServiceManager();
+//
+//        $eventManager = $e->getApplication()->getEventManager();
+//        $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'getMenuSettings'), -100);
+//    }
+//
+//
+//    // Classe responsavel por renderizar e montar o menu
+//    public function getMenuSettings(){
+//
+//        echo "init exec OK";
+//
+//    }
+
 }

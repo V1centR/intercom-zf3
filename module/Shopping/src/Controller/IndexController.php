@@ -49,6 +49,7 @@ class IndexController extends AbstractActionController
             'slide1' => 'OK',
             'products' => $products,
             'slides' => $bannersSlides,
+//            'categorias' => $this->getCategorias,
         ]);
     }
 }

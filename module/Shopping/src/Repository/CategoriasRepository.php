@@ -11,9 +11,8 @@ class CategoriasRepository extends EntityRepository
 
     public function getCategorias(){
 
-        $menu =  'getCategorias OK AAA';
+//        echo 'getCategorias OK AAA';
 
-       return $menu;
 
     }
 

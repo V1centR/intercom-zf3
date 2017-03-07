@@ -45,24 +45,15 @@ return [
         ],
     ],
 
-    'view_helpers' => [
 
+    'view_helpers' => [
         'factories' => [
-           Menu::class => InvokableFactory::class,
+            \Shopping\Helpers\Menu::class => InvokableFactory::class,
         ],
         'aliases' => [
-            'mainMenu' => Menu::class,
+            'mainMenu' =>   \Shopping\Helpers\Menu::class
         ]
     ],
-
-//    'service_manager' => [
-//
-//        'services' => [
-//
-//
-//        ]
-//
-//    ],
 
     'view_manager' => [
         'display_not_found_reason' => true,

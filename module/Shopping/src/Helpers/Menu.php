@@ -27,21 +27,31 @@ class Menu extends AbstractHelper
      */
     public function renderMenu(){
 
-        $getCategorias = $this->entityManager->getRepository(Categorias::class)
-            ->findBy([
-                        'status' => 'A',
-                        'categoriaid' => null,
-                     ],
-                     [], 8,null);
+        $getSubCategorias = [];
 
-//        $conn = $this->entityManager->getConnection();
-//        $sql = "SELECT * FROM categorias where status = 'A' AND categoriaId is null limit 4";
-//        $stmt = $conn->prepare($sql);
-//        $stmt->execute();
-//        $categorias = $stmt->fetchAll();
-//        print_r($categorias);
+        $conn = $this->entityManager->getConnection();
+        $sql = "SELECT * FROM get_categoria where id_cat is null limit 5";
 
-        return $getCategorias;
+
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $getCategorias = $stmt->fetchAll();
+
+        foreach ($getCategorias as $categoriasId){
+
+            $getSubCategorias[$categoriasId['cat_pai_id']] = $this->entityManager->getRepository(Categorias::class)
+                ->findBy([
+                    'status' => 'A',
+                    'categoriaid' => $categoriasId['cat_pai_id'],
+                    ],
+                    [], 10,null);
+            }
+
+        return [
+                'category' => $getCategorias,
+                'subCategorias' => $getSubCategorias,
+        ];
     }
 
 }

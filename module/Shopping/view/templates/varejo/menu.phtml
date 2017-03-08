@@ -10,22 +10,34 @@
 <?php
 
     $menuData =  $this->mainMenu()->renderMenu();
+    $initItem = 0;
+    $setItemFirst = 'class="first"';
 
-    foreach ($menuData as $menuItens){
-        echo ' 
-           <li id="n-shows"><a href="#" class="dir">'.$menuItens->getNome().'</a>
-            <ul class="submenu">
-                <li class="first"><a href="#"><strong>Notebooks</strong></a></li>
-                <li><a href="#">Computadores</a></li>
-                <li><a href="#/">Multifuncionais</a></li>
-                <li><a href="#">Be on MTV</a></li>
-                <li><a href="#">Shop MTV Shows</a></li>
-    <!--            <div style=" height: 200px; width: 500px; background-color: #2aabd2;">banner promocional</div>-->
-            </ul>
-        </li> 
-        ';
+
+    foreach ($menuData['category'] as $category => $categoryData){
+
+        echo '<li id="n-shows"><a href="#" class="dir">'.$categoryData['nome'].'</a>';
+
+        foreach ($menuData['subCategorias'] as $subCategorias => $getCategoria) {
+
+            if($categoryData['cat_pai_id'] ==  $subCategorias) {
+
+            echo '<ul class="submenu">';
+
+                foreach ($getCategoria as $sub) {
+                    if($initItem == 0){
+                        $setItemFirst = 'class="first"';
+                    }
+                echo '<li '.$setItemFirst.'><a href="#"><strong>'.$sub->getNome().'</strong></a></li>';
+                    $setItemFirst = '';
+                    $initItem = 1;
+                }
+                echo ' <!--<div style=" height: 200px; width: 500px; background-color: #2aabd2;">banner promocional</div>--></ul>';
+            }
+        }
+        echo '</li>';
     }
+
 ?>
 <!-- / END -->
-
 </ul>

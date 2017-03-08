@@ -40,16 +40,10 @@ class IndexController extends AbstractActionController
                                   'status' => 'A',
                                  ]);
 
-//        foreach ($bannersSlides as $slideData){
-//            echo $slideData->getImagemId()->getId()."<br>";
-//        }
-
-
         return new ViewModel([
             'slide1' => 'OK',
             'products' => $products,
             'slides' => $bannersSlides,
-//            'categorias' => $this->getCategorias,
         ]);
     }
 }

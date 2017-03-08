@@ -50,7 +50,7 @@ return [
 
     'view_helpers' => [
         'factories' => [
-            \Shopping\Helpers\Menu::class => InvokableFactory::class,
+//            \Shopping\Helpers\Menu::class => InvokableFactory::class,
             \Shopping\Helpers\Menu::class => MenuFactory::class
         ],
         'aliases' => [

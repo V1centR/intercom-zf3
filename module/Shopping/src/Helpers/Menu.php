@@ -6,10 +6,6 @@ use Zend\View\Helper\AbstractHelper;
 use Shopping\Entity\Categorias;
 use Doctrine\ORM\Mapping as ORM;
 
-use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
-use Shopping\Controller\IndexController;
-
 class Menu extends AbstractHelper
 {
 
@@ -24,22 +20,28 @@ class Menu extends AbstractHelper
         $this->entityManager = $entityManager;
     }
 
-
+    /**
+     * retorna objectData do menu
+     * @return mixed
+     *
+     */
     public function renderMenu(){
 
-      //  $conn = $this->entityManager->getConnection();
+        $getCategorias = $this->entityManager->getRepository(Categorias::class)
+            ->findBy([
+                        'status' => 'A',
+                        'categoriaid' => null,
+                     ],
+                     [], 8,null);
 
-        $conn = $this->entityManager->getConnection();
+//        $conn = $this->entityManager->getConnection();
+//        $sql = "SELECT * FROM categorias where status = 'A' AND categoriaId is null limit 4";
+//        $stmt = $conn->prepare($sql);
+//        $stmt->execute();
+//        $categorias = $stmt->fetchAll();
+//        print_r($categorias);
 
-        // get produtos #############
-        $sql = "SELECT * FROM get_view_produtos where precopromocional <> 0 limit 4";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute();
-        $products = $stmt->fetchAll();
-
-       // print_r($products);
-
-        return "Helper::renderMenu ok";
+        return $getCategorias;
     }
 
 }

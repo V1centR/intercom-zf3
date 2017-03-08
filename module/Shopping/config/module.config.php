@@ -8,6 +8,7 @@
 namespace Shopping;
 
 use Shopping\Controller\Factory\IndexControllerFactory;
+use Shopping\Controller\Factory\MenuFactory;
 use Zend\Router\Http\Literal;
 use Shopping\view\varejo\Helper\Menu;
 use Zend\Router\Http\Segment;
@@ -42,6 +43,7 @@ return [
     'controllers' => [
         'factories' => [
             Controller\IndexController::class => IndexControllerFactory::class,
+
         ],
     ],
 
@@ -49,6 +51,7 @@ return [
     'view_helpers' => [
         'factories' => [
             \Shopping\Helpers\Menu::class => InvokableFactory::class,
+            \Shopping\Helpers\Menu::class => MenuFactory::class
         ],
         'aliases' => [
             'mainMenu' =>   \Shopping\Helpers\Menu::class

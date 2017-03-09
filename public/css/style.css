@@ -10,7 +10,8 @@ body {
 .container1320{
     max-width: 1320px;
     margin: auto;
-    padding: 15px;
+    padding: 0px;
+    margin: 0px;
 }
 
 .lateral-nav{

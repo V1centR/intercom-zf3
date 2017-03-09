@@ -24,17 +24,31 @@
 
         <?php echo $this->partial('menu'); ?>
         <div class="clear"></div>
-        <div>
+        <div class="container1320">
             <?= $this->content ?>
         </div>
         <footer>
 
             <div class="info-container">
-            <div class="info first">
+                <div class="info first">
+                    <!-- List group -->
+                    <ul>
+                        <li class="title">Info</li>
+                        <li>Cras justo odio</li>
+                        <li>Entrega</li>
+                        <li>Garantia estendida</li>
+                        <li>Assessoria de imprensa</li>
+                        <li>Investidores</li>
+                        <li>Companhia verde</li>
+
+                    </ul>
+                </div>
+
+                <div class="info">
 
                 <!-- List group -->
                 <ul>
-                    <li class="title">Info</li>
+                    <li class="title">FAQ</li>
                     <li>Cras justo odio</li>
                     <li>Entrega</li>
                     <li>Garantia estendida</li>
@@ -43,43 +57,27 @@
                     <li>Companhia verde</li>
 
                 </ul>
-            </div>
+                </div>
 
-            <div class="info">
+                <div class="info">
 
-            <!-- List group -->
-            <ul>
-                <li class="title">FAQ</li>
-                <li>Cras justo odio</li>
-                <li>Entrega</li>
-                <li>Garantia estendida</li>
-                <li>Assessoria de imprensa</li>
-                <li>Investidores</li>
-                <li>Companhia verde</li>
+                <!-- List group -->
+                <ul>
+                    <li class="title">Loja</li>
+                    <li>Cras justo odio</li>
+                    <li>Entrega</li>
+                    <li>Garantia estendida</li>
+                    <li>Assessoria de imprensa</li>
+                    <li>Investidores</li>
+                    <li>Companhia verde</li>
 
-            </ul>
-            </div>
+                </ul>
+                </div>
+                <div class="clear"></div>
 
-            <div class="info">
+                <div class="credit-cards-container"></div>
 
-            <!-- List group -->
-            <ul>
-                <li class="title">Loja</li>
-                <li>Cras justo odio</li>
-                <li>Entrega</li>
-                <li>Garantia estendida</li>
-                <li>Assessoria de imprensa</li>
-                <li>Investidores</li>
-                <li>Companhia verde</li>
-
-            </ul>
-            </div>
-            <div class="clear"></div>
-
-            <div class="credit-cards-container"></div>
-
-
-            <p>&copy; 2005 - <?= date('Y') ?> by Zend Technologies Ltd. All rights reserved.</p>
+                <p>&copy; 2005 - <?= date('Y') ?> by Zend Technologies Ltd. All rights reserved.</p>
             </div>
         </footer>
         <?= $this->inlineScript() ?>

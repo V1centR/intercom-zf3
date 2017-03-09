@@ -32,8 +32,6 @@ class Menu extends AbstractHelper
         $conn = $this->entityManager->getConnection();
         $sql = "SELECT * FROM get_categoria where id_cat is null limit 5";
 
-
-
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         $getCategorias = $stmt->fetchAll();
@@ -45,7 +43,7 @@ class Menu extends AbstractHelper
                     'status' => 'A',
                     'categoriaid' => $categoriasId['cat_pai_id'],
                     ],
-                    [], 10,null);
+                    [], 6,null);
             }
 
         return [

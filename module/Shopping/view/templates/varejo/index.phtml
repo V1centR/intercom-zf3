@@ -18,11 +18,11 @@
             if($setActive === 0){
                 $slideActive = ' active';
             }
-//            echo '
-//                    <div class="item '.$slideActive.'">
-//                       <img src="/directory/'.DB_PROFILE.'/images/'.$slideData->getImagemId()->getId().'.'.$slideData->getImagemId()->getExt().'">
-//                    </div>
-//                ';
+            echo '
+                    <div class="item '.$slideActive.'">
+                       <img src="/directory/'.DB_PROFILE.'/images/'.$slideData->getImagemId()->getId().'.'.$slideData->getImagemId()->getExt().'">
+                    </div>
+                ';
             $setActive = 1;
             $slideActive = '';
         }
@@ -47,7 +47,7 @@
     </div>
 </div>
 
-<div class="panel panel-default">
+<div class="panel">
     <!--    #####Frame de produtos #############-->
     <div class="panel-body">
         <?php
@@ -71,6 +71,7 @@
     <!--    ### final frame produtos ####-->
 </div>
 
+<div class="banner-promo2">Banner promocional</div>
 
 <div class="panel panel-default">
     <div class="panel-body">
@@ -78,7 +79,7 @@
     </div>
 </div>
 
-<div class="panel panel-default">
+<div class="panel">
     <!--    #####Frame de produtos #############-->
     <div class="panel-body">
         <?php
@@ -96,7 +97,9 @@
         }
         ?>
         <div class="clear"></div>
-
     </div>
     <!--    ### final frame produtos ####-->
 </div>
+
+<div class="banner-promo2">Banner promocional 2</div>
+<div class="atend-bar">Barra de atendimento</div>

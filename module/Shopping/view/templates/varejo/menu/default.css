@@ -23,10 +23,15 @@ ul.dropdown {
 }
 
 	ul.dropdown li {
-	 /*padding: 20px;*/
-	 background-color: #333;
+	 padding: 20px;
+	 /*background-color: #333;*/
 
-	 /*color: #fff;*/
+	 color: #fff;
+	}
+
+	ul.dropdown li#n-shows{
+
+		background-color: #333;
 	}
 
 	ul.dropdown a:link,
@@ -36,7 +41,6 @@ ul.dropdown {
 	 border-left-color: #5db1e0;
 	 background-color: #4498c7;
 	 color: #fff;
-
 	}
 
 	ul.dropdown ul a.dir:hover {
@@ -115,7 +119,6 @@ ul.dropdown *.dir {
 	 background-image: url(nav-arrow-right2.png);
 	}
 
-
 /* -- Components override -- */
 
 ul.dropdown-vertical *.dir {
@@ -152,11 +155,11 @@ ul.dropdown ul ul ul *.dir { border-color: #767676 #404040 #404040; }
 
 /* -- Custom elements -- */
 
-#n-movies { width: 250px; text-align: center; }
-#n-movies ul { right: auto; left: 0; width: 249px; text-align: left;}
-#n-movies ul ul { left: 249px; width: 150px; }
-#n-movies ul a { width: 232px; }
-#n-movies ul a.dir { width: 210px; }
-#n-movies ul ul a { width: 133px; }
-#n-movies ul ul a.dir { width: 111px; }
-#n-movies ul ul ul { left: 100%; }
+/*#n-movies { width: 250px; text-align: center; }*/
+/*#n-movies ul { right: auto; left: 0; width: 249px; text-align: left;}*/
+/*#n-movies ul ul { left: 249px; width: 150px; }*/
+/*#n-movies ul a { width: 232px; }*/
+/*#n-movies ul a.dir { width: 210px; }*/
+/*#n-movies ul ul a { width: 133px; }*/
+/*#n-movies ul ul a.dir { width: 111px; }*/
+/*#n-movies ul ul ul { left: 100%; }*/

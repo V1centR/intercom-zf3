@@ -1,43 +1,50 @@
 <!-- Le styles -->
 <?= $this->headLink()
     ->appendStylesheet($this->basePath('templates/'.TEMPLATE.'/menu/dropdown.css'))
-    ->appendStylesheet($this->basePath('templates/'.TEMPLATE.'/menu/default.css'))
     ->appendStylesheet($this->basePath('templates/'.TEMPLATE.'/menu/default.ultimate.css'))
 ?>
 <!--    menu renderizado como servico ##### -->
-<ul id="nav" class="dropdown dropdown-horizontal">
-    <li id="n-home"><a href="#">Home</a></li>
-<?php
+<div class="menu-container-background">
+    <div class="menu-container">
+        <div class="">Logotype</div>
+        <ul id="nav" class="dropdown dropdown-horizontal">
+        <!--    <li id="n-home"><a href="#">Home</a></li>-->
+        <?php
 
-    $menuData =  $this->mainMenu()->renderMenu();
-    $initItem = 0;
-    $setItemFirst = 'class="first"';
+            $menuData =  $this->mainMenu()->renderMenu();
+            $initItem = 0;
+            $setItemFirst = 'class="first"';
 
+            foreach ($menuData['category'] as $category => $categoryData){
 
-    foreach ($menuData['category'] as $category => $categoryData){
+                echo '<li id="n-shows"><a href="#" class="dir">'.$categoryData['nome'].'</a>';
 
-        echo '<li id="n-shows"><a href="#" class="dir">'.$categoryData['nome'].'</a>';
+                foreach ($menuData['subCategorias'] as $subCategorias => $getCategoria) {
 
-        foreach ($menuData['subCategorias'] as $subCategorias => $getCategoria) {
+                    if($categoryData['cat_pai_id'] ==  $subCategorias) {
 
-            if($categoryData['cat_pai_id'] ==  $subCategorias) {
+                    echo '<ul class="submenu">';
 
-            echo '<ul class="submenu">';
+                        echo '<div class="banner-category">Banner da categoria</div>';
 
-                foreach ($getCategoria as $sub) {
-                    if($initItem == 0){
-                        $setItemFirst = 'class="first"';
+                        foreach ($getCategoria as $sub) {
+                            if($initItem == 0){
+                                $setItemFirst = 'class="first"';
+                            }
+                        echo '<li '.$setItemFirst.'><a href="#"><strong>'.$sub->getNome().'</strong></a></li>';
+                            $setItemFirst = '';
+                            $initItem = 1;
+                        }
+                        echo ' <!--<div style=" height: 200px; width: 500px; background-color: #2aabd2;">banner promocional</div>--></ul>';
                     }
-                echo '<li '.$setItemFirst.'><a href="#"><strong>'.$sub->getNome().'</strong></a></li>';
-                    $setItemFirst = '';
-                    $initItem = 1;
                 }
-                echo ' <!--<div style=" height: 200px; width: 500px; background-color: #2aabd2;">banner promocional</div>--></ul>';
+                echo '</li>';
             }
-        }
-        echo '</li>';
-    }
 
-?>
-<!-- / END -->
-</ul>
+        ?>
+        <!-- / END -->
+        </ul>
+
+    </div>
+    <div class="clear"></div>
+</div>

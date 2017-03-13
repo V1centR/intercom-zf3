@@ -25,9 +25,12 @@
 
                     echo '<ul class="submenu">';
 
-                        echo '<div class="banner-category">Banner da categoria</div>';
+                        echo '<div class="banner-category">'.$categoryData['img_data'].'</div>';
 
                         foreach ($getCategoria as $sub) {
+
+//                            echo $sub->getImagemid()->getId().'.'.$sub->getImagemid()->getExt();
+
                             if($initItem == 0){
                                 $setItemFirst = 'class="first"';
                             }

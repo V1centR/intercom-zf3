@@ -1,45 +1,47 @@
-<!-- carousel -->
-<div id="myCarousel" class="carousel slide" data-ride="carousel">
-    <!-- Indicators -->
-    <ol class="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
-    </ol>
+<style>
+    #slides_control > div{
+        height: auto;
+    }
+    img{
+        margin:auto;
+        width: 100%;
+    }
+    #slides_control {
+        position:relative;
+        width: 100%;
+    }
+</style>
+<script>
+    angular.module('shop', ['ui.bootstrap']);
+    function CarouselDemoCtrl($scope){
+        $scope.myInterval = 5000;
+        $scope.slides = [
 
-    <!-- Wrapper for slides -->
-    <div class="carousel-inner" role="listbox">
-
-        <?php
-        $setActive = 0;
-        $slideActive = '';
-
-        foreach ($slides as $slideData){
-            if($setActive === 0){
-                $slideActive = ' active';
-            }
-            echo '
-                    <div class="item '.$slideActive.'">
-                       <img src="/directory/'.DB_PROFILE.'/images/'.$slideData->getImagemId()->getId().'.'.$slideData->getImagemId()->getExt().'">
-                    </div>
+            <?php
+            foreach ($slides as $slideData) {
+                echo '                
+                        {
+                            image: "/directory/' . DB_PROFILE . '/images/' . $slideData->getImagemId()->getId() . '.' . $slideData->getImagemId()->getExt() . '"
+                        },                
                 ';
-            $setActive = 1;
-            $slideActive = '';
-        }
-        ?>
-    </div>
+            }
+            ?>
 
-    <!-- Left and right controls -->
-    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-    </a>
+        ];
+    }
+</script>
+
+<div>
+    <div ng-controller="CarouselDemoCtrl" id="slides_control">
+        <div>
+            <carousel interval="myInterval">
+                <slide ng-repeat="slide in slides" active="slide.active">
+                    <img ng-src="{{slide.image}}">
+                </slide>
+            </carousel>
+        </div>
+    </div>
 </div>
-<!-- fecha carousel-->
 
 <div class="panel panel-default">
     <div class="panel-body">
@@ -51,18 +53,17 @@
     <!--    #####Frame de produtos #############-->
     <div class="panel-body">
         <?php
-
-        foreach ($products as $productInfo){
+        foreach ($products as $productInfo) {
             echo '                
                         <div class="frame-product">
                             <div class="product-thumb">photo</div>
-                            <div class="product-title">'.substr($productInfo["nome"],0,50).'</div>
-                            <div class="prev-price">De <strike>R$ '.$productInfo["precounitario"].'</strike></div>
-                            <div class="current-price">R$ '.$productInfo["precopromocional"].'</div>
-                            <div class="drop-price">10x '.$productInfo["precopromocional"] / 10 .' sem juros!</div>
-                        </div>                
-                
-                ';
+                            <div class="product-title">' . substr($productInfo["nome"], 0, 50) . '</div>
+                            <div class="prev-price">De <strike>R$ ' . $productInfo["precounitario"] . '</strike></div>
+                            <div class="current-price">R$ ' . $productInfo["precopromocional"] . '</div>
+                            <div class="drop-price">10x ' . $productInfo["precopromocional"] / 10 . ' sem juros!</div>
+                        </div>
+                    
+                    ';
         }
         ?>
         <div class="clear"></div>
@@ -83,17 +84,16 @@
     <!--    #####Frame de produtos #############-->
     <div class="panel-body">
         <?php
-
-        foreach ($products as $productInfo){
+        foreach ($products as $productInfo) {
             echo '                
-                    <div class="frame-product">
-                        <div class="product-thumb">photo</div>
-                        <div class="product-title">'.substr($productInfo["nome"],0,50).'</div>
-                        <div class="prev-price">De <strike>R$ '.$productInfo["precounitario"].'</strike></div>
-                        <div class="current-price">R$ '.$productInfo["precopromocional"].'</div>
-                        <div class="drop-price">10x '.$productInfo["precopromocional"] / 10 .' sem juros!</div>
-                    </div>                
-                ';
+                        <div class="frame-product">
+                            <div class="product-thumb">photo</div>
+                            <div class="product-title">' . substr($productInfo["nome"], 0, 50) . '</div>
+                            <div class="prev-price">De <strike>R$ ' . $productInfo["precounitario"] . '</strike></div>
+                            <div class="current-price">R$ ' . $productInfo["precopromocional"] . '</div>
+                            <div class="drop-price">10x ' . $productInfo["precopromocional"] / 10 . ' sem juros!</div>
+                        </div>                
+                    ';
         }
         ?>
         <div class="clear"></div>
@@ -103,3 +103,5 @@
 
 <div class="banner-promo2">Banner promocional 2</div>
 <div class="atend-bar">Barra de atendimento</div>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.min.js"></script>

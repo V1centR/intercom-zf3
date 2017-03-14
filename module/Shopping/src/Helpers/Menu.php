@@ -8,7 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 class Menu extends AbstractHelper
 {
-
     /**
      * Entity manager.
      * @var Doctrine/EntityManager
@@ -25,7 +24,8 @@ class Menu extends AbstractHelper
      * @return mixed
      *
      */
-    public function renderMenu(){
+    public function renderMenu()
+    {
 
         $getSubCategorias = [];
         $getBannerSubMenu = [];
@@ -41,9 +41,9 @@ class Menu extends AbstractHelper
         $stmt->execute();
         $getCategorias = $stmt->fetchAll();
 
-        foreach ($getCategorias as $categoriasId){
+        foreach ($getCategorias as $categoriasId) {
 
-            if($categoriasId['id_cat'] == null){
+            if ($categoriasId['id_cat'] == null) {
                 $getBannerSubMenu[$categoriasId['cat_pai_id']] = $categoriasId['img_data'];
             }
 
@@ -51,13 +51,13 @@ class Menu extends AbstractHelper
                 ->findBy([
                     'status' => 'A',
                     'categoriaid' => $categoriasId['cat_pai_id'],
-                    ],
-                    [], 6,null);
-            }
+                ],
+                    [], 6, null);
+        }
 
         return [
-                'category' => $getCategorias,
-                'subCategorias' => $getSubCategorias,
+            'category' => $getCategorias,
+            'subCategorias' => $getSubCategorias,
         ];
     }
 

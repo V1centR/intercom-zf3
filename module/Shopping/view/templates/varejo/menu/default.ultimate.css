@@ -77,22 +77,22 @@ ul.dropdown-horizontal li a.dir{
 	padding-top: 10px;
 	color: #ffffff;
 	/*width: 120px;*/
-
 }
 
 .menu-container{
 	height: 60px;
-	max-width: 1320px;
 	min-width: 400px;
-	margin: auto;
+	margin: 0 auto;
 }
 
 .menu-container-background{
 	/*width: 100%;*/
-	background: #5e5e5e;
 	height: auto;
-	padding-left: 30px;
+	padding: 0px;
 	min-width: 400px;
+	max-width: 1320px;
+	background: #5e5e5e;
+	margin: 0 auto;
 }
 
 .banner-category{
@@ -109,11 +109,28 @@ ul.dropdown-horizontal li a.dir{
 	background-color: #f5f5f5;
 }
 
-.cart-frame{
+.cart-buttom{
 	position: relative;
 	float: right;
 	top: 0px;
-	width: 150px;
+	width: 80px;
 	height: 60px;
 	background-color: #FFD700;
+	color: #3c3c3c;
+	font-size: 40px;
+	text-align: center;
+	padding-top: 10px;
+}
+
+.cart-info{
+	width: 400px;
+	height:200px;
+	background-color: #ffffff;
+	color: #3c3c3c;
+	position: relative;
+	float: right;
+	z-index: 777;
+	top: 52px;
+	left: 60px;
+	display: block;
 }

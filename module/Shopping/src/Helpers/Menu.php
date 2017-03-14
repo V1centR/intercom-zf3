@@ -2,7 +2,6 @@
 
 namespace Shopping\Helpers;
 
-use Shopping\Entity\Imagem;
 use Zend\View\Helper\AbstractHelper;
 use Shopping\Entity\Categorias;
 use Doctrine\ORM\Mapping as ORM;
@@ -30,22 +29,20 @@ class Menu extends AbstractHelper
 
         $getSubCategorias = [];
         $getBannerSubMenu = [];
-        $bannersImg = [];
 
         $conn = $this->entityManager->getConnection();
-        $sql = "SELECT * FROM get_categoria where id_cat is null limit 5";
+
+        $sql = "SELECT *,db1.imagem.id, db1.imagem.status, db1.imagem.ext  
+                FROM db1.get_categoria
+                inner join db1.imagem on db1.get_categoria.img_data = db1.imagem.id	
+                where id_cat is null limit 5";
 
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         $getCategorias = $stmt->fetchAll();
 
-
-
         foreach ($getCategorias as $categoriasId){
 
-//            echo $categoriasId['img_id'].'<br>';
-
-            # id das classes principais
             if($categoriasId['id_cat'] == null){
                 $getBannerSubMenu[$categoriasId['cat_pai_id']] = $categoriasId['img_data'];
             }
@@ -58,24 +55,9 @@ class Menu extends AbstractHelper
                     [], 6,null);
             }
 
-            $bannersSubMenu = $this->entityManager->getRepository(Imagem::class)
-                ->findBy([
-                    'id' => $getBannerSubMenu
-                ]);
-
-        foreach ($bannersSubMenu as $bannerImg){
-
-            $bannersImg[] =  $bannerImg->getId().'.'.$bannerImg->getExt();
-            echo $bannerImg->getId().'.'.$bannerImg->getExt().'<br>';
-
-        }
-
-            print_r($getBannerSubMenu);
-
         return [
                 'category' => $getCategorias,
                 'subCategorias' => $getSubCategorias,
-//                'bannerSubMenu' =>
         ];
     }
 

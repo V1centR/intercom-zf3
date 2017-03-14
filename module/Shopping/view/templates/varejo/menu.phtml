@@ -6,7 +6,8 @@
 <!--    menu renderizado como servico ##### -->
 <div class="menu-container-background">
     <div class="menu-container">
-        <div class="">Logotype</div>
+        <div class="cart-frame"></div>
+        <div class="logo">Logotype</div>
         <ul id="nav" class="dropdown dropdown-horizontal">
         <!--    <li id="n-home"><a href="#">Home</a></li>-->
         <?php
@@ -25,11 +26,11 @@
 
                     echo '<ul class="submenu">';
 
-                        echo '<div class="banner-category">'.$categoryData['img_data'].'</div>';
+                        echo '<div>
+                                <img src="/directory/'.DB_PROFILE.'/images/'.$categoryData['img_data'].'.'.$categoryData['ext'].'" class="banner-category">
+                             </div>';
 
                         foreach ($getCategoria as $sub) {
-
-//                            echo $sub->getImagemid()->getId().'.'.$sub->getImagemid()->getExt();
 
                             if($initItem == 0){
                                 $setItemFirst = 'class="first"';

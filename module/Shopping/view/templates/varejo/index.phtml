@@ -11,28 +11,9 @@
         width: 100%;
     }
 </style>
-<script>
-    angular.module('shop', ['ui.bootstrap']);
-    function CarouselDemoCtrl($scope){
-        $scope.myInterval = 5000;
-        $scope.slides = [
-
-            <?php
-            foreach ($slides as $slideData) {
-                echo '                
-                        {
-                            image: "/directory/' . DB_PROFILE . '/images/' . $slideData->getImagemId()->getId() . '.' . $slideData->getImagemId()->getExt() . '"
-                        },                
-                ';
-            }
-            ?>
-
-        ];
-    }
-</script>
 
 <div>
-    <div ng-controller="CarouselDemoCtrl" id="slides_control">
+    <div ng-cloak ng-controller="CarouselDemoCtrl" id="slides_control">
         <div>
             <carousel interval="myInterval">
                 <slide ng-repeat="slide in slides" active="slide.active">
@@ -42,6 +23,22 @@
         </div>
     </div>
 </div>
+<script>
+    angular.module('shop').controller('CarouselDemoCtrl', function ($scope){
+        $scope.myInterval = 5000;
+        $scope.slides = [
+            <?php
+            foreach ($slides as $slideData) {
+                echo '                
+                        {
+                            image: "/directory/' . DB_PROFILE . '/images/' . $slideData->getImagemId()->getId() . '.' . $slideData->getImagemId()->getExt() . '"
+                        },                
+                ';
+            }
+            ?>
+        ];
+    })
+</script>
 
 <div class="panel panel-default">
     <div class="panel-body">
@@ -103,5 +100,5 @@
 
 <div class="banner-promo2">Banner promocional 2</div>
 <div class="atend-bar">Barra de atendimento</div>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+<!--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>-->
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.min.js"></script>

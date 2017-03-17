@@ -3,15 +3,56 @@
     ->appendStylesheet($this->basePath('templates/'.TEMPLATE.'/menu/dropdown.css'))
     ->appendStylesheet($this->basePath('templates/'.TEMPLATE.'/menu/default.ultimate.css'))
 ?>
+<script>
+
+    angular.module('shop').controller('cartInfo', function ($scope, $interval) {
+
+        var c = 0;
+        $scope.showCart = function () {
+
+            $scope.cartIsVisible = true;
+        };
+        $scope.hideCart = function () {
+            //alert(1);
+            $scope.cartIsVisible = false;
+        };
+        $scope.goCart = function () {
+            //alert(1);
+            window.location.href = '/checkout';
+        };
+
+//        $scope.showCartBtn = function () {
+//            $scope.cartIsVisible = true;
+//            $("div#cart").load("/cart/queryCart");
+//
+//            var timer = $interval(function () {
+//                $scope.counter = "exec " + c + ".";
+//                if (c == 50) {
+//                    $scope.cartIsVisible = false;
+//                    $interval.cancel(timer);
+//                    c = 0;
+//                }
+//                c++;
+//            }, 100);
+//        };
+    });
+
+
+
+</script>
+
 <!--    menu renderizado como servico ##### -->
 <div class="menu-container-background">
     <div class="menu-container">
-        <div class="cart-buttom"><span class="glyphicon glyphicon-shopping-cart"></span></div>
+        <div ng-controller="cartInfo" class="cart-buttom" ng-mouseover="showCart()" ng-click="goCart()" ng-mouseleave="hideCart()" id="showCart" >
+            <span class="glyphicon glyphicon-shopping-cart"></span>
 
-        <div class="cart-info">
-            Seu carrinho esta vazio!
+
+                <div ng-cloak ng-show="cartIsVisible" class="cart-info">
+                    Seu carrinho esta vazio!
+                </div>
+
         </div>
-
 
         <div class="logo">Logotype</div>
         <ul id="nav" class="dropdown dropdown-horizontal">
@@ -32,9 +73,11 @@
 
                     echo '<ul class="submenu">';
 
-                        echo '<div>
-                                <img src="/directory/'.DB_PROFILE.'/images/'.$categoryData['img_data'].'.'.$categoryData['ext'].'" class="banner-category">
-                             </div>';
+                            if(!empty($categoryData['ext'])){
+                             echo '<div>
+                                        <img src="/directory/'.DB_PROFILE.'/images/'.$categoryData['img_data'].'.'.$categoryData['ext'].'" class="banner-category">
+                                  </div>';
+                            }
 
                         foreach ($getCategoria as $sub) {
 

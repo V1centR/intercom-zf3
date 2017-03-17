@@ -127,10 +127,14 @@ ul.dropdown-horizontal li a.dir{
 	height:200px;
 	background-color: #ffffff;
 	color: #3c3c3c;
-	position: relative;
+	position: absolute;
 	float: right;
 	z-index: 777;
-	top: 52px;
-	left: 60px;
+	top: 40px;
+	right: 30px;
 	display: block;
+	-webkit-box-shadow: 7px 7px 14px -4px rgba(0,0,0,0.17);
+	-moz-box-shadow: 7px 7px 14px -4px rgba(0,0,0,0.17);
+	box-shadow: 7px 7px 14px -4px rgba(0,0,0,0.17);
+	font-size: 18px;
 }

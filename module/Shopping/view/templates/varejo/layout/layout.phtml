@@ -16,9 +16,12 @@
         ?>
         <!-- Scripts -->
         <?= $this->headScript()
-            ->prependFile($this->basePath('templates/'.TEMPLATE.'/js/bootstrap.js'))
+//            ->prependFile($this->basePath('templates/'.TEMPLATE.'/js/bootstrap.js'))
             ->prependFile($this->basePath('templates/'.TEMPLATE.'/js/angular.js'))
         ?>
+        <script>
+            angular.module('shop', ['ui.bootstrap']);
+        </script>
     </head>
     <body>
 

@@ -46,4 +46,22 @@ class IndexController extends AbstractActionController
             'slides' => $bannersSlides,
         ]);
     }
+
+    public function isoAction()
+    {
+        echo 'iso action controller';
+
+
+
+
+        $view = new ViewModel(array(
+//            'logo_shop' => $testOk,
+
+
+        ));
+
+        $view->setTemplate('iso')->setTerminal(true);
+
+        return $view;
+    }
 }

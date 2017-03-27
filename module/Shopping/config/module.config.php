@@ -9,8 +9,8 @@ namespace Shopping;
 
 use Shopping\Controller\Factory\IndexControllerFactory;
 use Shopping\Controller\Factory\MenuFactory;
+use Shopping\Controller\Factory\ServiceFactory;
 use Zend\Router\Http\Literal;
-use Shopping\view\varejo\Helper\Menu;
 use Zend\Router\Http\Segment;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Zend\ServiceManager\Factory\InvokableFactory;
@@ -28,13 +28,13 @@ return [
                     ],
                 ],
             ],
-            'shopping' => [
-                'type'    => Segment::class,
+            'iso' => [
+                'type' => Literal::class,
                 'options' => [
-                    'route'    => '/shop[/:action]',
+                    'route' => '/iso',
                     'defaults' => [
-                        'controller' => Controller\IndexController::class,
-                        'action'     => 'index',
+                        'controller' => Controller\AtendController::class,
+                        'action'     => 'iso',
                     ],
                 ],
             ],
@@ -43,18 +43,29 @@ return [
     'controllers' => [
         'factories' => [
             Controller\IndexController::class => IndexControllerFactory::class,
+            Controller\AtendController::class => ServiceFactory::class,
 
         ],
+
+        'invokables' => [
+            //'Shopping\Controller\Index' => \Shopping\Controller\IndexController::class,
+           // 'Shopping\Controller\Atend' => \Shopping\Controller\AtendController::class
+        ],
+
+         'aliases' => [
+             'iso' =>   'Shopping\Controller\Index',
+
+         ]
     ],
 
 
     'view_helpers' => [
         'factories' => [
-//            \Shopping\Helpers\Menu::class => InvokableFactory::class,
+          //  \Shopping\Helpers\Menu::class => InvokableFactory::class,
             \Shopping\Helpers\Menu::class => MenuFactory::class
         ],
         'aliases' => [
-            'mainMenu' =>   \Shopping\Helpers\Menu::class
+            'mainMenu' =>   \Shopping\Helpers\Menu::class,
         ]
     ],
 
@@ -64,18 +75,14 @@ return [
         'doctype'                  => 'HTML5',
         'not_found_template'       => 'error/404',
         'exception_template'       => 'error/index',
-//        'template_map' => [
-//            'layout/layout'           => __DIR__ . '/../view/layout/layout.phtml',
-//            'shopping/index/index' => __DIR__ . '/../view/shopping/index/index.phtml',
-//            'error/404'               => __DIR__ . '/../view/error/404.phtml',
-//            'error/index'             => __DIR__ . '/../view/error/index.phtml',
-//        ],
+
         'template_map' => [
             'layout/layout'           => __DIR__ . '/../view/templates/'.TEMPLATE.'/layout/layout.phtml',
             'shopping/index/index' => __DIR__ . '/../view/templates/'.TEMPLATE.'/index.phtml',
             'error/404'               => __DIR__ . '/../view/templates/'.TEMPLATE.'/error/404.phtml',
             'error/index'             => __DIR__ . '/../view/templates/'.TEMPLATE.'/error/index.phtml',
             'menu' => __DIR__ . '/../view/templates/'.TEMPLATE.'/menu.phtml',
+            'iso' => __DIR__ . '/../view/templates/'.TEMPLATE.'/iso.phtml',
         ],
 
         'template_path_stack' => [

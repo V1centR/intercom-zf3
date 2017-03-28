@@ -3,67 +3,10 @@
     ->appendStylesheet($this->basePath('templates/'.TEMPLATE.'/menu/dropdown.css'))
     ->appendStylesheet($this->basePath('templates/'.TEMPLATE.'/menu/default.ultimate.css'))
 ?>
-<script>
-
-    angular.module('shop').controller('cartInfo', function ($scope, $interval) {
-
-        var c = 0;
-        $scope.showCart = function () {
-
-            $scope.cartIsVisible = true;
-        };
-        $scope.hideCart = function () {
-            //alert(1);
-            $scope.cartIsVisible = false;
-        };
-        $scope.goCart = function () {
-            //alert(1);
-           // window.location.href = '/checkout';
-        };
-
-//        $scope.showCartBtn = function () {
-//            $scope.cartIsVisible = true;
-//            $("div#cart").load("/cart/queryCart");
-//
-//            var timer = $interval(function () {
-//                $scope.counter = "exec " + c + ".";
-//                if (c == 50) {
-//                    $scope.cartIsVisible = false;
-//                    $interval.cancel(timer);
-//                    c = 0;
-//                }
-//                c++;
-//            }, 100);
-//        };
-    });
-
-
-
-</script>
 
 <!--    menu renderizado como servico ##### -->
 <div class="menu-container-background">
     <div class="menu-container">
-
-        <div class="top-bar">
-            <div ng-controller="cartInfo" class="cart-buttom" ng-mouseover="showCart()" ng-click="goCart()" ng-mouseleave="hideCart()" id="showCart" >
-                <span class="glyphicon glyphicon-shopping-cart"></span>
-                    <div ng-cloak ng-show="cartIsVisible" class="cart-info">
-                        Seu carrinho esta vazio!
-                    </div>
-            </div>
-            <div ng-controller="modalUsersAssistente" class="login-register-frame">
-                <span class="glyphicon glyphicon-log-in"></span>&nbsp;
-                <a href="#" ng-click="open('sm', '1')" id="loginOpen">Entre</a> ou
-                <a href="" ng-click="open('sm', '0')">Cadastre-se</a>
-
-            </div>
-
-            <div class="logo">Logotype</div>
-
-        </div>
-
-
         <ul id="nav" class="dropdown dropdown-horizontal">
         <!--    <li id="n-home"><a href="#">Home</a></li>-->
         <?php
@@ -111,19 +54,8 @@
     <div class="clear"></div>
 </div>
 
-<script type="text/ng-template" id="modalCadastro.html">
-    <div class='ng-modal' ng-show='show'>
-        Modal OK
-    </div>
-</script>
-
 <script>
-
-
-
-
-    var app = angular.module('shop');
-
+    var app = angular.module('ui.bootstrap.app');
     app.controller('modalUsersAssistente', ['$scope', 'ModalService', function($scope, ModalService) {
 
         $scope.yesNoResult = null;

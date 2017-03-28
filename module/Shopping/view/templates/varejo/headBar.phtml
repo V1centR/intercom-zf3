@@ -1,38 +1,10 @@
-<!DOCTYPE HTML>
-<html ng-app="ui.bootstrap.app">
-<head>
-    <meta charset="utf-8">
-    <?= $this->headTitle('InterCommerce Isolate test :: Varejo')->setSeparator(' - ')->setAutoEscape(false) ?>
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-touch.min.js"></script>
-    <!--    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>-->
-    <script src="https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.min.js"></script>
-    <script>
-        // angular.module('shop', ['ui.bootstrap']);
-        //  angular.module('shop', ['ngAnimate', 'ngSanitize', 'ui.bootstrap']);
-        angular.module('ui.bootstrap.app', ['ui.bootstrap']);
-    </script>
-    <?= $this->headScript()
-//            ->prependFile($this->basePath('templates/'.TEMPLATE.'/js/bootstrap.js'))
-//        ->prependFile($this->basePath('templates/'.TEMPLATE.'/js/angular-animate.js'))
-//        ->prependFile($this->basePath('templates/'.TEMPLATE.'/js/angular.js'))
-        ->appendFile($this->basePath('templates/'.TEMPLATE.'/js/execUserModals.js'))
-
-    ?>
-    <?= $this->headLink()
-        ->appendStylesheet($this->basePath('templates/'.TEMPLATE.'/css/login.min.css'))
-        ->prependStylesheet($this->basePath('templates/'.TEMPLATE.'/css/home.min.css'))
-        ->prependStylesheet($this->basePath('templates/'.TEMPLATE.'/css/structure.min.css'))
-        ->appendStylesheet($this->basePath('templates/'.TEMPLATE.'/css/modalUserStyle.css'))
-    ?>
-</head>
-
-<body>
-
+<?= $this->headLink()
+    ->appendStylesheet($this->basePath('templates/' . TEMPLATE . '/css/login.min.css'))
+    ->prependStylesheet($this->basePath('templates/' . TEMPLATE . '/css/home.min.css'))
+    ->prependStylesheet($this->basePath('templates/' . TEMPLATE . '/css/structure.min.css'))
+    ->appendStylesheet($this->basePath('templates/' . TEMPLATE . '/css/modalUserStyle.css'))
+?>
 <span ng-controller="modalUsersAssistente">
-
     <script>
         $(document).ready(function () {
             $('button.close').click(function () {
@@ -40,50 +12,42 @@
                 document.getElementById("messageLogin").textContent = "";
             });
 
-            $('input#loginInput').focus(function(){
+            $('input#loginInput').focus(function () {
                 document.getElementById("messageLogin").textContent = "";
             });
         });
 
-        function resetMsg(){
+        function resetMsg() {
             document.getElementById("messageLogin").textContent = "";
         }
 
-        function resetMsgCadastro(){
+        function resetMsgCadastro() {
             //document.getElementById("messageCadastro").textContent = "";
             //  document.getElementById("messageCadastrar1").textContent = "";
         }
     </script>
     <!--angular #################-->
 
-
-
     <div class="page">
         <div class="topbar-container">
-
             <header id="site-topbar" class="site-topbar fixed clearfix" itemscope itemtype="http://schema.org/WebSite">
-
-
                 <div class="logo">
                     <div style=" overflow-y: hidden; height: 60px;">
-                        <a href="/" ><?php echo '<img src="/images/' . $logo_shop . '" width="132">'; ?></a>
+                        <a href="/"><?php //echo '<img src="/images/' . $logo_shop . '" width="132">'; ?></a>
                     </div>
-
                 </div>
-
-
-
-
                 <div class="wraper-right-icons">
                     <div class="cart">
                         <!--#############################################################-->
                         <span ng-controller="cartInfo" id="cartInfo">
                             <a href="">
-                                <div ng-mouseover="showCart()" ng-click="goCart()" ng-mouseleave="hideCart()" id="showCart" class="topbar-buttons cart-link">
+                                <div ng-mouseover="showCart()" ng-click="goCart()" ng-mouseleave="hideCart()"
+                                     id="showCart" class="topbar-buttons cart-link">
 
                                     <span class="cart-icon"></span>
                                     <span class="number" id="num_itens"></span>
-                                    <div ng-cloak id="cart"  style="z-index: 9999; display:none; padding: 8px; width: 400px; background-color: #fff; position: absolute; left: -350px; top: 30px; box-shadow: 0 0 8px #888; font-size: 11px; text-align: left; ">
+                                    <div ng-cloak id="cart"
+                                         style="z-index: 9999; display:none; padding: 8px; width: 400px; background-color: #fff; position: absolute; left: -350px; top: 30px; box-shadow: 0 0 8px #888; font-size: 11px; text-align: left; ">
                                         <script>$("div#cart").load("/cart/queryCart");</script>
                                     </div>
                                 </div>
@@ -138,7 +102,6 @@
                             </div>';
                     }
                     ?>
-
 
                     <?php
                     if ($this->login) {
@@ -207,7 +170,8 @@
 <div class="topbar-search" style="position: relative; width: 250px;">
     <div>
         <form id="searchInputForm">
-            <input type="text" name="searchInput" id="searchInput" placeholder="Olá, o que você procura?"  class="input-box">
+            <input type="text" name="searchInput" id="searchInput" placeholder="Olá, o que você procura?"
+                   class="input-box">
             <!--              <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>              -->
             <button class="search-icon">Procurar</button>
         </form>
@@ -245,12 +209,13 @@
 </div>
 <!--angular busca####################-->
 
-<div class="contact" >
+<div class="contact">
     <a href="" class="topbar-buttons button-link contact-link"><span class="contact-icon"></span>Ajuda</a>
     <div class="dropdown clearfix">
         <div class="dropdown-position">
             <header id="self-help-header" class="header-dropdown clearfix">
-                <form class="help-form"><input class="input-box" placeholder="Como podemos ajudar?" type="text"><input class="search-icon" value="Procurar" type="submit"></form>
+                <form class="help-form"><input class="input-box" placeholder="Como podemos ajudar?" type="text"><input
+                            class="search-icon" value="Procurar" type="submit"></form>
             </header>
             <section class="body-dropdown clearfix">
                 <strong class="title-dropdown">Ajudas mais buscadas</strong><a href="#" class="link">Veja todas</a>
@@ -270,77 +235,108 @@
 </div><!--fecha div.page###############-->
 
 
-
 <!--################################Novo modal#######################################-->
 <script type="text/ng-template" id="modalCadastro.html">
     <div>
         <div class="wm-sign-in">
-            <a title="Fechar" type="button" class="close" ng-click="cancel()" style="display:block; text-decoration:none; cursor:pointer; font-size:30px; position:relative;top:-8px; float:right; height:20px;">×</a>
+            <a title="Fechar" type="button" class="close" ng-click="cancel()"
+               style="display:block; text-decoration:none; cursor:pointer; font-size:30px; position:relative;top:-8px; float:right; height:20px;">×</a>
             <div class="sign-in-wrapper">
-                <form class="client-sign-in" id="client-sign-up cadastrarCtrl" autocomplete="off" novalidate="novalidate" >
+                <form class="client-sign-in" id="client-sign-up cadastrarCtrl" autocomplete="off"
+                      novalidate="novalidate">
 
                     <fieldset ng-controller="cadastrarCtrl">
                         <div class="label">Preencha os campos:</div>
 
                         <div class="client-name">
                             <span class="icon"></span>
-                            <input id="cadNome" onBlur="validate(this.value,'cadNome',this.id)" type="text" class="input-box product-ipt-notifyme-client-name" ng-model="nome" placeholder="Nome completo" onfocus="resetMsgCadastro();" />
+                            <input id="cadNome" onBlur="validate(this.value,'cadNome',this.id)" type="text"
+                                   class="input-box product-ipt-notifyme-client-name" ng-model="nome"
+                                   placeholder="Nome completo" onfocus="resetMsgCadastro();"/>
 
                             <span class="icon-login-check checkmark" id="cadNome"></span>
                             <span class="icon-field-error checkmark" id="cadNomeErr"></span>
-                            <span class="wm-tooltip wm-notify-error bottom" id="cadNomeMsg"><span class="wm-tooltip-arrow"></span><span class="wm-tooltip-arrow-shadow"></span><span class="wm-tooltip-content" id="cadNomeMsgSlot"></span></span>
+                            <span class="wm-tooltip wm-notify-error bottom" id="cadNomeMsg"><span
+                                        class="wm-tooltip-arrow"></span><span
+                                        class="wm-tooltip-arrow-shadow"></span><span class="wm-tooltip-content"
+                                                                                     id="cadNomeMsgSlot"></span></span>
                         </div>
 
                         <div class="client-user-name">
                             <span class="icon"></span>
-                            <input type="text" id="cadEmail" onBlur="validate(this.value,'cadEmail',this.id)" class="input-box" ng-model="email" placeholder="E-mail" onfocus="resetMsgCadastro();" />
+                            <input type="text" id="cadEmail" onBlur="validate(this.value,'cadEmail',this.id)"
+                                   class="input-box" ng-model="email" placeholder="E-mail"
+                                   onfocus="resetMsgCadastro();"/>
 
                             <span class="icon-login-check checkmark" id="cadEmail"></span>
                             <span class="icon-field-error checkmark" id="cadEmailErr"></span>
-                            <span class="wm-tooltip wm-notify-error bottom" id="cadEmailMsg"><span class="wm-tooltip-arrow"></span><span class="wm-tooltip-arrow-shadow"></span><span class="wm-tooltip-content" id="cadEmailMsgSlot"></span></span>
+                            <span class="wm-tooltip wm-notify-error bottom" id="cadEmailMsg"><span
+                                        class="wm-tooltip-arrow"></span><span
+                                        class="wm-tooltip-arrow-shadow"></span><span class="wm-tooltip-content"
+                                                                                     id="cadEmailMsgSlot"></span></span>
 
                         </div>
 
                         <div class="client-cpfcnpj">
                             <span class="icon"></span>
 
-                            <input type="text" id="cadCpfCnpj" onBlur="validate(this.value,'cadCpfCnpj',this.id)" class="input-box" ng-model="cpf_cnpj" placeholder="CPF ou CNPJ" onfocus="resetMsgCadastro();" />
+                            <input type="text" id="cadCpfCnpj" onBlur="validate(this.value,'cadCpfCnpj',this.id)"
+                                   class="input-box" ng-model="cpf_cnpj" placeholder="CPF ou CNPJ"
+                                   onfocus="resetMsgCadastro();"/>
 
                             <span class="icon-login-check checkmark" id="cadCpfCnpj"></span>
                             <span class="icon-field-error checkmark" id="cadCpfCnpjErr"></span>
-                            <span class="wm-tooltip wm-notify-error bottom" id="cadCpfCnpjMsg"><span class="wm-tooltip-arrow"></span><span class="wm-tooltip-arrow-shadow"></span><span class="wm-tooltip-content" id="cadCpfCnpjMsgSlot"></span></span>
+                            <span class="wm-tooltip wm-notify-error bottom" id="cadCpfCnpjMsg"><span
+                                        class="wm-tooltip-arrow"></span><span
+                                        class="wm-tooltip-arrow-shadow"></span><span class="wm-tooltip-content"
+                                                                                     id="cadCpfCnpjMsgSlot"></span></span>
 
                         </div>
 
                         <div class="client-phone">
                             <span class="icon"></span>
 
-                            <input type="text" id="cadPhone" onBlur="validate(this.value,'cadPhone',this.id)" class="input-box" ng-model="telefone" placeholder="(DDD) xxxx-xxxx" onfocus="resetMsgCadastro();" />
+                            <input type="text" id="cadPhone" onBlur="validate(this.value,'cadPhone',this.id)"
+                                   class="input-box" ng-model="telefone" placeholder="(DDD) xxxx-xxxx"
+                                   onfocus="resetMsgCadastro();"/>
 
                             <span class="icon-login-check checkmark" id="cadPhone"></span>
                             <span class="icon-field-error checkmark" id="cadPhoneErr"></span>
-                            <span class="wm-tooltip wm-notify-error bottom" id="cadPhoneMsg"><span class="wm-tooltip-arrow"></span><span class="wm-tooltip-arrow-shadow"></span><span class="wm-tooltip-content" id="cadPhoneMsgSlot"></span></span>
+                            <span class="wm-tooltip wm-notify-error bottom" id="cadPhoneMsg"><span
+                                        class="wm-tooltip-arrow"></span><span
+                                        class="wm-tooltip-arrow-shadow"></span><span class="wm-tooltip-content"
+                                                                                     id="cadPhoneMsgSlot"></span></span>
                         </div>
 
                         <div class="new-client-pwd">
                             <span class="icon"></span>
 
-                            <input type="password" id="cadPass" onBlur="validate(this.value,'cadPass',this.id)" class="input-box" ng-model="senha_1" placeholder="Senha" onfocus="resetMsgCadastro();" />
+                            <input type="password" id="cadPass" onBlur="validate(this.value,'cadPass',this.id)"
+                                   class="input-box" ng-model="senha_1" placeholder="Senha"
+                                   onfocus="resetMsgCadastro();"/>
 
                             <span class="icon-login-check checkmark" id="cadPass"></span>
                             <span class="icon-field-error checkmark" id="cadPassErr"></span>
-                            <span class="wm-tooltip wm-notify-error bottom" id="cadPassMsg"><span class="wm-tooltip-arrow"></span><span class="wm-tooltip-arrow-shadow"></span><span class="wm-tooltip-content" id="cadPassMsgSlot"></span></span>
+                            <span class="wm-tooltip wm-notify-error bottom" id="cadPassMsg"><span
+                                        class="wm-tooltip-arrow"></span><span
+                                        class="wm-tooltip-arrow-shadow"></span><span class="wm-tooltip-content"
+                                                                                     id="cadPassMsgSlot"></span></span>
 
                         </div>
 
                         <div class="new-client-pwd">
                             <span class="icon"></span>
 
-                            <input type="password" id="cadPassC" onBlur="validate(this.value,'cadPassC',this.id)" class="input-box" ng-model="senha_c" placeholder="Confirmar Senha" onfocus="resetMsgCadastro();" />
+                            <input type="password" id="cadPassC" onBlur="validate(this.value,'cadPassC',this.id)"
+                                   class="input-box" ng-model="senha_c" placeholder="Confirmar Senha"
+                                   onfocus="resetMsgCadastro();"/>
 
                             <span class="icon-login-check checkmark" id="cadPassC"></span>
                             <span class="icon-field-error checkmark" id="cadPassCErr"></span>
-                            <span class="wm-tooltip wm-notify-error bottom" id="cadPassCMsg"><span class="wm-tooltip-arrow"></span><span class="wm-tooltip-arrow-shadow"></span><span class="wm-tooltip-content" id="cadPassCMsgSlot"></span></span>
+                            <span class="wm-tooltip wm-notify-error bottom" id="cadPassCMsg"><span
+                                        class="wm-tooltip-arrow"></span><span
+                                        class="wm-tooltip-arrow-shadow"></span><span class="wm-tooltip-content"
+                                                                                     id="cadPassCMsgSlot"></span></span>
 
                         </div>
 
@@ -349,17 +345,21 @@
                         <div style="margin-top: 10px;">
                             <div style=" font-size: 11px; text-align: center; font-weight: bold; margin-top: 8px; color: #f00; height: 10px; margin-bottom: 8px;">
                                 <span id="messageCadastro"></span>
-                                <div class="loading" ng-show="loading" ng-model="loader" style="padding: 1px; height: 16px; width: 16px;"></div>
+                                <div class="loading" ng-show="loading" ng-model="loader"
+                                     style="padding: 1px; height: 16px; width: 16px;"></div>
                             </div>
 
                             <div align="center" style="margin-bottom: 10px; position: relative;">
-                                <button ng-click="cadastrar()" class="btn btn-primary" style="font-weight: bold; width: 99%;">Cadastrar</button><br>
+                                <button ng-click="cadastrar()" class="btn btn-primary"
+                                        style="font-weight: bold; width: 99%;">Cadastrar
+                                </button>
+                                <br>
                             </div>
                         </div>
 
-                        <div style="font-size: 12px; color: #888" >
-                            <span style="position: relative;" >
-                                <input type="checkbox" ng-model="newsletter" ng-checked="true" />
+                        <div style="font-size: 12px; color: #888">
+                            <span style="position: relative;">
+                                <input type="checkbox" ng-model="newsletter" ng-checked="true"/>
                             </span>
                             <span>  Desejo receber ofertas por e-mail.</span>
                         </div>
@@ -367,54 +367,48 @@
                         <div style=" font-size: 12px; color: #888;">
 
                             <hr size="1" style="color: #888;">
-                            Ao criar uma conta, você concorda com nossos termos de uso, condições, política de privacidade e que tem pelo menos 16 anos de idade.
+                            Ao criar uma conta, você concorda com nossos termos de uso, condições, política de
+                            privacidade e que tem pelo menos 16 anos de idade.
 
                         </div>
 
                     </fieldset>
-                </form></div>
+                </form>
+            </div>
         </div>
     </div>
 
-
-<script type="text/javascript-lazy">
-  jQuery(function($){
-   $("#cadPhone").mask("(99) 999999999");
-});
-</script>
-
-</script>
-
 <script>
-
 //validacao real-time##################################
 
-var validate = function(val,type,id){
+var validate = function (val, type, id) {
 
-    if(id == 'cadPassC'){
+    if (id == 'cadPassC') {
         var senha1 = $('input#cadPass').val();
         var senha_c = $('input#cadPassC').val();
 
         $.ajax({
-            type:"POST",
+            type: "POST",
             url: "/validform",
-            data :{senha1: senha1, senha2: senha_c},
-            success: function(data){
+            data: {senha1: senha1, senha2: senha_c},
+            success: function (data) {
 
-                var obj = JSON.parse(''+ data + '');
+                var obj = JSON.parse('' + data + '');
 
-                if(!obj.inputOk){
-                    $('span#'+id).hide();
-                    $('span#'+id+'Err').fadeIn('fast');
+                if (!obj.inputOk) {
+                    $('span#' + id).hide();
+                    $('span#' + id + 'Err').fadeIn('fast');
 
-                    $('span#'+id+'MsgSlot').text(obj.message);
-                    $('span#'+id+'Msg').fadeIn('fast');
-                    $('span#'+id+'Msg').click(function(){ $(this).hide(); });
+                    $('span#' + id + 'MsgSlot').text(obj.message);
+                    $('span#' + id + 'Msg').fadeIn('fast');
+                    $('span#' + id + 'Msg').click(function () {
+                        $(this).hide();
+                    });
 
-                } else if(obj.inputOk){
-                    $('span#'+id).fadeIn('fast');
-                    $('span#'+id+'Err').hide();
-                    $('span#'+id+'Msg').hide();
+                } else if (obj.inputOk) {
+                    $('span#' + id).fadeIn('fast');
+                    $('span#' + id + 'Err').hide();
+                    $('span#' + id + 'Msg').hide();
                 }
             }
         });
@@ -422,22 +416,24 @@ var validate = function(val,type,id){
     } else {
 
         $.ajax({
-            type:"POST",
+            type: "POST",
             url: "/validform",
-            data :{dataInput: val, dataType: type},
-            success: function(data){
-                var obj = JSON.parse(''+ data + '');
-                if(!obj.inputOk){
-                    $('span#'+id).hide();
-                    $('span#'+id+'Err').fadeIn('fast');
+            data: {dataInput: val, dataType: type},
+            success: function (data) {
+                var obj = JSON.parse('' + data + '');
+                if (!obj.inputOk) {
+                    $('span#' + id).hide();
+                    $('span#' + id + 'Err').fadeIn('fast');
 
-                    $('span#'+id+'MsgSlot').text(obj.message);
-                    $('span#'+id+'Msg').fadeIn('fast');
-                    $('span#'+id+'Msg').click(function(){ $(this).hide(); });
-                } else if(obj.inputOk){
-                    $('span#'+id).fadeIn('fast');
-                    $('span#'+id+'Err').hide();
-                    $('span#'+id+'Msg').hide();
+                    $('span#' + id + 'MsgSlot').text(obj.message);
+                    $('span#' + id + 'Msg').fadeIn('fast');
+                    $('span#' + id + 'Msg').click(function () {
+                        $(this).hide();
+                    });
+                } else if (obj.inputOk) {
+                    $('span#' + id).fadeIn('fast');
+                    $('span#' + id + 'Err').hide();
+                    $('span#' + id + 'Msg').hide();
                 }
             }
         }); //############fecha ajax############
@@ -450,23 +446,27 @@ var validate = function(val,type,id){
 <script type="text/ng-template" id="modalLogin.html">
 
     <div class="wm-sign-in clearfix">
-        <a title="Fechar" type="button" class="close" ng-click="cancel()" style="display:block; text-decoration:none; cursor:pointer; font-size:30px; position:relative; float:right;top:-8px; height:20px;">×</a>
+        <a title="Fechar" type="button" class="close" ng-click="cancel()"
+           style="display:block; text-decoration:none; cursor:pointer; font-size:30px; position:relative; float:right;top:-8px; height:20px;">×</a>
         <div class="title">Entrar</div>
-        <div id="alert-signin-error" class="alert alert-danger alert-dismissable hide"><span class="icon-wm-warning"></span><span id="message">Usuário ou senha inválidos.</span></div>
+        <div id="alert-signin-error" class="alert alert-danger alert-dismissable hide"><span
+                    class="icon-wm-warning"></span><span id="message">Usuário ou senha inválidos.</span></div>
         <div class="sign-in-wrapper">
 
             <form id="loginForm client-sign-in" name="login" class="client-sign-in" novalidate="novalidate">
                 <fieldset ng-controller="loginFormModal">
                     <div class="client-user-name">
                         <span class="icon"></span>
-                        <input type="text" class="input-box" name="email" ng-model="email" id="loginInput" onfocus="resetMsg();" placeholder="E-mail, CPF ou CNPJ"/>
+                        <input type="text" class="input-box" name="email" ng-model="email" id="loginInput"
+                               onfocus="resetMsg();" placeholder="E-mail, CPF ou CNPJ"/>
 
                     </div>
 
                     <div class="new-client-pwd">
                         <span class="icon"></span>
 
-                        <input type="password" class="input-box" ng-model="senha" placeholder="Senha" onfocus="resetMsg();" />
+                        <input type="password" class="input-box" ng-model="senha" placeholder="Senha"
+                               onfocus="resetMsg();"/>
                     </div>
 
                     <div style="clear:  both;"></div>
@@ -475,21 +475,26 @@ var validate = function(val,type,id){
                         <div style=" font-size: 11px; text-align: center; font-weight: bold; margin-top: 8px; color: #f00; height: 10px; margin-bottom: 8px;">
 
                             <span id="messageLogin"></span>
-                            <div class="loading" ng-show="loading" ng-model="loader" style="padding: 1px; height: 16px; width: 16px;"></div>
+                            <div class="loading" ng-show="loading" ng-model="loader"
+                                 style="padding: 1px; height: 16px; width: 16px;"></div>
 
                         </div>
 
                         <div align="center" style="margin-bottom: 10px;">
-                            <button ng-click="entrar()" class="btn btn-primary" style="font-weight: bold; width: 99%;">Entrar</button><br>
+                            <button ng-click="entrar()" class="btn btn-primary" style="font-weight: bold; width: 99%;">
+                                Entrar
+                            </button>
+                            <br>
                         </div>
                     </div>
 
-                    <div class="form-group" style="font-size: 12px; color: #888" >
-                        <span style="position: relative; top: 2px;" ><input type="checkbox" value="1" ng-model="conectado" /></span>
+                    <div class="form-group" style="font-size: 12px; color: #888">
+                        <span style="position: relative; top: 2px;"><input type="checkbox" value="1"
+                                                                           ng-model="conectado"/></span>
                         <span>  Continuar conectado</span>
                     </div>
 
-                    <div style="font-size: 12px; color: #888" >
+                    <div style="font-size: 12px; color: #888">
                         <a href="" ng-click="switchLoginRecover()">Esqueci minha senha</a>
                     </div>
 
@@ -500,8 +505,9 @@ var validate = function(val,type,id){
         <div class="sign-in-footer">
             Não tem conta no Loja teste òtimo
 
-            <div class="form-group links" style="font-size: 12px; color: #888; text-align: center; padding-top:4px;" >
-                <a class="links" href="" ng-click="switchCadastroModal()" style="font-size: 20px;"><span> Cadastre-se aqui</span>  </a>
+            <div class="form-group links" style="font-size: 12px; color: #888; text-align: center; padding-top:4px;">
+                <a class="links" href="" ng-click="switchCadastroModal()" style="font-size: 20px;"><span> Cadastre-se aqui</span>
+                </a>
             </div>
 
         </div>
@@ -512,26 +518,39 @@ var validate = function(val,type,id){
 
 <script type="text/ng-template" id="modalRecover.html">
     <div class="wm-sign-in clearfix">
-        <a title="Fechar" type="button" class="close" ng-click="cancel()" style="display:block; text-decoration:none; cursor:pointer; font-size:30px; position:relative; float:right; top:-8px; height:20px;">×</a>
+        <a title="Fechar" type="button" class="close" ng-click="cancel()"
+           style="display:block; text-decoration:none; cursor:pointer; font-size:30px; position:relative; float:right; top:-8px; height:20px;">×</a>
         <div class="title">Esqueci minha senha</div>
-        <div id="alert-signin-error" class="alert alert-danger alert-dismissable hide signup-error"><span class="icon-wm-warning"></span>&nbsp;<span id="message">Ops! Tente Novamente.</span></div>
+        <div id="alert-signin-error" class="alert alert-danger alert-dismissable hide signup-error"><span
+                    class="icon-wm-warning"></span>&nbsp;<span id="message">Ops! Tente Novamente.</span></div>
         <div class="sign-in-wrapper">
 
             <form id="noticeRecoverCtrl">
                 <fieldset ng-controller="recoverCtrl">
 
-                    <div class="label">Digite seu E-mail, CPF ou CNPJ para receber as instruções e criar uma nova senha</div>
+                    <div class="label">Digite seu E-mail, CPF ou CNPJ para receber as instruções e criar uma nova
+                        senha
+                    </div>
                     <div class="client-user-name">
                         <span class="icon"></span>
-                        <input id="signinClientName" ng-model="email" onfocus="resetMsgCadastro();" class="input-box email-fp" type="text" maxlength="100" name="signinClientName" placeholder="E-mail, CPF ou CNPJ" style="width:430px"><span id="checkmark" class="icon-login-check checkmark validate"></span><span id="toolTip" class="wm-tooltip wm-notify-error left forgot" style="display: none;"><span class="wm-tooltip-arrow"></span><span class="wm-tooltip-arrow-shadow"></span><span class="wm-tooltip-content">&nbsp;</span></span></div>
+                        <input id="signinClientName" ng-model="email" onfocus="resetMsgCadastro();"
+                               class="input-box email-fp" type="text" maxlength="100" name="signinClientName"
+                               placeholder="E-mail, CPF ou CNPJ" style="width:430px"><span id="checkmark"
+                                                                                           class="icon-login-check checkmark validate"></span><span
+                                id="toolTip" class="wm-tooltip wm-notify-error left forgot" style="display: none;"><span
+                                    class="wm-tooltip-arrow"></span><span class="wm-tooltip-arrow-shadow"></span><span
+                                    class="wm-tooltip-content">&nbsp;</span></span></div>
                     <div style="">
                         <div style=" font-size: 11px; text-align: left; font-weight: bold; margin-top: 8px; color: #f00; height: 10px; margin-bottom: 8px;">
                             <span id="messageCadastrar1"></span>
-                            <div class="loading" ng-show="loading" ng-model="loader" style="padding: 1px; height: 16px; width: 16px;"></div>
+                            <div class="loading" ng-show="loading" ng-model="loader"
+                                 style="padding: 1px; height: 16px; width: 16px;"></div>
                         </div>
 
                         <div class="forgot-password-actions">
-                            <input id="signinButtonSend" ng-click="recover()" class="btn btn-primary" value="Enviar" type="submit" name="signinButtonSend"> ou <a class="closeable" ng-click="cancel()" href="#">Cancelar</a></div>
+                            <input id="signinButtonSend" ng-click="recover()" class="btn btn-primary" value="Enviar"
+                                   type="submit" name="signinButtonSend"> ou <a class="closeable" ng-click="cancel()"
+                                                                                href="#">Cancelar</a></div>
                     </div>
 
                 </fieldset>
@@ -542,20 +561,19 @@ var validate = function(val,type,id){
     </div>
 </script>
 
-
 </span>
 
 <script>
     //angular.module('ui.bootstrap.app', ['ngAnimate', 'ui.bootstrap']);
-    angular.module('ui.bootstrap.app').controller('modalUsersAssistente',function ($scope, $uibModal, $log,$rootScope) {
+    angular.module('ui.bootstrap.app').controller('modalUsersAssistente', function ($scope, $uibModal, $log, $rootScope) {
 
         //############open modal recover senha#############
         $scope.$on('modalRecover', function (event, data) {
-            $scope.open('lg','2');
+            $scope.open('lg', '2');
         });
 
         $scope.$on('modalCadastro', function (event, data) {
-            $scope.open('sm','0');
+            $scope.open('sm', '0');
         });
 
         $scope.items = ['item1', 'item2', 'item3'];
@@ -573,10 +591,10 @@ var validate = function(val,type,id){
                 var setTemplate = 'modalRecover.html';
             } else if (tipoModal == 3) {
                 var setTemplate = 'modalNewsletter.html';
-            }else if (tipoModal == 4) {
+            } else if (tipoModal == 4) {
                 var setTemplate = 'modalAtendimento.html';
-            }else if (tipoModal >= 50) {
-                var setTemplate = 'modalInfo'+tipoModal+'.html';
+            } else if (tipoModal >= 50) {
+                var setTemplate = 'modalInfo' + tipoModal + '.html';
             }
 
             var modalInstance = $uibModal.open({
@@ -605,7 +623,7 @@ var validate = function(val,type,id){
 
     // Please note that $modalInstance represents a modal window (instance) dependency.
     // It is not the same as the $uibModal service used above.
-    angular.module('ui.bootstrap.app').controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, items,$rootScope) {
+    angular.module('ui.bootstrap.app').controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, items, $rootScope) {
 
         $scope.items = items;
         $scope.selected = {
@@ -620,12 +638,12 @@ var validate = function(val,type,id){
             $uibModalInstance.dismiss('cancel');
         };
 
-        $scope.switchLoginRecover = function(){
+        $scope.switchLoginRecover = function () {
             $uibModalInstance.dismiss('cancel');
             $rootScope.$broadcast('modalRecover');
         };
 
-        $scope.switchCadastroModal = function(){
+        $scope.switchCadastroModal = function () {
             $uibModalInstance.dismiss('cancel');
             $rootScope.$broadcast('modalCadastro');
         };
@@ -633,10 +651,7 @@ var validate = function(val,type,id){
 </script>
 
 
-
 <script>
-
-
 
 
     //###########################Login configs##################
@@ -657,13 +672,10 @@ var validate = function(val,type,id){
         };
 
 
-
-
         $scope.loading = false;
         $scope.entrar = function () {
 
             $scope.loading = true;
-
 
 
             var request = $http({
@@ -721,8 +733,6 @@ var validate = function(val,type,id){
     });
 
 
-
-
     //###########################Cadastrar configs##################
     angular.module('ui.bootstrap.app').controller('cadastrarCtrl', function ($scope, $http) {
 
@@ -764,7 +774,6 @@ var validate = function(val,type,id){
             });
         }
     });
-
 
 
     //###################################Recover configs##################################
@@ -809,11 +818,4 @@ var validate = function(val,type,id){
             });
         }
     });
-
-
-
 </script>
-
-</body>
-
-</html>

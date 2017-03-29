@@ -7,7 +7,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-touch.min.js"></script>
-        <!--    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>-->
+            <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
         <script src="https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.min.js"></script>
         <script>
             angular.module('ui.bootstrap.app', ['ui.bootstrap']);
@@ -20,16 +20,17 @@
 
         ?>
         <?= $this->headLink()
-//            ->appendStylesheet($this->basePath('templates/' . TEMPLATE . '/css/login.min.css'))
-//            ->prependStylesheet($this->basePath('templates/' . TEMPLATE . '/css/home.min.css'))
-//            ->prependStylesheet($this->basePath('templates/' . TEMPLATE . '/css/structure.min.css'))
-//            ->appendStylesheet($this->basePath('templates/' . TEMPLATE . '/css/modalUserStyle.css'))
+           ->appendStylesheet($this->basePath('templates/' . TEMPLATE . '/css/login.min.css'))
+            ->prependStylesheet($this->basePath('templates/' . TEMPLATE . '/css/home.min.css'))
+            //->prependStylesheet($this->basePath('templates/' . TEMPLATE . '/css/structure.min.css'))
+            ->appendStylesheet($this->basePath('templates/' . TEMPLATE . '/css/modalUserStyle.css'))
             ->appendStylesheet($this->basePath('templates/' . TEMPLATE . '/css/style.css'))
         ?>
     </head>
     <body>
 
-        <?php //echo $this->partial('headBar'); ?>
+        <?php echo $this->partial('headBar'); ?>
+        <div class="clear"></div>
         <?php echo $this->partial('menu'); ?>
         <div class="clear"></div>
         <div class="container1320">

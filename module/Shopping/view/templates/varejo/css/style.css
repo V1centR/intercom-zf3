@@ -136,6 +136,7 @@ div.top-bar{
     color: #68b604;
 }
 
+
 .btn-success {
     background-color: #57a900;
     background-image: -moz-linear-gradient(top, #70d900, #57a900);
@@ -159,4 +160,28 @@ div.container a.navbar-brand > img {
     display: inline;
     margin-right: 4px;
     margin-top: -2px;
+}
+.loading{ width: 16px; height: 16px; background-image: url("images/loading.gif"); background-repeat: no-repeat;}
+.topbar-container{ width: 100%; background-color:#1a75ce; color: #fff;}
+.topbar-container a:link, a:visited{ color: #fff; text-decoration: none;}
+.topbar-container section.body-dropdown{ display: none;}
+.topbar-container .logo{ position: relative; float: left;}
+
+.login{background-color:transparent;height:60px;position:relative;padding-right:19px;border-right:1px solid #1265B6;color:#FFF}.login .wrapper{line-height:60px;font-size:15px}.login .wrapper a{color:#FFF}.login .wrapper a:hover{color:#ffb300}
+
+/*.wraper-right-icons{min-width:77%;float:right; border: 1px solid #fff;}*/
+
+.contact {
+    background-color: transparent;
+    height: 60px;
+    position: relative;
+    margin-right: 10px;
+}
+.cart, .contact, .login, .topbar-search, .profile, .wishlist {
+    float: right;
+}
+
+.login .wrapper {
+    line-height: 60px;
+    font-size: 15px;
 }

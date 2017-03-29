@@ -7,9 +7,12 @@
 
 namespace Shopping;
 
+use Shopping\Controller\AtendController;
 use Shopping\Controller\Factory\IndexControllerFactory;
 use Shopping\Controller\Factory\MenuFactory;
 use Shopping\Controller\Factory\ServiceFactory;
+use Shopping\Controller\Factory\UsersControllerFactory;
+use Shopping\Controller\UsersController;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
@@ -38,13 +41,41 @@ return [
                     ],
                 ],
             ],
+
+           'users' => [
+                       'type' => Segment::class,
+                       'options' => array(
+                           'route' => '/users[:action][/:id]',
+                           'constraints' => [
+                               'controller' => '[a-z_-]+',
+                           ],
+                           'defaults' => array(
+                               'controller' => UsersController::class,
+                               'action' => 'register',
+                           ),
+                       ),
+           ],
+
+            'validform' => [
+                'type' => Segment::class,
+                'options' => array(
+                    'route' => '/validform',
+                    'constraints' => array(
+                        'controller' => '[a-z_-]+',
+                    ),
+                    'defaults' => [
+                        'controller' => AtendController::class,
+                        'action' => 'validForm',
+                    ],
+                ),
+            ],
         ],
     ],
     'controllers' => [
         'factories' => [
             Controller\IndexController::class => IndexControllerFactory::class,
             Controller\AtendController::class => ServiceFactory::class,
-
+            Controller\UsersController::class => UsersControllerFactory::class,
         ],
 
         'invokables' => [

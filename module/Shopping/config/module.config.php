@@ -36,7 +36,7 @@ return [
                 'options' => [
                     'route' => '/iso',
                     'defaults' => [
-                        'controller' => Controller\AtendController::class,
+                        'controller' => Controller\IndexController::class,
                         'action'     => 'iso',
                     ],
                 ],
@@ -115,6 +115,7 @@ return [
             'menu' => __DIR__ . '/../view/templates/'.TEMPLATE.'/menu.phtml',
             'headBar' => __DIR__ . '/../view/templates/'.TEMPLATE.'/headBar.phtml',
             'iso' => __DIR__ . '/../view/templates/'.TEMPLATE.'/iso.phtml',
+            'generic' => __DIR__ . '/../view/templates/'.TEMPLATE.'/generic.phtml',
         ],
 
         'template_path_stack' => [

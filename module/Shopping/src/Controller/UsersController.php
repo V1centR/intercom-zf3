@@ -2,7 +2,11 @@
 
 namespace Shopping\Controller;
 
+use Shopping\Entity\Usuario;
+use Zend\EventManager\Event;
+use Zend\Mvc\Application;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
 use Zend\Session\Container;
 use Zend\Authentication\Storage\Session;
@@ -29,9 +33,19 @@ use Zend\Mime\Message as MimeMessage;
 use Zend\Mail\Message;
 
 
-class UsersController extends AbstractActionController {
-    
-    
+class UsersController extends AbstractActionController
+{
+
+    /**
+     * Entity manager.
+     * @var Doctrine/EntityManager
+     */
+    private $entityManager;
+
+    public function __construct($entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
     
 
 
@@ -192,24 +206,14 @@ class UsersController extends AbstractActionController {
      * @return ViewModel
      */
     public function registerAction() {
-        
+
        $postdata = file_get_contents("php://input");
 
-       echo 'register action ok';
-
-       print_r($postdata);
-       exit;
-
-
        if(empty($postdata)){
-
-
             $model = new ViewModel();
-
             $model->setTemplate('error/404');
-            $model->setTerminal(true);
+           // $model->setTerminal(true);
             return $model;
-
             exit;
         }
         
@@ -223,71 +227,48 @@ class UsersController extends AbstractActionController {
         @$telefone = $request->telefone;
         @$senha_1 = $request->pass;
         @$senha_c = $request->pass_c;
-        
-      
-        
       
         if(empty($nome)){
-            
-            echo 'Campo nome é obrigatório!';            
-                    
+            echo 'Campo nome é obrigatório!';
             exit;
-            
         }
         
-        #validação do e-mail####################        
+        //validação do e-mail
         if(empty($email)){
-            
             echo 'Campo email é obrigatório!';
-            exit; 
-            
+            exit;
         } else if(!self::email_test($email)){
-            
             echo 'O email informado não é valido';
             exit;            
-        } 
-        ########################################    
-        
-        
+        }
         
         if (empty($senha_1) || empty($senha_c)) {
-
             echo 'As senhas são obrigatórias e devem ser iguais!';
             exit;
-            
         } else if ($senha_1 != $senha_c) {
-
             echo 'As senhas digitadas não conferem!';
             exit;
         } else {
-            
-            
             $senha_def = md5($senha_c);
         }
         
         
+       // $this->object = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+
+
+        $sql_checkUser = $this->entityManager->getRepository(Usuario::class)
+            ->findOneByEmail($email);
         
-        $this->object = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        #verifica se email já esta cadastrado####################
-        $this->sql_checkUser = "SELECT id FROM `$db`.Pessoa WHERE email = '$email'";		
-        $query1 = $this->object->getConnection()->prepare($this->sql_checkUser);
-        $query1->execute();
-        
-        if($query1->rowCount() >= 1){
-            
+        if($sql_checkUser->rowCount() >= 1){
             echo 'E-mail já consta em nosso cadastro! ultilize outro endereço de e-mail!';           
             exit;
-            
-            
         }
-        #######################################################
-        
         
         
         #inserir novo visitante##########################
         $this->object = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         #get formas de pagamentos na view get_forma_pagamento######
-        $this->sql_newuser = "INSERT INTO `$db`.Pessoa SET                                
+        $this->sql_newuser = "INSERT INTO Pessoa SET                                
 				email = '$email', 
 				razaosocial = '$nome',
                                 nomefantasia = '$nome',	
@@ -379,13 +360,10 @@ class UsersController extends AbstractActionController {
     }
     
     public function email_test($email) {
-		
 		$this->email = $email;
-
 		if (!preg_match('/^[^0-9][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[@][a-zA-Z0-9_-]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,4}$/',$this->email)){
 			return false;
 		}else{
-			
 			return true;
 		}			
     }
@@ -1116,8 +1094,8 @@ class UsersController extends AbstractActionController {
                         ->setConnectionClass('login')
                         ->setName('smtp.gmail.com')
                         ->setConnectionConfig(array(
-                            'username' => 'servidor@otimonegocio.com.br',
-                            'password' => '@Otn1234567',
+                            'username' => 'vicentcdb@gmail.com',
+                            'password' => '******',
                             'ssl' => 'tls',
                                 )
                 );
@@ -1246,7 +1224,7 @@ class UsersController extends AbstractActionController {
 		
 		
 		$message = new Message();
-		$message->addFrom("servidor@otimonegocio.com.br", "Suporte ÓtimoNegócio")
+		$message->addFrom("vicentcdb@gmail.com", "Suporte ÓtimoNegócio")
 		->addTo($this->email)
 		->setSubject($this->subject_type);
 		$message->setBody($body);
@@ -1261,8 +1239,8 @@ class UsersController extends AbstractActionController {
 				'port' => 587,
 				'connection_class'  => 'login',
 				'connection_config' => array(
-						'username' => 'servidor@otimonegocio.com.br',
-						'password' => '@Otn1234567',
+						'username' => 'vicentcdb@gmail.com',
+						'password' => '********',
 						"ssl" => "tls"
 				),
 		));

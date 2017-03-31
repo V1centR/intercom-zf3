@@ -4,6 +4,7 @@ namespace Shopping\Controller;
 
 use Shopping\Entity\Banners;
 use Shopping\Entity\Categorias;
+use Shopping\Entity\Usuario;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,7 +20,6 @@ class IndexController extends AbstractActionController
     public function __construct($entityManager)
     {
         $this->entityManager = $entityManager;
-        $getCategorias = $this->entityManager->getRepository(Categorias::class)->getCategorias();
     }
 
     public function indexAction()
@@ -49,7 +49,27 @@ class IndexController extends AbstractActionController
 
     public function isoAction()
     {
-        echo 'iso action controller';
+        //echo 'iso action controller';
+
+
+        $checkUser = $this->entityManager->getRepository(Usuario::class)
+            ->findOneByEmail('test@test.com');
+
+//        $this->sql_checkUser = "SELECT id FROM `$db`.Pessoa WHERE email = '$this->emailCheck'";
+//        $query1 = $this->object->getConnection()->prepare($this->sql_checkUser);
+//        $query1->execute();
+
+        print_r($checkUser);
+
+        echo count($checkUser);
+
+       // echo $checkUser->getEmail();
+//
+//        if($checkUser->rowCount() >= 1){
+//            return false;
+//        } else if ($checkUser->rowCount() == 0){
+//            return true;
+//        }
 
 
 
@@ -60,7 +80,7 @@ class IndexController extends AbstractActionController
 
         ));
 
-        $view->setTemplate('iso')->setTerminal(true);
+      //  $view->setTemplate('iso')->setTerminal(true);
 
         return $view;
     }

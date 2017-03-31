@@ -2,11 +2,14 @@
 
 namespace Shopping\Controller;
 
-use Shopping\Entity\Banners;
-use Shopping\Entity\Categorias;
+use Shopping\Controller\Helpers\ValidaCPFCNPJ;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 use Doctrine\ORM\Mapping as ORM;
+use Shopping\Entity\Usuario;
+use Zend\Http\Response;
+use Zend\Json;
 
 class AtendController extends AbstractActionController
 {
@@ -19,7 +22,6 @@ class AtendController extends AbstractActionController
     public function __construct($entityManager)
     {
         $this->entityManager = $entityManager;
-       // $getCategorias = $this->entityManager->getRepository(Categorias::class)->getCategorias();
     }
 
     public function indexAction()
@@ -29,149 +31,88 @@ class AtendController extends AbstractActionController
         ]);
     }
 
-    public function isoAction()
+    public function validFormAction()
     {
-        echo 'iso action controller';
+        $postdata = $this->getRequest()->getContent();
+        $jsonItem = json_decode($postdata, true);
 
-        $view = new ViewModel(array(
-//            'logo_shop' => $testOk,
-        ));
+        $dataInput = $jsonItem['dataInput'];
+        $dataType = $jsonItem['dataType'];
 
-        $view->setTemplate('iso')->setTerminal(true);
-
-        return $view;
-    }
-
-    public function validFormAction(){
-
-
-        $db = 'db1';
-        $postdata = file_get_contents("php://input");
-        // $request = json_decode($postdata);
-        @$dataInput = $_POST['dataInput'];
-        @$dataType = $_POST['dataType'];
         $error = false;
         $cpf_cnpj = false;
-
-
-
 
         if(($dataType != 'cadPassC') || ($dataType != 'cadPass')) {
 
             switch ($dataType) {
 
-                #validacao campo nome cadastro##############
+                //validacao campo nome cadastro
                 case 'cadNome':
-
                     if(empty($dataInput)){
-
                         //echo 'Campo nome é obrigatório!';
                         echo json_encode(array('inputOk' => false, 'message' => 'Campo nome é obrigatório!'));
                         exit;
-
                     } else if(!preg_match('/^[a-zA-Z0-9à-úÀ-Ú!=?& -]+$/',$dataInput)){
-
-
                         echo json_encode(array('inputOk' => false, 'message' => 'Nome contém caracteres não permitidos!'));
                         exit;
                         //!preg_match('/^[a-zA-Z0-9]+$/', $postdata)
                     } else if(strlen($dataInput) > 99){
-
                         //echo 'Nome muito extenso!';
                         echo json_encode(array('inputOk' => false, 'message' => 'Nome muito extenso!'));
                         exit;
-
                     } else {
-
                         echo json_encode(array('inputOk' => true));
                     }
                     break;
-
-
-
 
                 case 'cadEmail':
-
                     if(empty($dataInput)){
-
-                        //echo 'Campo nome é obrigatório!';
                         echo json_encode(array('inputOk' => false, 'message' => 'E-mail é obrigatório!'));
                         exit;
-
                     } else if(!self::email_test($dataInput)){
-
                         echo json_encode(array('inputOk' => false, 'message' => 'E-mail digitado não é válido!'));
                         exit;
-
                     } else if(!self::cadCheck($dataInput)){
-
                         echo json_encode(array('inputOk' => false, 'message' => 'Olá, seu e-mail já esta cadastrado!'));
                         exit;
-
                     } else {
-
                         echo json_encode(array('inputOk' => true));
-
                     }
                     break;
-
 
                 case 'cadCpfCnpj':
 
-
-
-                    // Cria um objeto sobre a classe
                     $cpf_cnpj = new ValidaCPFCNPJ($dataInput);
                     // Verifica se o CPF ou CNPJ é válido
-
                     if(empty($dataInput)){
-
                         echo json_encode(array('inputOk' => false, 'message' => 'CPF ou CNPJ é obrigatório!'));
                         exit;
-
                     } else if(!$cpf_cnpj->valida()){
-
                         echo json_encode(array('inputOk' => false, 'message' => 'CPF ou CNPJ não é válido!'));
                         exit;
 
                     } else {
-
                         echo json_encode(array('inputOk' => true));
-
                     }
-
                     break;
 
 
                 case 'cadPhone':
 
                     if(empty($dataInput)){
-
                         echo json_encode(array('inputOk' => false, 'message' => 'Telefone é obrigatório!'));
                         exit;
 
                     } else if(strlen($dataInput) <= 12){
-
                         echo json_encode(array('inputOk' => false, 'message' => 'Telefone digitado é inválido!'));
                         exit;
-
                     }else {
-
                         echo json_encode(array('inputOk' => true));
                     }
-
                     break;
-
-
-
-
             }#fecha switch##################
 
-
         }
-
-
-
 
         if($dataType == 'cadPass'){
 
@@ -181,55 +122,34 @@ class AtendController extends AbstractActionController
                 exit;
 
             } else if(strlen($dataInput) <= 5){
-
                 echo json_encode(array('inputOk' => false, 'message' => 'Senha mínimo 6 caracteres!'));
                 exit;
-
             }else {
-
                 echo json_encode(array('inputOk' => true));
             }
-
-
-
         }
 
+        if(isset($jsonItem['senha2'])){
 
-
-
-        if(isset($_POST['senha2'])){
-
-
-            $senha1 = $_POST['senha1'];
-            $senha2 = $_POST['senha2'];
+            $senha1 = $jsonItem['senha1'];
+            $senha2 = $jsonItem['senha2'];
 
             if($senha1 != $senha2){
-
                 echo json_encode(array('inputOk' => false, 'message' => 'Senhas precisam ser iguais!'));
                 exit;
-
             } else if(strlen($senha2) <= 5){
-
                 echo json_encode(array('inputOk' => false, 'message' => 'Senha mínimo 6 caracteres!'));
                 exit;
-
             }else {
-
                 echo json_encode(array('inputOk' => true));
             }
-
-
-
         }
 
-
-
         $view = new ViewModel();
-        $view->setTemplate('templates/orion/generic.phtml');
+        $view->setTemplate('generic');
         $view->setTerminal(true);
 
         return $view;
-
     }
 
 
@@ -577,27 +497,15 @@ FROM `$db`.Pedido INNER JOIN `$db`.Pessoa ON Pedido.pessoaId = Pessoa.id WHERE p
 
     public function cadCheck($email) {
 
-        $db = 'db1';
-
-        $this->emailCheck = $email;
-
-        $this->object = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         #verifica se email já esta cadastrado####################
-        $this->sql_checkUser = "SELECT id FROM `$db`.Pessoa WHERE email = '$this->emailCheck'";
-        $query1 = $this->object->getConnection()->prepare($this->sql_checkUser);
-        $query1->execute();
+        $checkUser = $this->entityManager->getRepository(Usuario::class)
+            ->findOneByEmail($email);
 
-        if($query1->rowCount() >= 1){
-
+        if(count($checkUser) >= 1){
             return false;
-
-
-        } else if ($query1->rowCount() == 0){
-
+        } else if (count($checkUser) == 0){
             return true;
-
         }
-
     }
 
 
@@ -616,13 +524,9 @@ FROM `$db`.Pedido INNER JOIN `$db`.Pessoa ON Pedido.pessoaId = Pessoa.id WHERE p
 
 
     public function email_test($email) {
-
-        $this->email = $email;
-
-        if (!preg_match('/^[^0-9][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[@][a-zA-Z0-9_-]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,4}$/',$this->email)){
+        if (!preg_match('/^[^0-9][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[@][a-zA-Z0-9_-]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,4}$/',$email)){
             return false;
         }else{
-
             return true;
         }
     }

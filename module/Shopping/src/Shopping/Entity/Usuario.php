@@ -126,6 +126,292 @@ class Usuario
      */
     private $datahoracadastro;
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
+    /**
+     * @param int $id
+     * @return Usuario
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getEmpresaid()
+    {
+        return $this->empresaid;
+    }
+
+    /**
+     * @param int $empresaid
+     * @return Usuario
+     */
+    public function setEmpresaid($empresaid)
+    {
+        $this->empresaid = $empresaid;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $email
+     * @return Usuario
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNome()
+    {
+        return $this->nome;
+    }
+
+    /**
+     * @param string $nome
+     * @return Usuario
+     */
+    public function setNome($nome)
+    {
+        $this->nome = $nome;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSobrenome()
+    {
+        return $this->sobrenome;
+    }
+
+    /**
+     * @param string $sobrenome
+     * @return Usuario
+     */
+    public function setSobrenome($sobrenome)
+    {
+        $this->sobrenome = $sobrenome;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSenha()
+    {
+        return $this->senha;
+    }
+
+    /**
+     * @param string $senha
+     * @return Usuario
+     */
+    public function setSenha($senha)
+    {
+        $this->senha = $senha;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTipousuario()
+    {
+        return $this->tipousuario;
+    }
+
+    /**
+     * @param string $tipousuario
+     * @return Usuario
+     */
+    public function setTipousuario($tipousuario)
+    {
+        $this->tipousuario = $tipousuario;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTelefone()
+    {
+        return $this->telefone;
+    }
+
+    /**
+     * @param string $telefone
+     * @return Usuario
+     */
+    public function setTelefone($telefone)
+    {
+        $this->telefone = $telefone;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCelular()
+    {
+        return $this->celular;
+    }
+
+    /**
+     * @param string $celular
+     * @return Usuario
+     */
+    public function setCelular($celular)
+    {
+        $this->celular = $celular;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmailalternativo()
+    {
+        return $this->emailalternativo;
+    }
+
+    /**
+     * @param string $emailalternativo
+     * @return Usuario
+     */
+    public function setEmailalternativo($emailalternativo)
+    {
+        $this->emailalternativo = $emailalternativo;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdredefinirsenha()
+    {
+        return $this->idredefinirsenha;
+    }
+
+    /**
+     * @param string $idredefinirsenha
+     * @return Usuario
+     */
+    public function setIdredefinirsenha($idredefinirsenha)
+    {
+        $this->idredefinirsenha = $idredefinirsenha;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdconfemail()
+    {
+        return $this->idconfemail;
+    }
+
+    /**
+     * @param string $idconfemail
+     * @return Usuario
+     */
+    public function setIdconfemail($idconfemail)
+    {
+        $this->idconfemail = $idconfemail;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param string $status
+     * @return Usuario
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTipofaturamento()
+    {
+        return $this->tipofaturamento;
+    }
+
+    /**
+     * @param string $tipofaturamento
+     * @return Usuario
+     */
+    public function setTipofaturamento($tipofaturamento)
+    {
+        $this->tipofaturamento = $tipofaturamento;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getValorcarregamento()
+    {
+        return $this->valorcarregamento;
+    }
+
+    /**
+     * @param string $valorcarregamento
+     * @return Usuario
+     */
+    public function setValorcarregamento($valorcarregamento)
+    {
+        $this->valorcarregamento = $valorcarregamento;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDatahoracadastro()
+    {
+        return $this->datahoracadastro;
+    }
+
+    /**
+     * @param \DateTime $datahoracadastro
+     * @return Usuario
+     */
+    public function setDatahoracadastro($datahoracadastro)
+    {
+        $this->datahoracadastro = $datahoracadastro;
+        return $this;
+    }
 }
 

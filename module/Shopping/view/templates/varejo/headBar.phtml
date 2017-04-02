@@ -306,7 +306,7 @@
 
                         <div style="margin-top: 10px;">
                             <div style=" font-size: 11px; text-align: center; font-weight: bold; margin-top: 8px; color: #f00; height: 10px; margin-bottom: 8px;">
-                                <span id="messageCadastro"></span>
+                                <span id="messageCadastro" ng-model="messageCadastro">{{messageCadastro}}</span>
                                 <div class="loading" ng-show="loading" ng-model="loader" style="padding: 1px; height: 16px; width: 16px;"></div>
                             </div>
 
@@ -746,6 +746,8 @@
                     case 'cadNome':
                         if(inputStatus == false){
                             $scope.cadNomeErr = true;
+                            $scope.messageCadastro = msg;
+
                         }else{
                             $scope.cadNomeErr = false;
                             $scope.cadNomeOk = true;
@@ -755,6 +757,7 @@
                     case 'cadEmail':
                         if(inputStatus == false){
                             $scope.cadEmailErr = true;
+                            $scope.messageCadastro = msg;
                         }else{
                             $scope.cadEmailErr = false;
                             $scope.cadEmailOk = true;
@@ -764,6 +767,7 @@
                     case 'cadCpfCnpj':
                         if(inputStatus == false){
                             $scope.cadCpfCnpjErr = true;
+                            $scope.messageCadastro = msg;
                         }else{
                             $scope.cadCpfCnpjErr = false;
                             $scope.cadCpfCnpjOk = true;
@@ -773,6 +777,7 @@
                     case 'cadPhone':
                         if(inputStatus == false){
                             $scope.cadPhoneErr = true;
+                            $scope.messageCadastro = msg;
                         }else{
                             $scope.cadPhoneErr = false;
                             $scope.cadPhoneOk = true;
@@ -783,6 +788,7 @@
                         if(inputStatus == false){
                             $scope.cadPassErr = true;
                             $scope.cadPassOk = false;
+                            $scope.messageCadastro = msg;
                         }else{
                             $scope.cadPassErr = false;
                             $scope.cadPassOk = true;
@@ -793,6 +799,7 @@
                         if(inputStatus == false){
                             $scope.cadPassCErr = true;
                             $scope.cadPassC_Ok = false;
+                            $scope.messageCadastro = msg;
                         }else{
                             $scope.cadPassCErr = false;
                             $scope.cadPassC_Ok = true;
@@ -801,16 +808,9 @@
                 }
 
             }, function errorCallback(response) {
-
                 console.log('error');
-
-
             });
-
-
-
-
-        }; // fecha validateEmail ##################
+        }; // fecha validate
 
 
         //ao clicar em cadastrar

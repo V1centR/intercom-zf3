@@ -96,13 +96,10 @@ class AtendController extends AbstractActionController
                     }
                     break;
 
-
                 case 'cadPhone':
-
                     if(empty($dataInput)){
                         echo json_encode(array('inputOk' => false, 'message' => 'Telefone é obrigatório!'));
                         exit;
-
                     } else if(strlen($dataInput) <= 12){
                         echo json_encode(array('inputOk' => false, 'message' => 'Telefone digitado é inválido!'));
                         exit;
@@ -115,9 +112,7 @@ class AtendController extends AbstractActionController
         }
 
         if($dataType == 'cadPass'){
-
             if(empty($dataInput)){
-
                 echo json_encode(array('inputOk' => false, 'message' => 'Senha é obrigatória!'));
                 exit;
 
@@ -129,10 +124,10 @@ class AtendController extends AbstractActionController
             }
         }
 
-        if(isset($jsonItem['senha2'])){
+        if($dataType == 'cadPassC'){
 
-            $senha1 = $jsonItem['senha1'];
-            $senha2 = $jsonItem['senha2'];
+            $senha1 = $jsonItem['dataInput']['s1'];
+            $senha2 = $jsonItem['dataInput']['s2'];
 
             if($senha1 != $senha2){
                 echo json_encode(array('inputOk' => false, 'message' => 'Senhas precisam ser iguais!'));

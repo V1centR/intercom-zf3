@@ -114,7 +114,7 @@ return [
             'error/index'             => __DIR__ . '/../view/templates/'.TEMPLATE.'/error/index.phtml',
             'menu' => __DIR__ . '/../view/templates/'.TEMPLATE.'/menu.phtml',
             'headBar' => __DIR__ . '/../view/templates/'.TEMPLATE.'/headBar.phtml',
-            'iso' => __DIR__ . '/../view/templates/'.TEMPLATE.'/iso.phtml',
+            'shopping/index/iso' => __DIR__ . '/../view/templates/'.TEMPLATE.'/iso.phtml',
             'generic' => __DIR__ . '/../view/templates/'.TEMPLATE.'/generic.phtml',
         ],
 

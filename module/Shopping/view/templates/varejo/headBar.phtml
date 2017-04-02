@@ -238,25 +238,23 @@
                 <form class="client-sign-in" id="client-sign-up cadastrarCtrl" autocomplete="off" novalidate="novalidate" >
 
                     <fieldset ng-controller="cadastrarCtrl">
-                        <div class="label">Preencha os campos:</div>
+                        <div class="title">Preencha os campos<br> test@test.com</div>
 
                         <div class="client-name">
                             <span class="icon"></span>
                             <input id="cadNome" ng-blur="validate('cadNome')" type="text" class="input-box product-ipt-notifyme-client-name" ng-model="nome" placeholder="Nome completo" onfocus="resetMsgCadastro();" />
-<!--
 
-                            <span class="icon-login-check checkmark" id="cadNome"></span>
-                            <span class="icon-field-error checkmark" id="cadNomeErr"></span>
+                            <span class="icon-login-check checkmark" id="cadNome" ng-show="cadNomeOk" style="display: block"></span>
+                            <span class="icon-field-error checkmark" id="cadNomeErr" ng-show="cadNomeErr" style="display: block"></span>
                             <span class="wm-tooltip wm-notify-error bottom" id="cadNomeMsg"><span class="wm-tooltip-arrow"></span><span class="wm-tooltip-arrow-shadow"></span><span class="wm-tooltip-content" id="cadNomeMsgSlot"></span></span>
                         </div>
 
                         <div class="client-user-name">
                             <span class="icon"></span>
-<!--                            <input type="text" id="cadEmail" onBlur="validate(this.value,'cadEmail',this.id)" class="input-box" ng-model="email" placeholder="E-mail" onfocus="resetMsgCadastro();" />-->
-                            <input type="text" id="cadEmail" ng-blur="validate('cadEmail')" class="input-box" ng-model="email" placeholder="E-mail" onfocus="resetMsgCadastro();" />
 
-                            <span class="icon-login-check checkmark" id="cadEmail"></span>
-                            <span class="icon-field-error checkmark" id="cadEmailErr"></span>
+                            <input type="text" id="cadEmail" ng-blur="validate('cadEmail')" class="input-box" ng-model="email" placeholder="E-mail" onfocus="resetMsgCadastro();" />
+                            <span class="icon-login-check checkmark" id="cadEmail" ng-model="cadEmailOk" ng-show="cadEmailOk" style="display: block"></span>
+                            <span class="icon-field-error checkmark" id="cadEmailErr" ng-show="cadEmailErr" style="display: block"></span>
                             <span class="wm-tooltip wm-notify-error bottom" id="cadEmailMsg"><span class="wm-tooltip-arrow"></span><span class="wm-tooltip-arrow-shadow"></span><span class="wm-tooltip-content" id="cadEmailMsgSlot"></span></span>
 
                         </div>
@@ -266,8 +264,8 @@
 
                             <input type="text" id="cadCpfCnpj" ng-blur="validate('cadCpfCnpj')" class="input-box" ng-model="cpf_cnpj" placeholder="CPF ou CNPJ" onfocus="resetMsgCadastro();" />
 
-                            <span class="icon-login-check checkmark" id="cadCpfCnpj"></span>
-                            <span class="icon-field-error checkmark" id="cadCpfCnpjErr"></span>
+                            <span class="icon-login-check checkmark" id="cadCpfCnpj" ng-show="cadCpfCnpjOk" style="display: block"></span>
+                            <span class="icon-field-error checkmark" id="cadCpfCnpjErr" ng-show="cadCpfCnpjErr" style="display: block"></span>
                             <span class="wm-tooltip wm-notify-error bottom" id="cadCpfCnpjMsg"><span class="wm-tooltip-arrow"></span><span class="wm-tooltip-arrow-shadow"></span><span class="wm-tooltip-content" id="cadCpfCnpjMsgSlot"></span></span>
 
                         </div>
@@ -275,20 +273,20 @@
                         <div class="client-phone">
                             <span class="icon"></span>
 
-                            <input type="text" id="cadPhone" onBlur="validate(this.value,'cadPhone',this.id)" class="input-box" ng-model="telefone" placeholder="(DDD) xxxx-xxxx" onfocus="resetMsgCadastro();" />
+                            <input type="text" id="cadPhone" ng-blur="validate('cadPhone')" class="input-box" ng-model="telefone" placeholder="(DDD) xxxx-xxxx" onfocus="resetMsgCadastro();" />
 
-                            <span class="icon-login-check checkmark" id="cadPhone"></span>
-                            <span class="icon-field-error checkmark" id="cadPhoneErr"></span>
+                            <span class="icon-login-check checkmark" id="cadPhone" ng-show="cadPhoneOk" style="display: block"></span>
+                            <span class="icon-field-error checkmark" id="cadPhoneErr" ng-show="cadPhoneErr" style="display: block"></span>
                             <span class="wm-tooltip wm-notify-error bottom" id="cadPhoneMsg"><span class="wm-tooltip-arrow"></span><span class="wm-tooltip-arrow-shadow"></span><span class="wm-tooltip-content" id="cadPhoneMsgSlot"></span></span>
                         </div>
 
                         <div class="new-client-pwd">
                             <span class="icon"></span>
 
-                            <input type="password" id="cadPass" onBlur="validate(this.value,'cadPass',this.id)" class="input-box" ng-model="senha_1" placeholder="Senha" onfocus="resetMsgCadastro();" />
+                            <input type="password" id="cadPass" ng-blur="validate('cadPass')" class="input-box" ng-model="senha_1" placeholder="Senha" onfocus="resetMsgCadastro();" />
 
-                            <span class="icon-login-check checkmark" id="cadPass"></span>
-                            <span class="icon-field-error checkmark" id="cadPassErr"></span>
+                            <span class="icon-login-check checkmark" id="cadPass" ng-show="cadPassOk" style="display: block"></span>
+                            <span class="icon-field-error checkmark" id="cadPassErr" ng-show="cadPassErr" style="display: block"></span>
                             <span class="wm-tooltip wm-notify-error bottom" id="cadPassMsg"><span class="wm-tooltip-arrow"></span><span class="wm-tooltip-arrow-shadow"></span><span class="wm-tooltip-content" id="cadPassMsgSlot"></span></span>
 
                         </div>
@@ -296,10 +294,10 @@
                         <div class="new-client-pwd">
                             <span class="icon"></span>
 
-                            <input type="password" id="cadPassC" onBlur="validate(this.value,'cadPassC',this.id)" class="input-box" ng-model="senha_c" placeholder="Confirmar Senha" onfocus="resetMsgCadastro();" />
+                            <input type="password" id="cadPassC" ng-blur="validate('cadPassC')" class="input-box" ng-model="senha_c" placeholder="Confirmar Senha" onfocus="resetMsgCadastro();" />
 
-                            <span class="icon-login-check checkmark" id="cadPassC"></span>
-                            <span class="icon-field-error checkmark" id="cadPassCErr"></span>
+                            <span class="icon-login-check checkmark" id="cadPassC" ng-show="cadPassC_Ok" style="display: block"></span>
+                            <span class="icon-field-error checkmark" id="cadPassCErr" ng-show="cadPassCErr" style="display: block"></span>
                             <span class="wm-tooltip wm-notify-error bottom" id="cadPassCMsg"><span class="wm-tooltip-arrow"></span><span class="wm-tooltip-arrow-shadow"></span><span class="wm-tooltip-content" id="cadPassCMsgSlot"></span></span>
 
                         </div>
@@ -338,6 +336,9 @@
 
 
 </script>
+
+<div>
+
 <script>
 //validacao real-time##################################
 
@@ -429,15 +430,14 @@
                                onfocus="resetMsg();"/>
                     </div>
 
-                    <div style="clear:  both;"></div>
+                    <div style="clear:both;"></div>
 
                     <div style="">
-                        <div style=" font-size: 11px; text-align: center; font-weight: bold; margin-top: 8px; color: #f00; height: 10px; margin-bottom: 8px;">
+                        <div style="font-size: 11px; text-align: center; font-weight: bold; margin-top: 8px; color: #f00; height: 10px; margin-bottom: 8px;">
 
                             <span id="messageLogin"></span>
                             <div class="loading" ng-show="loading" ng-model="loader"
                                  style="padding: 1px; height: 16px; width: 16px;"></div>
-
                         </div>
 
                         <div align="center" style="margin-bottom: 10px;">
@@ -449,11 +449,9 @@
                     </div>
 
                     <div class="form-group" style="font-size: 12px; color: #888">
-                        <span style="position: relative; top: 2px;"><input type="checkbox" value="1"
-                                                                           ng-model="conectado"/></span>
+                        <span style="position: relative; top: 2px;"><input type="checkbox" value="1" ng-model="conectado"/></span>
                         <span>  Continuar conectado</span>
                     </div>
-
                     <div style="font-size: 12px; color: #888">
                         <a href="" ng-click="switchLoginRecover()">Esqueci minha senha</a>
                     </div>
@@ -463,15 +461,13 @@
 
         </div>
         <div class="sign-in-footer">
-            Não tem conta no Loja teste òtimo
-
+            Não tem conta em nossa Loja?
             <div class="form-group links" style="font-size: 12px; color: #888; text-align: center; padding-top:4px;">
                 <a class="links" href="" ng-click="switchCadastroModal()" style="font-size: 20px;"><span> Cadastre-se aqui</span>
                 </a>
             </div>
 
         </div>
-
     </div>
 </script>
 
@@ -521,7 +517,6 @@
     </div>
 </script>
 
-</span>
 
 <script>
     //angular.module('ui.bootstrap.app', ['ngAnimate', 'ui.bootstrap']);
@@ -609,7 +604,7 @@
         };
     });
 </script>
-
+</div>
 
 <script>
 
@@ -692,8 +687,7 @@
         }
     });
 
-
-    //###########################Cadastrar configs##################
+    // ======= Cadastrar configs ============
     angular.module('ui.bootstrap.app').controller('cadastrarCtrl', function ($scope, $http) {
 
         $scope.loading = false;
@@ -707,27 +701,32 @@
             switch ($setItem){
 
                 case 'cadNome':
-                    console.log('cadNome tested ok!');
+//                    console.log('cadNome tested ok!');
                     dataInput = $scope.nome;
                     dataType = 'cadNome';
                     break;
-
                 case 'cadEmail':
-                    console.log('cadEmail tested ok!');
                     dataInput = $scope.email;
                     dataType = 'cadEmail';
-                break;
-
+                    break;
                 case 'cadCpfCnpj':
-                    console.log('cadCpfCnpj tested ok!');
                     dataInput = $scope.cpf_cnpj;
                     dataType = 'cadCpfCnpj';
                     break;
+                case 'cadPhone':
+                    dataInput = $scope.telefone;
+                    dataType = 'cadPhone';
+                    break;
+                case 'cadPass':
+                    dataInput = $scope.senha_1;
+                    dataType = 'cadPass';
+                    break;
+                case 'cadPassC':
+                    dataInput = $scope.senha_c;
+                    dataInput = {'s1': $scope.senha_1, 's2': $scope.senha_c};
+                    dataType = 'cadPassC';
+                    break;
             }
-
-
-
-           // console.log($scope.email + ' validate email angular ok');
 
             var checkData = $http({
                 method: "post",
@@ -739,8 +738,67 @@
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).then(function successCallback(response) {
 
-            console.log('success');
-            console.log(response);
+                var inputStatus = response.data.inputOk; // true / false
+                var msg = response.data.message;
+
+                switch (dataType){
+
+                    case 'cadNome':
+                        if(inputStatus == false){
+                            $scope.cadNomeErr = true;
+                        }else{
+                            $scope.cadNomeErr = false;
+                            $scope.cadNomeOk = true;
+                        }
+                        break;
+
+                    case 'cadEmail':
+                        if(inputStatus == false){
+                            $scope.cadEmailErr = true;
+                        }else{
+                            $scope.cadEmailErr = false;
+                            $scope.cadEmailOk = true;
+                        }
+                        break;
+
+                    case 'cadCpfCnpj':
+                        if(inputStatus == false){
+                            $scope.cadCpfCnpjErr = true;
+                        }else{
+                            $scope.cadCpfCnpjErr = false;
+                            $scope.cadCpfCnpjOk = true;
+                        }
+                        break;
+
+                    case 'cadPhone':
+                        if(inputStatus == false){
+                            $scope.cadPhoneErr = true;
+                        }else{
+                            $scope.cadPhoneErr = false;
+                            $scope.cadPhoneOk = true;
+                        }
+                        break;
+
+                    case 'cadPass':
+                        if(inputStatus == false){
+                            $scope.cadPassErr = true;
+                            $scope.cadPassOk = false;
+                        }else{
+                            $scope.cadPassErr = false;
+                            $scope.cadPassOk = true;
+                        }
+                        break;
+
+                    case 'cadPassC':
+                        if(inputStatus == false){
+                            $scope.cadPassCErr = true;
+                            $scope.cadPassC_Ok = false;
+                        }else{
+                            $scope.cadPassCErr = false;
+                            $scope.cadPassC_Ok = true;
+                        }
+                        break;
+                }
 
             }, function errorCallback(response) {
 

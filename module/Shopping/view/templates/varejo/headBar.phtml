@@ -228,7 +228,7 @@
 </div><!--fecha div.page###############-->
 
 
-<!--################################Novo modal#######################################-->
+<!-- === Modal register ==== -->
 <script type="text/ng-template" id="modalCadastro.html">
 
     <div>
@@ -307,11 +307,11 @@
                         <div style="margin-top: 10px;">
                             <div style=" font-size: 11px; text-align: center; font-weight: bold; margin-top: 8px; color: #f00; height: 10px; margin-bottom: 8px;">
                                 <span id="messageCadastro" ng-model="messageCadastro">{{messageCadastro}}</span>
-                                <div class="loading" ng-show="loading" ng-model="loader" style="padding: 1px; height: 16px; width: 16px;"></div>
+                                <div class="loading" ng-show="loading" ng-model="loader" style="margin: 0 auto;"></div>
                             </div>
 
                             <div align="center" style="margin-bottom: 10px; position: relative;">
-                                <button ng-click="cadastrar()" class="btn btn-primary" style="font-weight: bold; width: 99%;">Cadastrar</button><br>
+                                <button ng-click="cadastrar()" ng-disabled="registerBtnDisabled" class="btn btn-primary" style="font-weight: bold; width: 99%;">Cadastrar</button><br>
                             </div>
                         </div>
 
@@ -338,71 +338,6 @@
 </script>
 
 <div>
-
-<script>
-//validacao real-time##################################
-
-//var validate = function (val, type, id) {
-//
-//    if (id == 'cadPassC') {
-//        var senha1 = $('input#cadPass').val();
-//        var senha_c = $('input#cadPassC').val();
-//
-//        $.ajax({
-//            type: "POST",
-//            url: "/validform",
-//            data: {senha1: senha1, senha2: senha_c},
-//            success: function (data) {
-//
-//                var obj = JSON.parse('' + data + '');
-//
-//                if (!obj.inputOk) {
-//                    $('span#' + id).hide();
-//                    $('span#' + id + 'Err').fadeIn('fast');
-//
-//                    $('span#' + id + 'MsgSlot').text(obj.message);
-//                    $('span#' + id + 'Msg').fadeIn('fast');
-//                    $('span#' + id + 'Msg').click(function () {
-//                        $(this).hide();
-//                    });
-//
-//                } else if (obj.inputOk) {
-//                    $('span#' + id).fadeIn('fast');
-//                    $('span#' + id + 'Err').hide();
-//                    $('span#' + id + 'Msg').hide();
-//                }
-//            }
-//        });
-//
-//    } else {
-//
-//        $.ajax({
-//            type: "POST",
-//            url: "/validform",
-//            data: {dataInput: val, dataType: type},
-//            success: function (data) {
-//                var obj = JSON.parse('' + data + '');
-//                if (!obj.inputOk) {
-//                    $('span#' + id).hide();
-//                    $('span#' + id + 'Err').fadeIn('fast');
-//
-//                    $('span#' + id + 'MsgSlot').text(obj.message);
-//                    $('span#' + id + 'Msg').fadeIn('fast');
-//                    $('span#' + id + 'Msg').click(function () {
-//                        $(this).hide();
-//                    });
-//                } else if (obj.inputOk) {
-//                    $('span#' + id).fadeIn('fast');
-//                    $('span#' + id + 'Err').hide();
-//                    $('span#' + id + 'Msg').hide();
-//                }
-//            }
-//        }); //############fecha ajax############
-//    }
-//};
-//########################
-</script>
-
 
 <script type="text/ng-template" id="modalLogin.html">
 
@@ -497,7 +432,7 @@
                                     class="wm-tooltip-arrow"></span><span class="wm-tooltip-arrow-shadow"></span><span
                                     class="wm-tooltip-content">&nbsp;</span></span></div>
                     <div style="">
-                        <div style=" font-size: 11px; text-align: left; font-weight: bold; margin-top: 8px; color: #f00; height: 10px; margin-bottom: 8px;">
+                        <div style=" font-size: 11px; text-align: center; font-weight: bold; margin-top: 8px; color: #f00; height: 10px; margin-bottom: 8px;">
                             <span id="messageCadastrar1"></span>
                             <div class="loading" ng-show="loading" ng-model="loader"
                                  style="padding: 1px; height: 16px; width: 16px;"></div>
@@ -821,9 +756,11 @@
 
         //ao clicar em cadastrar
         $scope.cadastrar = function ($rootScope) {
-            document.getElementById("messageCadastro").textContent = "";
-            //alert($scope.email);
+
             $scope.loading = true;
+            $scope.registerBtnDisabled = true;
+            $scope.messageCadastro = '';
+
             var request = $http({
                 method: "post",
                 url: "/users/register",
@@ -835,29 +772,31 @@
                     pass: $scope.senha_1,
                     pass_c: $scope.senha_c,
                 },
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+//                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).then(function successCallback(response) {
 
                 var msg = response.data.message;
                 console.log(msg);
                 $scope.loading = false;
                 $scope.messageCadastro = msg;
-               // console.log(response);
-
+                $scope.registerBtnDisabled = false;
 
                 if(response.data.registerOk == true){
-                    $scope.messageCadastro = 'Cadastro realizado com sucesso!';
+                    $scope.messageCadastro = 'Cadastro realizado com sucesso';
+                    $scope.registerBtnDisabled = true;
+                   // alert('Cadastro realizado com sucesso!');
+                    //window.location = "/";
                 }
-
 
             }, function errorCallback(response) {
                 console.log('error');
+                $scope.registerBtnDisabled = false;
             });
         }
     });
 
 
-    //###################################Recover configs##################################
+    // === Recover configs ===
     angular.module('ui.bootstrap.app').controller('recoverCtrl', function ($scope, $http) {
 
         $scope.loading = false;

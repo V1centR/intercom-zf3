@@ -288,11 +288,8 @@ class UsersController extends AbstractActionController
             exit;
         }
 
-        // nova insercao de user
-
+        // insert user
         $conn = $this->entityManager->getConnection();
-
-        // get produtos #############
         $sql_newuser = "INSERT INTO usuario SET                                
                         email = '$email',
                         nome = '$nome',	
@@ -303,8 +300,6 @@ class UsersController extends AbstractActionController
         try{
 
             $query = $conn->prepare($sql_newuser);
-            $query->execute();
-
             if($query->execute()){
                 echo json_encode(array('registerOk' => true));
                 exit;
@@ -320,19 +315,13 @@ class UsersController extends AbstractActionController
             ##########################################################
 
         } catch (\Exception $e){
-
             echo json_encode(array('dataOk' => false, 'message' => 'Houve um erro no processamento!'));
             exit;
-
         }
 
-
-       $view = new ViewModel(array(
-
+       $view = new ViewModel([
          // 'json_comand' => json_encode($json_comand),
-
-       ));
-
+       ]);
 
        $view->setTemplate('templates/orion/registro.phtml');
        $view->setTerminal(true);

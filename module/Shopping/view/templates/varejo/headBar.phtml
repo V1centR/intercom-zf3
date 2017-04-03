@@ -238,7 +238,7 @@
                 <form class="client-sign-in" id="client-sign-up cadastrarCtrl" autocomplete="off" novalidate="novalidate" >
 
                     <fieldset ng-controller="cadastrarCtrl">
-                        <div class="title">Preencha os campos<br> test@test.com</div>
+                        <div class="title">Preencha os campos</div>
 
                         <div class="client-name">
                             <span class="icon"></span>
@@ -751,6 +751,7 @@
                         }else{
                             $scope.cadNomeErr = false;
                             $scope.cadNomeOk = true;
+                            $scope.messageCadastro = '';
                         }
                         break;
 
@@ -761,6 +762,7 @@
                         }else{
                             $scope.cadEmailErr = false;
                             $scope.cadEmailOk = true;
+                            $scope.messageCadastro = '';
                         }
                         break;
 
@@ -771,6 +773,7 @@
                         }else{
                             $scope.cadCpfCnpjErr = false;
                             $scope.cadCpfCnpjOk = true;
+                            $scope.messageCadastro = '';
                         }
                         break;
 
@@ -781,6 +784,7 @@
                         }else{
                             $scope.cadPhoneErr = false;
                             $scope.cadPhoneOk = true;
+                            $scope.messageCadastro = '';
                         }
                         break;
 
@@ -792,6 +796,7 @@
                         }else{
                             $scope.cadPassErr = false;
                             $scope.cadPassOk = true;
+                            $scope.messageCadastro = '';
                         }
                         break;
 
@@ -803,6 +808,7 @@
                         }else{
                             $scope.cadPassCErr = false;
                             $scope.cadPassC_Ok = true;
+                            $scope.messageCadastro = '';
                         }
                         break;
                 }
@@ -830,24 +836,22 @@
                     pass_c: $scope.senha_c,
                 },
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-            });
-            /* Check whether the HTTP Request is successful or not. */
-            request.success(function (data) {
+            }).then(function successCallback(response) {
+
+                var msg = response.data.message;
+                console.log(msg);
                 $scope.loading = false;
-                document.getElementById("messageCadastro").textContent = data;
+                $scope.messageCadastro = msg;
+               // console.log(response);
 
-                var cad_command = angular.fromJson(data);
 
-                if (cad_command == true) {
-
-                    document.getElementById("messageCadastro").style.display = 'none';
-                    alert('Cadastro realizado com sucesso!');
-
-                    window.location = "/";
+                if(response.data.registerOk == true){
+                    $scope.messageCadastro = 'Cadastro realizado com sucesso!';
                 }
-            });
-            request.error(function (data) {
-                document.getElementById("messageCadastro").textContent = "Houve um problema [" + data + "]";
+
+
+            }, function errorCallback(response) {
+                console.log('error');
             });
         }
     });

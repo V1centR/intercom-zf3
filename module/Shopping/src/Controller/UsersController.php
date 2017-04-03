@@ -196,9 +196,6 @@ class UsersController extends AbstractActionController
         $view->setTerminal(true); 
        
        return $view;
-        
-        
-        
          
      }
 
@@ -207,19 +204,45 @@ class UsersController extends AbstractActionController
      */
     public function registerAction() {
 
-       $postdata = file_get_contents("php://input");
+       //$postdata = file_get_contents("php://input");
+        $postdata = $this->getRequest()->getContent();
+        $jsonItem = json_decode($postdata, true);
+        $emptyData = 0;
 
-       if(empty($postdata)){
+        if(empty($postdata)){
             $model = new ViewModel();
             $model->setTemplate('error/404');
-           // $model->setTerminal(true);
+            // $model->setTerminal(true);
             return $model;
             exit;
         }
-        
-       
+
+        // check empty arrays values
+        foreach ($jsonItem as $dataCheck){
+            if(empty($dataCheck)){
+                $emptyData++;
+            }
+        }
+
+        // se nenhum campo vazio
+//        if($emptyData == 0){
+//
+//            $nome =     addslashes($jsonItem['nome']);
+//            $email =    addslashes($jsonItem['email']);
+//            $cpf_cnpj = addslashes($jsonItem['cpf_cnpj']);
+//            $telefone = addslashes($jsonItem['telefone']);
+//            $senha_1 =     addslashes($jsonItem['pass']);
+//            $senha_c =   addslashes($jsonItem['pass_c']);
+//
+//        }else {
+//
+//            echo json_encode(array('dataOk' => false, 'message' => 'Todos os campos são obrigatórios!'));
+//            exit;
+//        }
+
+
         $request = json_decode($postdata);
-        
+
         #dados#############################
         @$nome = $request->nome;
         @$email = $request->email;
@@ -227,147 +250,104 @@ class UsersController extends AbstractActionController
         @$telefone = $request->telefone;
         @$senha_1 = $request->pass;
         @$senha_c = $request->pass_c;
-      
+
         if(empty($nome)){
-            echo 'Campo nome é obrigatório!';
+            //echo 'Campo nome é obrigatório!';
+            echo json_encode(array('dataOk' => false, 'message' => 'Campo nome é obrigatório!'));
             exit;
         }
-        
         //validação do e-mail
         if(empty($email)){
-            echo 'Campo email é obrigatório!';
+           // echo 'Campo email é obrigatório!';
+            echo json_encode(array('dataOk' => false, 'message' => 'Campo e-mail é obrigatório!'));
             exit;
         } else if(!self::email_test($email)){
-            echo 'O email informado não é valido';
-            exit;            
+            //echo 'O email informado não é valido';
+            echo json_encode(array('dataOk' => false, 'message' => 'O email informado não é valido!'));
+            exit;
         }
-        
+
         if (empty($senha_1) || empty($senha_c)) {
-            echo 'As senhas são obrigatórias e devem ser iguais!';
+//            echo 'As senhas são obrigatórias e devem ser iguais!';
+            echo json_encode(array('dataOk' => false, 'message' => 'As senhas são obrigatórias e devem ser iguais!'));
             exit;
         } else if ($senha_1 != $senha_c) {
-            echo 'As senhas digitadas não conferem!';
+//            echo 'As senhas digitadas não conferem!';
+            echo json_encode(array('dataOk' => false, 'message' => 'As senhas digitadas não conferem!'));
             exit;
         } else {
             $senha_def = md5($senha_c);
         }
-        
-        
-       // $this->object = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-
 
         $sql_checkUser = $this->entityManager->getRepository(Usuario::class)
             ->findOneByEmail($email);
-        
-        if($sql_checkUser->rowCount() >= 1){
-            echo 'E-mail já consta em nosso cadastro! ultilize outro endereço de e-mail!';           
+
+        if(count($sql_checkUser) >= 1){
+//            echo 'E-mail já consta em nosso cadastro! ultilize outro endereço de e-mail!';
+            echo json_encode(array('dataOk' => false, 'message' => 'Este e-mail já consta em nosso cadastro!'));
             exit;
         }
-        
-        
-        #inserir novo visitante##########################
-        $this->object = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        #get formas de pagamentos na view get_forma_pagamento######
-        $this->sql_newuser = "INSERT INTO Pessoa SET                                
-				email = '$email', 
-				razaosocial = '$nome',
-                                nomefantasia = '$nome',	
-				telcomercial= '$telefone',
-                                cnpjcpf = '$cpf_cnpj',
-				senha = '$senha_def'
-				";		
-        $query = $this->object->getConnection()->prepare($this->sql_newuser);
-        
-       
-        $json_comand = array();
-        
-        if ($query->execute()) {
 
-         
-        // $this->exec_mail = self::preRegisterMail($email);
-            
-    
-        #filtra login e-mail, cpf ou cnpj####
-            $this->filtraLogin = self::filterLogin($postdata,true);
-        #####################################
-        
-        
-            
-        
-        if(!$this->filtraLogin['string']){           
-            
-            echo 'Os dados digitados não são válidos!';           
-            exit;
-            
-        }else{
-            
+        // nova insercao de user
+
+        $conn = $this->entityManager->getConnection();
+
+        // get produtos #############
+        $sql_newuser = "INSERT INTO usuario SET                                
+                        email = '$email',
+                        nome = '$nome',	
+                        telefone= '$telefone',
+                        senha = '$senha_def'
+				";
+
+        try{
+
+            $query = $conn->prepare($sql_newuser);
+            $query->execute();
+
+            if($query->execute()){
+                echo json_encode(array('registerOk' => true));
+                exit;
+            }
+
+
+            #filtra login e-mail, cpf ou cnpj####
+            //$this->filtraLogin = self::filterLogin($postdata,true);
+            #####################################
+
             #inicia autenticação######################################
-              $this->sessao = self::startSession($postdata,$this->filtraLogin['string']);
+           // $this->sessao = self::startSession($postdata,$this->filtraLogin['string']);
             ##########################################################
 
+        } catch (\Exception $e){
 
-              if(!$this->sessao){
-
-                  echo 'Login ou senha inválidos <<<';
-
-
-              }else if($this->sessao){
-
-                  echo json_encode(true);
-
-              }
-            
-            
-        }#fecha if !$this->filtraLogin####
-            
-            ####################################
-
-            
-            
-//            
-//            $json_login = array();
-//            $json_login['email'] = $email;
-//            $json_login['pass'] = $senha_c;
-//            $this->sessao = self::startSession(json_encode($json_login));
-//           
-//            
-//            $json_comand = json_encode($json_comand['cad_key'] = true);
-          
-          
-
-        } else {
-
-            echo "Um erro ocorreu ao criar o usuário";
-           // $json_comand = '{"cad_ok": false}';
+            echo json_encode(array('dataOk' => false, 'message' => 'Houve um erro no processamento!'));
+            exit;
 
         }
 
-        
+
        $view = new ViewModel(array(
-           
-          'json_comand' => json_encode($json_comand),
-           
+
+         // 'json_comand' => json_encode($json_comand),
+
        ));
-      
-       
+
+
        $view->setTemplate('templates/orion/registro.phtml');
-       $view->setTerminal(true); 
-       
+       $view->setTerminal(true);
+
        return $view;
-        
-        
-        
+
     }
     
     public function email_test($email) {
-		$this->email = $email;
-		if (!preg_match('/^[^0-9][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[@][a-zA-Z0-9_-]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,4}$/',$this->email)){
+		if (!preg_match('/^[^0-9][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[@][a-zA-Z0-9_-]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,4}$/',$email)){
 			return false;
 		}else{
 			return true;
 		}			
     }
-	
     
     
     public function cadastroAction(){

@@ -69,6 +69,23 @@ return [
                     ],
                 ),
             ],
+
+           'users' => [
+               'type' => Segment::class,
+               'options' => array(
+                   'route' => '/users[:action][/:id]',
+                   'constraints' => [
+                       'controller' => '[a-z_-]+',
+                   ],
+                   'defaults' => array(
+                       'controller' => UsersController::class,
+                       'action' => 'register',
+                   ),
+               ),
+           ],
+
+
+
         ],
     ],
     'controllers' => [

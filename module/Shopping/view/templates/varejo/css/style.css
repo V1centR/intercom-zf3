@@ -164,7 +164,7 @@ div.container a.navbar-brand > img {
 
 .loading{ width: 16px; height: 16px; background-image: url("images/loading.gif"); background-repeat: no-repeat;margin: 0 auto;}
 .topbar-container{ width: 100%; background-color:#1a75ce; color: #fff;}
-.topbar-container a:link, a:visited{ color: #fff; text-decoration: none;}
+.topbar-container a:link, a:visited{ text-decoration: none;}
 .topbar-container section.body-dropdown{ display: none;}
 .topbar-container .logo{ position: relative; float: left;}
 

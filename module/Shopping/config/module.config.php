@@ -70,7 +70,7 @@ return [
                 ),
             ],
 
-           'users' => [
+           'login' => [
                'type' => Segment::class,
                'options' => array(
                    'route' => '/users[:action][/:id]',
@@ -79,12 +79,10 @@ return [
                    ],
                    'defaults' => array(
                        'controller' => UsersController::class,
-                       'action' => 'register',
+                       'action' => 'login',
                    ),
                ),
            ],
-
-
 
         ],
     ],

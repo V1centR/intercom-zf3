@@ -346,7 +346,7 @@
            style="display:block; text-decoration:none; cursor:pointer; font-size:30px; position:relative; float:right;top:-8px; height:20px;">×</a>
         <div class="title">Entrar</div>
         <div id="alert-signin-error" class="alert alert-danger alert-dismissable hide"><span
-                    class="icon-wm-warning"></span><span id="message">Usuário ou senha inválidos.</span></div>
+                    class="icon-wm-warning" ></span><span id="message">Usuário ou senha inválidos.</span></div>
         <div class="sign-in-wrapper">
 
             <form id="loginForm client-sign-in" name="login" class="client-sign-in" novalidate="novalidate">
@@ -544,29 +544,22 @@
 <script>
 
 
-    //###########################Login configs##################
+    //=== Login configs===
     angular.module('ui.bootstrap.app').controller('loginFormModal', function ($scope, $http) {
 
         $scope.modalRecover = function () {
-
             // $scope.$uibModal.dismiss('cancel');
             $uibModalInstance.close($scope.selected.item);
         };
-
-
         $scope.cadastrarPage = function () {
-
             $scope.$emit('cadastrarCtrlOn');
             $scope.$emit('loginCtrlOff');
-
         };
-
 
         $scope.loading = false;
         $scope.entrar = function () {
 
             $scope.loading = true;
-
 
             var request = $http({
                 method: "post",
@@ -577,52 +570,60 @@
                     conectado: $scope.conectado,
                 },
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-            });
+            }).then(function successCallback(response) {
+
+                console.log(response);
+                console.log('execLogin ok');
+
+
+            },function errorCallback(response) {
+                console.log('error');
+            });;
 
             /* Check whether the HTTP Request is successful or not. */
-            request.success(function (data) {
-
-                $scope.loading = false;
-                document.getElementById("messageLogin").textContent = data;
-
-
-                var log_command = angular.fromJson(data);
-
-
-                if (log_command == true) {
-
-                    document.getElementById("messageLogin").style.display = 'none';
-                    // window.location.reload();  $('#ocorrencia_opt').val(); $('#dropDownId :selected').text();
-
-                    var changed = $('#ocorrencia_opt option:selected').val();
-
-                    if (changed != 0) {
-
-                        var nome = $('input#nomeInput').val();
-                        var email = $('input#inputEmail').val();
-                        window.location.href = window.location.href + "?name=" + nome + "&option=0&email=" + email + "&open=1";
-
-                    } else {
-
-                        window.location.reload();
-
-                    }
-
-
-                }
-
-                alert(cad_command);
-                //window.location.assign("/")
-            });
-            request.error(function (data) {
-                $scope.loading = false;
-                document.getElementById("messageLogin").textContent = 'Um erro ocorreu durante o processamento do login!';
-
-            });
+//            request.success(function (data) {
+//
+//                $scope.loading = false;
+//                document.getElementById("messageLogin").textContent = data;
+//
+//
+//                var log_command = angular.fromJson(data);
+//
+//
+//                if (log_command == true) {
+//
+//                    document.getElementById("messageLogin").style.display = 'none';
+//                    // window.location.reload();  $('#ocorrencia_opt').val(); $('#dropDownId :selected').text();
+//
+//                    var changed = $('#ocorrencia_opt option:selected').val();
+//
+//                    if (changed != 0) {
+//
+//                        var nome = $('input#nomeInput').val();
+//                        var email = $('input#inputEmail').val();
+//                        window.location.href = window.location.href + "?name=" + nome + "&option=0&email=" + email + "&open=1";
+//
+//                    } else {
+//
+//                        window.location.reload();
+//
+//                    }
+//
+//
+//                }
+//
+//                alert(cad_command);
+//                //window.location.assign("/")
+//            });
+//            request.error(function (data) {
+//                $scope.loading = false;
+//                document.getElementById("messageLogin").textContent = 'Um erro ocorreu durante o processamento do login!';
+//
+//            });
         }
     });
 
-    // ======= Cadastrar configs ============
+    // ======= Register configs validade + http request ============
     angular.module('ui.bootstrap.app').controller('cadastrarCtrl', function ($scope, $http) {
 
         $scope.loading = false;
@@ -794,7 +795,6 @@
             });
         }
     });
-
 
     // === Recover configs ===
     angular.module('ui.bootstrap.app').controller('recoverCtrl', function ($scope, $http) {

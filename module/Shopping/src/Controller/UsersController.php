@@ -31,6 +31,7 @@ use Zend\View\Model\JsonModel;
 use Zend\Mime\Part as MimePart;
 use Zend\Mime\Message as MimeMessage;
 use Zend\Mail\Message;
+use Doctrine\ORM\Mapping as ORM;
 
 
 class UsersController extends AbstractActionController
@@ -243,7 +244,7 @@ class UsersController extends AbstractActionController
 
         $request = json_decode($postdata);
 
-        #dados#############################
+        //dados
         @$nome = $request->nome;
         @$email = $request->email;
         @$cpf_cnpj = $request->cpf_cnpj;
@@ -347,76 +348,65 @@ class UsersController extends AbstractActionController
        
        return $view;
     
-    
 }
 
 
 
     public function loginAction(){
-
-      
         
-       #validação de entrada de dados#############################
-       $postdata = file_get_contents("php://input");       
-        $db = 'db1';
-       
-       if(empty($postdata)){           
-           
-          
-          
+       //validação de entrada de dados
+       $postdata = $this->getRequest()->getContent();
+
+       //executado 2x fazer uma funcao
+        if(empty($postdata)){
             $model = new ViewModel();
             $model->setTemplate('error/404');
-            $model->setTerminal(true); 
-            return $model;       
-          
-            exit;            
+            // $model->setTerminal(true);
+            return $model;
+            exit;
         }
-        ##########################################################
-        
-        
         
         $request = json_decode($postdata);
-     
-        #filtra login e-mail, cpf ou cnpj####
+
+        //dados
+//        $nome = $request->email;
+//        $pass = $request->pass;
+//        $conectado = $request->conectado;
+
+
+        //filtra login e-mail, cpf ou cnpj
         $this->filtraLogin = self::filterLogin($postdata,true);
-        #####################################
+
+
+//        echo $this->filtraLogin['string'];
+//        exit;
         
-        
-        
-        if(!$this->filtraLogin['string']){           
-            
-            echo 'Os dados digitados não são válidos!';           
+        if(!$this->filtraLogin['string']){
+            //echo 'Os dados digitados não são válidos!';
+            echo json_encode(array('dataOk' => false, 'message' => 'Os dados digitados não são válidos!'));
             exit;
             
         }else{
             
-            #inicia autenticação######################################
+            //inicia autenticação
               $this->sessao = self::startSession($postdata,$this->filtraLogin['string']);
-            ##########################################################
-
 
               if(!$this->sessao){
-
-                  echo 'Login ou senha inválidos';
-
-
+//                  echo 'Login ou senha inválidos';
+                  echo json_encode(array('dataOk' => false, 'message' => 'Login ou senha inválidos'));
+                  exit;
               }else if($this->sessao){
-
                   echo json_encode(true);
-
               }
             
             
         }#fecha if !$this->filtraLogin####
         
-        
-        $view = new ViewModel();      
-        $view->setTemplate('templates/orion/generic.phtml');
-        $view->setTerminal(true); 
-       
-       return $view;
-        
-
+//        $view = new ViewModel();
+//        $view->setTemplate('templates/orion/generic.phtml');
+//        $view->setTerminal(true);
+//
+//       return $view;
     }
     
     
@@ -427,60 +417,59 @@ class UsersController extends AbstractActionController
         #cnpj = 2
        // $this->typeLogin = $typeLogin; 
         $this->str_exec = $str;
-        
+        $execLogin = false;
+
         $request = json_decode($json_data);
-        
-       
-        @$conectado = $request->conectado;
-        
-        
-        #################################
-            #executa strings passadas como parametros na funcao##########################
-            $this->object = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');            
-            $query = $this->object->getConnection()->prepare($this->str_exec); 
-            $query->execute();      
-            $count = 0;
-            $count = $query->rowCount();
-            $data = $query->fetch();
-            
-            $this->passLoginData = false;
-            
-            if($count == 1){
-                
-                $this->passLoginData = $data;
-            }
-            
-        #################################
-        
-        
-        if(!$this->passLoginData){            
-          
-          $json_comand = false;
-            
-                   
-        } else {
-            
-            
-               $new_session = new Container('sessionUser');      
-               
-               
-               $new_session->idUser         = $this->passLoginData['id'];
-               $new_session->emailUser      = $this->passLoginData['email'];
-               $new_session->nomeUser       = $this->passLoginData['nome'];
-               
-               
-                if($conectado){
-                    
-                     setcookie("userConected", '1', time()+432000);
+        @$conectado = true;
+
+
+        //executa strings passadas como parametros na funcao
+        $conn = $this->entityManager->getConnection();
+
+        try{
+
+            $query = $conn->prepare($this->str_exec);
+            if($query->execute()){
+
+                $count = $query->rowCount();
+                $data = $query->fetch();
+
+                // #########################################
+                $this->passLoginData = false;
+
+                if($count == 1){
+                    $this->passLoginData = $data;
                 }
-               
-            $json_comand = true;
-       
-            
+
+                if(!$this->passLoginData){
+                    $json_comand = false;
+                } else {
+
+                    $new_session = new Container('sessionUser');
+
+                    $new_session->idUser         = $this->passLoginData['id'];
+                    $new_session->emailUser      = $this->passLoginData['email'];
+                    $new_session->nomeUser       = $this->passLoginData['nome'];
+
+                    if($conectado){
+                        setcookie("userConected", '1', time()+432000);
+                    }
+
+                    echo $new_session->idUser;
+                    $json_comand = true;
+                }
+                // #########################################
+
+//                echo json_encode(array('loginOk' => true));
+//                exit;
+
+                return $json_comand;
+            }
+        } catch (\Exception $e){
+            echo json_encode(array('dataOk' => false, 'message' => 'Houve um erro no processamento!'));
+            exit;
         }
-       
-        
-       return $json_comand;
+
     }
     
     
@@ -531,48 +520,34 @@ class UsersController extends AbstractActionController
     
     public function filterLogin($postdata,$type) {        
         
-        #validação de entrada de dados#############################
-      
-        $db = 'db1';
+        //validação de entrada de dados
        
         if(empty($postdata)){
-
              $model = new ViewModel();
              $model->setTemplate('error/404');
-             $model->setTerminal(true); 
-             return $model;       
-
+             //$model->setTerminal(true);
+             return $model;
              exit;            
-         }
-         
+        }
         
-         $this->typeService = $type;
-         
-        ##########################################################
+        $this->typeService = $type;
         $request = json_decode($postdata);
         
-        #dados#############################      
+        //dados
         @$senha = $request->pass;       
         @$email_cpf_cnpj = $request->email;
-        
+
         $this->senha = md5($senha);
         
-        
-        
         if($this->typeService == 1){
-                
                 $setSqlSenha = "AND senha = '$this->senha'";
-                
             } else{
-                
                 $setSqlSenha = "";
-                
         }
-      
         
         if(empty($email_cpf_cnpj)){
-            
-            echo 'Insira um E-mail, CPF ou CNPJ para logar!';
+            //echo 'Insira um E-mail, CPF ou CNPJ para logar!';
+            echo json_encode(array('dataOk' => false, 'message' => 'Insira um E-mail, CPF ou CNPJ para logar!'));
             exit;
             
         } else if(self::email_test($email_cpf_cnpj)){
@@ -582,20 +557,17 @@ class UsersController extends AbstractActionController
             $this->login = $email_cpf_cnpj;
             $this->type = 0;
             
-            
             //echo 'Entrou e-mail';
-            
-            $this->str = "SELECT id,email,nomefantasia as nome, cnpjcpf FROM `$db`.Pessoa WHERE email = '$email_cpf_cnpj' ".$setSqlSenha." ";
+            $this->str = "SELECT id,email,nome FROM usuario WHERE email = '$email_cpf_cnpj' ".$setSqlSenha." ";
             
         } else {
-            
             $this->loginIsCpfCnpj = true;
             $this->loginIsEmail = false;
         }
         
-        
         if(empty($senha) && $this->typeService){            
-          echo 'Campo senha é obrigatório!';
+//          echo 'Campo senha é obrigatório!';
+            echo json_encode(array('dataOk' => false, 'message' => 'Campo senha é obrigatório!'));
           exit;
         } 
         
@@ -605,31 +577,26 @@ class UsersController extends AbstractActionController
             $test_str = array(".",",","-",";"," ","/","\/","");        
             $this->data = str_replace($test_str, '', $email_cpf_cnpj);
             $this->data = preg_replace("/[^0-9\s]/", "", $this->data);
-          
-            
-            #valida cpf e cnpj####
+
+            //valida cpf e cnpj
                 if (strlen($this->data) == 11){
 
                     //echo 'entrou cpf';
-                    
-                    #tratamento do cpf##########################
+                    //tratamento do cpf
                     $pref1 = substr($this->data, 0,3);
                     $pref2 = substr($this->data, 3,3);
                     $pref3 = substr($this->data, 6,3);
                     $digito = substr($this->data, 9,2);
 
                     $this->default = $pref1.'.'.$pref2.'.'.$pref3.'-'.$digito;
-                    $this->str = "SELECT id,email,nomefantasia as nome, cnpjcpf FROM `$db`.Pessoa WHERE cnpjcpf = '$this->default' ".$setSqlSenha."";
+                    $this->str = "SELECT id,email,nomefantasia as nome, cnpjcpf FROM Pessoa WHERE cnpjcpf = '$this->default' ".$setSqlSenha."";
                     $this->type = 1;
-                    #############################################
 
-                #17991480000100 34109333873
-                #validar caso seja um cnpj
+                //17991480000100 34109333873
+                //validar caso seja um cnpj
                 }else if(strlen($this->data) == 14){
-
                     // echo 'entrou cnpj';
-             
-                    #tratamento do cnpj##########################
+                    //tratamento do cnpj
                     $pref1 = substr($this->data, 0,2);
                     $pref2 = substr($this->data, 2,3);
                     $pref3 = substr($this->data, 5,3);
@@ -637,28 +604,19 @@ class UsersController extends AbstractActionController
                     $pref5 = substr($this->data, 12,2);
         
                     $this->default =  $pref1.'.'.$pref2.'.'.$pref3.'/'.$pref4.'-'.$pref5;
-                    $this->str = "SELECT id,email,nomefantasia as nome, cnpjcpf FROM `$db`.Pessoa WHERE cnpjcpf = '$this->default' ".$setSqlSenha."";
+                    $this->str = "SELECT id,email,nomefantasia as nome, cnpjcpf FROM Pessoa WHERE cnpjcpf = '$this->default' ".$setSqlSenha."";
                     $this->type = 2;
-                    #############################################
 
                 } else if(!$this->loginIsEmail){
-                    
                     $this->str = false;
-                } #fecha valida cpf e cnpj#####################	
+                } //fecha valida cpf e cnpj
             
-            
-        } #fecha if
+        } //fecha if
         
-        
-     
-        
-        return array(
-            
+        return [
             'string' => $this->str,
             
-            
-        );
-        
+        ];
     }
     
     

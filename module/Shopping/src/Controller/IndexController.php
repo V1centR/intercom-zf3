@@ -8,6 +8,7 @@ use Shopping\Entity\Usuario;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Doctrine\ORM\Mapping as ORM;
+use Zend\Http\Header\SetCookie;
 
 class IndexController extends AbstractActionController
 {
@@ -49,7 +50,10 @@ class IndexController extends AbstractActionController
 
     public function isoAction()
     {
-        echo 'iso action controller';
+       // setcookie("userConected", '1', time()+432000);
+
+//        $newCookie = new SetCookie("userConectedZF", '1', time()+432000);
+//        $teste = $this->getResponse()->getHeaders()->addHeader($newCookie);
 
 
 

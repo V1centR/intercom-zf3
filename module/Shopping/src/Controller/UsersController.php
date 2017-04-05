@@ -4,6 +4,7 @@ namespace Shopping\Controller;
 
 use Shopping\Entity\Usuario;
 use Zend\EventManager\Event;
+use Zend\Http\Header\SetCookie;
 use Zend\Mvc\Application;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Mvc\MvcEvent;
@@ -350,8 +351,6 @@ class UsersController extends AbstractActionController
     
 }
 
-
-
     public function loginAction(){
         
        //validação de entrada de dados
@@ -368,18 +367,8 @@ class UsersController extends AbstractActionController
         
         $request = json_decode($postdata);
 
-        //dados
-//        $nome = $request->email;
-//        $pass = $request->pass;
-//        $conectado = $request->conectado;
-
-
         //filtra login e-mail, cpf ou cnpj
         $this->filtraLogin = self::filterLogin($postdata,true);
-
-
-//        echo $this->filtraLogin['string'];
-//        exit;
         
         if(!$this->filtraLogin['string']){
             //echo 'Os dados digitados não são válidos!';
@@ -391,85 +380,73 @@ class UsersController extends AbstractActionController
             //inicia autenticação
               $this->sessao = self::startSession($postdata,$this->filtraLogin['string']);
 
-              if(!$this->sessao){
-//                  echo 'Login ou senha inválidos';
-                  echo json_encode(array('dataOk' => false, 'message' => 'Login ou senha inválidos'));
-                  exit;
-              }else if($this->sessao){
-                  echo json_encode(true);
-              }
-            
-            
-        }#fecha if !$this->filtraLogin####
+            if($this->sessao){
+                echo json_encode(array('dataOk' => true));
+
+            } else {
+                echo json_encode(array('dataOk' => false, 'message' => 'Login ou senha inválidos'));
+                exit;
+            }
+        }
         
-//        $view = new ViewModel();
-//        $view->setTemplate('templates/orion/generic.phtml');
-//        $view->setTerminal(true);
-//
-//       return $view;
+        $view = new ViewModel();
+        $view->setTemplate('generic');
+        $view->setTerminal(true);
+
+       return $view;
     }
-    
-    
+
+    /**
+     * @param $json_data
+     * @param $str
+     * @return bool
+     */
     public function startSession($json_data,$str) {
-        
-        #e-mail = 0
-        #cpf = 1
-        #cnpj = 2
-       // $this->typeLogin = $typeLogin; 
+
+       //e-mail = 0
+       //cpf = 1
+       //cnpj = 2
+       // $this->typeLogin = $typeLogin;
         $this->str_exec = $str;
         $execLogin = false;
+        $this->passLoginData = false;
 
         $request = json_decode($json_data);
-        @$conectado = true;
-
+        $conectado = $request->conectado;
 
         //executa strings passadas como parametros na funcao
         $conn = $this->entityManager->getConnection();
 
-        try{
+        $query = $conn->prepare($this->str_exec);
+        if($query->execute()){
 
-            $query = $conn->prepare($this->str_exec);
-            if($query->execute()){
+            $count = $query->rowCount();
+            $data = $query->fetch();
 
-                $count = $query->rowCount();
-                $data = $query->fetch();
+            if($count == 1){
 
-                // #########################################
-                $this->passLoginData = false;
+                $this->passLoginData = $data;
 
-                if($count == 1){
-                    $this->passLoginData = $data;
+                $new_session = new Container('sessionUser');
+
+                $new_session->idUser         = $this->passLoginData['id'];
+                $new_session->emailUser      = $this->passLoginData['email'];
+                $new_session->nomeUser       = $this->passLoginData['nome'];
+
+                // TODO setCokie nativo, futuramente implementar setCookie ZF3
+                if($conectado){
+                    setcookie("uc", '1', time()+432000, '/');
+//                        $newCookie = new SetCookie("userConected", '1', time()+432000);
+//                        $teste = $this->getResponse()->getHeaders()->addHeader($newCookie);
                 }
 
-                if(!$this->passLoginData){
-                    $json_comand = false;
-                } else {
+                return true;
 
-                    $new_session = new Container('sessionUser');
+            } else {
 
-                    $new_session->idUser         = $this->passLoginData['id'];
-                    $new_session->emailUser      = $this->passLoginData['email'];
-                    $new_session->nomeUser       = $this->passLoginData['nome'];
-
-                    if($conectado){
-                        setcookie("userConected", '1', time()+432000);
-                    }
-
-                    echo $new_session->idUser;
-                    $json_comand = true;
-                }
-                // #########################################
-
-//                echo json_encode(array('loginOk' => true));
-//                exit;
-
-                return $json_comand;
+                return false;
             }
-        } catch (\Exception $e){
-            echo json_encode(array('dataOk' => false, 'message' => 'Houve um erro no processamento!'));
-            exit;
         }
-
     }
     
     

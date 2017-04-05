@@ -1,6 +1,7 @@
 <span ng-controller="modalUsersAssistente">
     <script>
         $(document).ready(function () {
+
             $('button.close').click(function () {
                 $('form').trigger("reset");
                 document.getElementById("messageLogin").textContent = "";
@@ -9,10 +10,50 @@
             $('input#loginInput').focus(function () {
                 document.getElementById("messageLogin").textContent = "";
             });
+
+
+            $('button#testeAAA').click(function () {
+
+                // var searchInput = document.getElementById("searchInput").value;
+
+//                        var login = $('input#loginInput').val();
+//                        var pass = $('input#pass').val();
+//                        var loggedIn = $('input#logged').val();
+
+
+                        var login = 'qeqwe@test.com';
+                        var pass = '123123';
+                        var loggedIn = 1;
+
+                        $.ajax({
+                            type: "POST",
+                            url: '/users/login',
+                            data: {
+                                email: login,
+                                pass: pass,
+                                conectado: loggedIn,
+                            },
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        }).done(function (data) {
+
+                            console.log(data);
+                            console.log('login exec complete!');
+                //            $('div#searchResult').fadeIn('fast').html(data);
+                        });
+            });
+            // fecha teste em ajax
+
+
+
+
+
+
+
+
         });
 
         function resetMsg() {
-            document.getElementById("messageLogin").textContent = "";
+           // document.getElementById("messageLogin").textContent = "";
         }
 
         function resetMsgCadastro() {
@@ -41,7 +82,7 @@
                                     <span class="number" id="num_itens"></span>
                                     <div ng-cloak id="cart"
                                          style="z-index: 9999; display:none; padding: 8px; width: 400px; background-color: #fff; position: absolute; left: -350px; top: 30px; box-shadow: 0 0 8px #888; font-size: 11px; text-align: left; ">
-                                        <script>$("div#cart").load("/cart/queryCart");</script>
+                                        <script>//$("div#cart").load("/cart/queryCart");</script>
                                     </div>
                                 </div>
                             </a>
@@ -350,7 +391,7 @@
         <div class="sign-in-wrapper">
 
             <form id="loginForm client-sign-in" name="login" class="client-sign-in" novalidate="novalidate">
-                <fieldset ng-controller="loginFormModal">
+                <fieldset ng-controller="loginFormModal" >
                     <div class="client-user-name">
                         <span class="icon"></span>
                         <input type="text" class="input-box" name="email" ng-model="email" id="loginInput"
@@ -361,7 +402,7 @@
                     <div class="new-client-pwd">
                         <span class="icon"></span>
 
-                        <input type="password" class="input-box" ng-model="senha" placeholder="Senha"
+                        <input type="password" class="input-box" ng-model="senha" id="pass" placeholder="Senha"
                                onfocus="resetMsg();"/>
                     </div>
 
@@ -370,7 +411,7 @@
                     <div style="">
                         <div style="font-size: 11px; text-align: center; font-weight: bold; margin-top: 8px; color: #f00; height: 10px; margin-bottom: 8px;">
 
-                            <span id="messageLogin"></span>
+                            <span id="messageLogin" ng-model="messageLogin">{{messageLogin}}</span>
                             <div class="loading" ng-show="loading" ng-model="loader"
                                  style="padding: 1px; height: 16px; width: 16px;"></div>
                         </div>
@@ -384,7 +425,7 @@
                     </div>
 
                     <div class="form-group" style="font-size: 12px; color: #888">
-                        <span style="position: relative; top: 2px;"><input type="checkbox" value="1" ng-model="conectado"/></span>
+                        <span style="position: relative; top: 2px;"><input type="checkbox" id="logged" value="1" ng-model="conectado"/></span>
                         <span>  Continuar conectado</span>
                     </div>
                     <div style="font-size: 12px; color: #888">
@@ -434,7 +475,7 @@
                     <div style="">
                         <div style=" font-size: 11px; text-align: center; font-weight: bold; margin-top: 8px; color: #f00; height: 10px; margin-bottom: 8px;">
                             <span id="messageCadastrar1"></span>
-                            <div class="loading" ng-show="loading" ng-model="loader"
+                            <div class="loading" id="loading" ng-show="loading" ng-model="loader"
                                  style="padding: 1px; height: 16px; width: 16px;"></div>
                         </div>
 
@@ -541,7 +582,9 @@
 </script>
 </div>
 
+
 <script>
+
 
 
     //=== Login configs===
@@ -560,9 +603,10 @@
         $scope.entrar = function () {
 
             $scope.loading = true;
+            $scope.messageLogin = '';
 
             var request = $http({
-                method: "post",
+                method: "POST",
                 url: "/users/login",
                 data: {
                     email: $scope.email,
@@ -572,12 +616,20 @@
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).then(function successCallback(response) {
 
-                console.log(response);
-                console.log('execLogin ok');
+                if(response.data.dataOk == false){
 
+                    console.log(response);
+                    $scope.loading = false;
+                    $scope.messageLogin = response.data.message;
 
+                } else if(response.data.dataOk == true) {
+
+                    console.log('logado com sucesso');
+                    window.location.reload();
+                }
             },function errorCallback(response) {
                 console.log('error');
+                $scope.loading = false;
             });;
 
             /* Check whether the HTTP Request is successful or not. */

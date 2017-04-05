@@ -1,5 +1,6 @@
 /vendor/*
 /data/*
+/module/Shopping/src/Shopping/*
 *.md
 *.xml
 *.phar

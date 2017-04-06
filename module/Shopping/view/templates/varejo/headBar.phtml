@@ -10,46 +10,6 @@
             $('input#loginInput').focus(function () {
                 document.getElementById("messageLogin").textContent = "";
             });
-
-
-            $('button#testeAAA').click(function () {
-
-                // var searchInput = document.getElementById("searchInput").value;
-
-//                        var login = $('input#loginInput').val();
-//                        var pass = $('input#pass').val();
-//                        var loggedIn = $('input#logged').val();
-
-
-                        var login = 'qeqwe@test.com';
-                        var pass = '123123';
-                        var loggedIn = 1;
-
-                        $.ajax({
-                            type: "POST",
-                            url: '/users/login',
-                            data: {
-                                email: login,
-                                pass: pass,
-                                conectado: loggedIn,
-                            },
-                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                        }).done(function (data) {
-
-                            console.log(data);
-                            console.log('login exec complete!');
-                //            $('div#searchResult').fadeIn('fast').html(data);
-                        });
-            });
-            // fecha teste em ajax
-
-
-
-
-
-
-
-
         });
 
         function resetMsg() {
@@ -71,6 +31,17 @@
                     </div>
                 </div>
                 <div class="wraper-right-icons">
+
+            <div ng-controller="cartInfo" class="cart-buttom" ng-mouseover="showCart()" ng-click="goCart()" ng-mouseleave="hideCart()" id="showCart" >
+                <span class="glyphicon glyphicon-shopping-cart"></span>
+                <div ng-cloak ng-show="cartIsVisible" class="dropdown-default cart-info">
+                    Seu carrinho esta vazio!
+                </div>
+            </div>
+
+
+
+
                     <div class="cart">
                         <!--#############################################################-->
                         <span ng-controller="cartInfo" id="cartInfo">
@@ -123,49 +94,76 @@
                     </div>
 
                     <?php
-                    if (!$this->login) {
+                    $menuData =  $this->sessions()->checkSession();
 
+                    if (!$menuData) {
                         echo '<div class="login">
                                     <div class="wrapper">
                                     <a href="" ng-click="open(\'sm\', \'1\')" id="loginOpen"><div style="position:relative; float:left;"><span class="glyphicon glyphicon-log-in"></span>&nbsp; Entre</div></a>&nbsp;
                                     <span class="color">ou</span>&nbsp;
                                     <a href="" ng-click="open(\'sm\', \'0\')">Cadastre-se</a>
-
-
-                                    </div>
+                              </div>
                             </div>';
                     }
                     ?>
 
                     <?php
-                    if ($this->login) {
+                    if ($menuData) {
 
                         $session = new \Zend\Session\Container('sessionUser');
 
-                        echo '<div class="profile" style="display:block;" ng-controller="userControls">
-                    <a href="/minhaconta" class="open-link topbar-buttons icon-topbar-link loaded">
-                       <span class="number">1</span>
-                       <div class="profile-img" style="background: url(//static.wmobjects.com.br/webstore/images/global/profile.png) center center;"></div>
-                    </a>
-                    <div style="display: none;" class="dropdown clearfix right profile-info" id="dropdown-profile">
-                       <div class="dropdown-position">
-                          <header class="header-dropdown clearfix"><strong class="title-dropdown">' . $session->nomeUser . '</strong></header>
-                          <section class="body-dropdown clearfix">
-                             <div class="controls"><a href="/minhaconta" class="user-name">
-                             <i class="icon-wm-cog"></i>Sua conta</a>
 
-                     <a href="" class="user-name">
-                         <i class="icon-wm-truck"></i>Seus pedidos</a>
-                     <a href="" ng-click="logOut()" class="logout">
-                         <i class="icon-wm-off"></i>Sair</a>
-                         <form>
-                         <input type="text" style="display:none" ng-model="logout"  name="logout" value="1">
-                         </form>
-                     </div>
-                          </section>
-                       </div>
-                    </div>
-                 </div>';
+
+                        echo '
+                            <div ng-controller="cartInfo" class="cart-buttom" ng-mouseover="showCart()" ng-click="goCart()" ng-mouseleave="hideCart()" id="showCart" >
+                                <span class="glyphicon glyphicon-user"></span>
+                                
+                                <div ng-cloak ng-show="cartIsVisible" class="dropdown-default user-actions">
+                                    <div class="header-dropdown">'.$session->nomeUser .'</div>
+                                    <div class="content">
+                                        <div class=""><a href="#"><span class="glyphicon glyphicon-user"></span> Minha conta</a> </div>
+                                        <div class=""><a href="#"><span class="glyphicon glyphicon-th-large"></span> Pedidos</a></div>
+                                        <div class=""><a href="#"><span class="glyphicon glyphicon-off"></span> Sair</a></div>
+                                    </div>                                                                       
+
+                                </div>
+                                
+                            </div>
+                        
+                        
+                        
+                        
+                        
+                        ';
+
+
+
+                        //ng-controller="userControls"
+//                        echo '<div class="profile" style="display:block;" >
+//
+//                                    <a href="/minhaconta" class="open-link topbar-buttons icon-topbar-link loaded">
+//
+//                                       <div class="profile-img" style="background: url(//static.wmobjects.com.br/webstore/images/global/profile.png) center center;"></div>
+//                                    </a>
+//                                    <div class="dropdown profile-info" id="dropdown-profile">
+//                                       <div class="dropdown-position">
+//                                          <header class="header-dropdown clearfix"><strong class="title-dropdown">' . $session->nomeUser . '</strong></header>
+//                                          <section class="body-dropdown clearfix">
+//                                             <div class="controls"><a href="/minhaconta" class="user-name">
+//                                             <i class="icon-wm-cog"></i>Sua conta</a>
+//
+//                                     <a href="" class="user-name">
+//                                         <i class="icon-wm-truck"></i>Seus pedidos</a>
+//                                     <a href="" ng-click="logOut()" class="logout">
+//                                         <i class="icon-wm-off"></i>Sair</a>
+//                                         <form>
+//                                         <input type="text" style="display:none" ng-model="logout"  name="logout" value="1">
+//                                         </form>
+//                                     </div>
+//                                          </section>
+//                                       </div>
+//                                    </div>
+//                                </div>';
                     }
                     ?>
 
@@ -584,9 +582,6 @@
 
 
 <script>
-
-
-
     //=== Login configs===
     angular.module('ui.bootstrap.app').controller('loginFormModal', function ($scope, $http) {
 
@@ -601,9 +596,10 @@
 
         $scope.loading = false;
         $scope.entrar = function () {
-
             $scope.loading = true;
             $scope.messageLogin = '';
+
+            console.log('entrar clicked');
 
             var request = $http({
                 method: "POST",
@@ -617,61 +613,17 @@
             }).then(function successCallback(response) {
 
                 if(response.data.dataOk == false){
-
                     console.log(response);
                     $scope.loading = false;
                     $scope.messageLogin = response.data.message;
-
                 } else if(response.data.dataOk == true) {
-
                     console.log('logado com sucesso');
                     window.location.reload();
                 }
             },function errorCallback(response) {
                 console.log('error');
                 $scope.loading = false;
-            });;
-
-            /* Check whether the HTTP Request is successful or not. */
-//            request.success(function (data) {
-//
-//                $scope.loading = false;
-//                document.getElementById("messageLogin").textContent = data;
-//
-//
-//                var log_command = angular.fromJson(data);
-//
-//
-//                if (log_command == true) {
-//
-//                    document.getElementById("messageLogin").style.display = 'none';
-//                    // window.location.reload();  $('#ocorrencia_opt').val(); $('#dropDownId :selected').text();
-//
-//                    var changed = $('#ocorrencia_opt option:selected').val();
-//
-//                    if (changed != 0) {
-//
-//                        var nome = $('input#nomeInput').val();
-//                        var email = $('input#inputEmail').val();
-//                        window.location.href = window.location.href + "?name=" + nome + "&option=0&email=" + email + "&open=1";
-//
-//                    } else {
-//
-//                        window.location.reload();
-//
-//                    }
-//
-//
-//                }
-//
-//                alert(cad_command);
-//                //window.location.assign("/")
-//            });
-//            request.error(function (data) {
-//                $scope.loading = false;
-//                document.getElementById("messageLogin").textContent = 'Um erro ocorreu durante o processamento do login!';
-//
-//            });
+            });
         }
     });
 
@@ -825,7 +777,7 @@
                     pass: $scope.senha_1,
                     pass_c: $scope.senha_c,
                 },
-//                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).then(function successCallback(response) {
 
                 var msg = response.data.message;
@@ -837,8 +789,8 @@
                 if(response.data.registerOk == true){
                     $scope.messageCadastro = 'Cadastro realizado com sucesso';
                     $scope.registerBtnDisabled = true;
-                   // alert('Cadastro realizado com sucesso!');
-                    //window.location = "/";
+                    alert('Cadastro realizado com sucesso!');
+                    window.location = "/";
                 }
 
             }, function errorCallback(response) {

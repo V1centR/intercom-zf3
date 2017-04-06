@@ -34,13 +34,14 @@ class Module
         $eventManager = $e->getApplication()->getEventManager();
         $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'getMenuSettings'), -100);
 
+
     }
 
 
     // Classe responsavel por renderizar e montar o menu
     public function getMenuSettings(){
 
-       // echo "init exec OK";
+       // return "init exec OK";
 
     }
 

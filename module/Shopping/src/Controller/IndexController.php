@@ -9,6 +9,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Doctrine\ORM\Mapping as ORM;
 use Zend\Http\Header\SetCookie;
+use Zend\Session\Container;
 
 class IndexController extends AbstractActionController
 {
@@ -50,13 +51,25 @@ class IndexController extends AbstractActionController
 
     public function isoAction()
     {
-       // setcookie("userConected", '1', time()+432000);
+        $new_session = new Container('sessionUser');
 
-//        $newCookie = new SetCookie("userConectedZF", '1', time()+432000);
-//        $teste = $this->getResponse()->getHeaders()->addHeader($newCookie);
+        $signal = ['.', ' '];
+        $timeKey = str_replace($signal, '', microtime());
+
+        echo strtoupper(sha1($timeKey)).'<br>';
 
 
 
+        print_r($_SESSION['sessionUser']);
+
+        if(isset($new_session->idUser)){
+            echo 'session ok';
+            echo $new_session->emailUser;
+
+        }else{
+
+            echo 'sem sessao';
+        }
 
         $view = new ViewModel(array(
 //            'logo_shop' => $testOk,

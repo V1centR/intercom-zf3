@@ -56,6 +56,17 @@ return [
                        ),
            ],
 
+            'logout' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route' => '/logout',
+                    'defaults' => [
+                        'controller' => UsersController::class,
+                        'action'     => 'logout',
+                    ],
+                ],
+            ],
+
             'validform' => [
                 'type' => Segment::class,
                 'options' => array(
@@ -108,10 +119,12 @@ return [
     'view_helpers' => [
         'factories' => [
           //  \Shopping\Helpers\Menu::class => InvokableFactory::class,
-            \Shopping\Helpers\Menu::class => MenuFactory::class
+            \Shopping\Helpers\Menu::class => MenuFactory::class,
+            \Shopping\Helpers\Sessions::class => InvokableFactory::class
         ],
         'aliases' => [
             'mainMenu' =>   \Shopping\Helpers\Menu::class,
+            'sessions' => \Shopping\Helpers\Sessions::class,
         ]
     ],
 
@@ -130,6 +143,7 @@ return [
             'menu' => __DIR__ . '/../view/templates/'.TEMPLATE.'/menu.phtml',
             'headBar' => __DIR__ . '/../view/templates/'.TEMPLATE.'/headBar.phtml',
             'shopping/index/iso' => __DIR__ . '/../view/templates/'.TEMPLATE.'/iso.phtml',
+//            'shopping/index/logout' => __DIR__ . '/../view/templates/'.TEMPLATE.'/iso.phtml',
             'generic' => __DIR__ . '/../view/templates/'.TEMPLATE.'/generic.phtml',
         ],
 

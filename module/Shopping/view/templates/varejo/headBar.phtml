@@ -21,7 +21,7 @@
             //  document.getElementById("messageCadastrar1").textContent = "";
         }
     </script>
-    <!--angular #################-->
+    <!--angular -->
 
         <div class="topbar-container">
             <header id="site-topbar" class="site-topbar fixed clearfix" itemscope itemtype="http://schema.org/WebSite">
@@ -32,42 +32,27 @@
                 </div>
                 <div class="wraper-right-icons">
 
-            <div ng-controller="cartInfo" class="cart-buttom" ng-mouseover="showCart()" ng-click="goCart()" ng-mouseleave="hideCart()" id="showCart" >
+            <div ng-controller="initDropDown" class="session-buttom" ng-mouseover="showSession()" ng-click="goCart()" ng-mouseleave="hideSession()" id="showCart" >
                 <span class="glyphicon glyphicon-shopping-cart"></span>
-                <div ng-cloak ng-show="cartIsVisible" class="dropdown-default cart-info">
+                <div ng-cloak ng-show="sessionIsVisible" class="dropdown-default cart-info">
                     Seu carrinho esta vazio!
                 </div>
             </div>
-
-
-
-
                     <div class="cart">
                         <!--#############################################################-->
-                        <span ng-controller="cartInfo" id="cartInfo">
-                            <a href="">
-                                <div ng-mouseover="showCart()" ng-click="goCart()" ng-mouseleave="hideCart()"
-                                     id="showCart" class="topbar-buttons cart-link">
+                        <span id="cartInfo">
 
-                                    <span class="cart-icon"></span>
-                                    <span class="number" id="num_itens"></span>
-                                    <div ng-cloak id="cart"
-                                         style="z-index: 9999; display:none; padding: 8px; width: 400px; background-color: #fff; position: absolute; left: -350px; top: 30px; box-shadow: 0 0 8px #888; font-size: 11px; text-align: left; ">
-                                        <script>//$("div#cart").load("/cart/queryCart");</script>
-                                    </div>
-                                </div>
-                            </a>
 
                             <script>
-                                angular.module('ui.bootstrap.app').controller('cartInfo', function ($scope, $interval) {
+                                angular.module('ui.bootstrap.app').controller('initDropDown', function ($scope, $interval) {
                                     var c = 0;
-                                    $scope.showCart = function () {
-                                        $scope.cartIsVisible = true;
+                                    $scope.showSession = function () {
+                                        $scope.sessionIsVisible = true;
                                     };
 
-                                    $scope.hideCart = function () {
+                                    $scope.hideSession = function () {
                                         //alert(1);
-                                        $scope.cartIsVisible = false;
+                                        $scope.sessionIsVisible = false;
                                     };
 
                                     $scope.goCart = function () {
@@ -112,91 +97,23 @@
 
                         $session = new \Zend\Session\Container('sessionUser');
 
-
-
                         echo '
-                            <div ng-controller="cartInfo" class="cart-buttom" ng-mouseover="showCart()" ng-click="goCart()" ng-mouseleave="hideCart()" id="showCart" >
+                            <div ng-controller="initDropDown" class="session-buttom" ng-mouseover="showSession()" ng-mouseleave="hideSession()" id="showCart" >
                                 <span class="glyphicon glyphicon-user"></span>
                                 
-                                <div ng-cloak ng-show="cartIsVisible" class="dropdown-default user-actions">
+                                <div ng-cloak ng-show="sessionIsVisible" class="dropdown-default user-actions">
                                     <div class="header-dropdown">'.$session->nomeUser .'</div>
-                                    <div class="content">
+                                    <div class="content" ng-controller="userControls">
                                         <div class=""><a href="#"><span class="glyphicon glyphicon-user"></span> Minha conta</a> </div>
                                         <div class=""><a href="#"><span class="glyphicon glyphicon-th-large"></span> Pedidos</a></div>
-                                        <div class=""><a href="#"><span class="glyphicon glyphicon-off"></span> Sair</a></div>
-                                    </div>                                                                       
+                                        <div class=""><a href="/logout?hash='.$session->keyUser.'"><span class="glyphicon glyphicon-off"></span> Sair</a></div>
+                                    </div>
 
-                                </div>
-                                
-                            </div>
-                        
-                        
-                        
-                        
-                        
+                                </div>                                
+                            </div>                        
                         ';
-
-
-
-                        //ng-controller="userControls"
-//                        echo '<div class="profile" style="display:block;" >
-//
-//                                    <a href="/minhaconta" class="open-link topbar-buttons icon-topbar-link loaded">
-//
-//                                       <div class="profile-img" style="background: url(//static.wmobjects.com.br/webstore/images/global/profile.png) center center;"></div>
-//                                    </a>
-//                                    <div class="dropdown profile-info" id="dropdown-profile">
-//                                       <div class="dropdown-position">
-//                                          <header class="header-dropdown clearfix"><strong class="title-dropdown">' . $session->nomeUser . '</strong></header>
-//                                          <section class="body-dropdown clearfix">
-//                                             <div class="controls"><a href="/minhaconta" class="user-name">
-//                                             <i class="icon-wm-cog"></i>Sua conta</a>
-//
-//                                     <a href="" class="user-name">
-//                                         <i class="icon-wm-truck"></i>Seus pedidos</a>
-//                                     <a href="" ng-click="logOut()" class="logout">
-//                                         <i class="icon-wm-off"></i>Sair</a>
-//                                         <form>
-//                                         <input type="text" style="display:none" ng-model="logout"  name="logout" value="1">
-//                                         </form>
-//                                     </div>
-//                                          </section>
-//                                       </div>
-//                                    </div>
-//                                </div>';
                     }
                     ?>
-
-                    <script>
-                        // Any function returning a promise object can be used to load values asynchronously
-                        angular.module('ui.bootstrap.app').controller('userControls', function ($scope, $http) {
-
-                            $scope.logOut = function () {
-
-                                var request = $http({
-                                    method: "post",
-                                    url: "/users/logout",
-                                    data: {
-                                        data: $scope.logout,
-                                    },
-                                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                                });
-
-                                /* Check whether the HTTP Request is successful or not. */
-                                request.success(function (data) {
-                                    var log_command = angular.fromJson(data);
-                                    if (log_command == true) {
-                                        //  window.location = "/";
-                                        window.location.href = window.location.pathname;
-                                        //document.getElementById("messageLogin").style.display = 'none';
-                                    }
-                                });
-                                request.error(function (data) {
-                                    document.getElementById("messageLogin").textContent = "error [" + data + "]";
-                                });
-                            }
-                        });
-                    </script>
 </span>
 <!--angular busca####################-->
 <!--<div class="topbar-search" style="position: relative; width: 250px;">-->

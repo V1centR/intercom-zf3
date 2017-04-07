@@ -437,7 +437,7 @@ class UsersController extends AbstractActionController
 
                 // TODO setCokie nativo, futuramente implementar setCookie ZF3
                 if($conectado){
-                    setcookie("uc", '1', time()+432000, '/');
+                    setcookie("uc", $keyUser, time()+432000, '/');
 //                        $newCookie = new SetCookie("userConected", '1', time()+432000);
 //                        $teste = $this->getResponse()->getHeaders()->addHeader($newCookie);
                 }
@@ -453,30 +453,31 @@ class UsersController extends AbstractActionController
 
     public function logoutAction() {
 
+        $getdata = $this->getRequest()->getQuery();
+
+        // TODO implementar validacao com banco de dados
+        if(empty($getdata->hash) || strlen($getdata->hash) < 40){
+            $model = new ViewModel();
+            $model->setTemplate('error/404');
+            // $model->setTerminal(true);
+            return $model;
+            exit;
+        }
+
         $new_session = new Container('sessionUser');
 //        $new_session->getManager()->destroy();
         //$new_session->offsetUnset('nomeUser');
         $new_session->getManager()->getStorage()->clear('sessionUser');
-//        setcookie('userConected',0,time()-100, '/');
-
-
-
-      //  $json_comand = json_encode($json_comand['logout'] = true);
-
-       // echo $json_comand;
-
-
+        setcookie('uc',0,time()-100, '/');
+        header('Location: /');
+        exit;
 
         $view = new ViewModel();
         $view->setTemplate('generic');
         $view->setTerminal(true);
 
         return $view;
-
-
     }
-
-
 
     public function filterLogin($postdata,$type) {
 

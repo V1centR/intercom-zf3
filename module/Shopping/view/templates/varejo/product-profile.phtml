@@ -1,0 +1,1184 @@
+<style>
+    .tabs-nav {padding: 20px 0 0; list-style: none;}
+    .tabs-nav li {display: inline;}
+    .tabs-nav a {
+        display:inline-block;
+        border: 1px solid #ddd;
+        border-bottom: none;
+        padding: 15px;
+        cursor: pointer;
+        border-radius: 5px 5px 0 0;
+        font-size: 14px;
+        color: #fff;
+        background: #e7e7e7;
+    }
+
+    .tabs-nav .active {
+        background: #fff;
+        color: rgba(20, 144, 64, 0.7);
+        border-bottom: 1px solid #fff;
+        margin-bottom: -1px;
+    }
+
+    .tab-content {
+        border: 1px solid #ddd;
+        padding: 20px;
+    }
+</style>
+
+<body class="webstore department" class="ng-cloak">
+
+<script>//angular.module('ui.bootstrap.app', []);</script>
+
+<?php
+$preco_unit = $data_prod['precounitario'];
+$preco_promocional = $data_prod['precopromocional'];
+
+
+$preco_promo = substr($data_prod['precopromocional'], 0, -3);
+$preco_promo_dec = substr($data_prod['precopromocional'], -2);
+
+
+$preco_parcelado = $preco_unit / 10;
+$preco_parcelado = number_format($preco_parcelado, 2, ",", ".");
+
+
+
+if ($preco_promocional == 0.00) {
+
+    $preco_final = $preco_unit;
+
+    $preco_promo = number_format(substr($preco_unit, 0, -3), 0, ",", ".");
+    $preco_promo_dec = substr($preco_unit, -2);
+    $hide = 'style="display:none"';
+
+    $preco_parcelado = $preco_unit / 10;
+    $preco_parcelado = number_format($preco_parcelado, 2, ",", ".");
+} else {
+    $hide = '';
+    $preco_promo = number_format(substr($preco_promocional, 0, -3), 0, ",", ".");
+    $preco_parcelado = $preco_promocional / 10;
+    $preco_parcelado = number_format($preco_parcelado, 2, ",", ".");
+    $preco_final = $preco_promocional;
+}
+
+
+
+
+
+$preco_promo_format = number_format($preco_unit, 2, ",", ".");
+
+
+
+// echo $preco_promo.'.'.$preco_promo_dec;
+
+
+$preco_funcao = number_format($preco_promocional, 2, ",", ".");
+
+#tratamento das avaliacoes##########################
+$soma = 0;
+$qtd_media = 0;
+#estatisticas####################
+foreach ($prod_rates as $stcs) {
+
+    $soma += $stcs['nota'] * 10;
+    $qtd_media++;
+}
+
+@$media = $soma / $qtd_media;
+$media = number_format($media, 0, '', '');
+
+
+$media_principal = str_replace('.', ',', $media / 10);
+
+
+
+if ($qtd_media == 0) {
+
+    $msg = ' - Seja a primeira pessoa a avaliar!';
+} else {
+
+    $msg = '';
+}
+#################################
+?>
+
+<div id="main" class="clearfix">
+
+    <article>
+        <div class="product-title-header">
+            <h1 itemprop="name"><?php echo $data_prod['nome_prod']; ?></h1>
+            <meta itemprop="description" content="<?php echo $data_prod['nome_prod']; ?>">
+
+            <a href="/marca/lg/29" class="product-brand" itemprop="brand"><?php echo $data_prod['marca_nome']; ?></a>
+            <meta itemprop="sku" content="1222607">
+        </div>
+        <aside class="product-info-left">
+            <div class="product-info-wrapper">
+                <div id="rating" class="rating large average-<?php echo $media; ?>" data-productid="3088158" data-rating="<?php echo $media; ?>" itemprop="aggregateRating" itemscope="" itemtype="//schema.org/AggregateRating">
+                    <div class="arc-mask-divisor"><span></span></div>
+                    <div class="arc-mask left">
+                        <div class="arc-shape"></div>
+                    </div>
+                    <div class="arc-mask right">
+                        <div class="arc-shape"></div>
+                    </div>
+                    <div class="arc-bg"></div>
+                    <div class="arc-content">
+                        <span class="arc-content-title">Avaliação</span><span class="arc-content-value" itemprop="ratingValue"><?php echo $media_principal; ?></span>
+                        <meta itemprop="ratingCount" content="30">
+                        <span class="arc-content-no-rate">Seja o primeiro a avaliar</span>
+                        <meta itemprop="worstRating" content="0">
+                        <meta itemprop="bestRating" content="5">
+                    </div>
+                </div>
+                <span class="wm-tooltip tooltip-rating left">
+                        <span class="wm-tooltip-arrow"></span><span class="wm-tooltip-arrow-shadow"></span>
+                        <div class="wm-tooltip-content">
+                            <div class="rating-info">
+                                <div class="rating-info-average">Avaliação média: <span><?php echo $media_principal; ?></span></div>
+                                <div class="rating-info-total-rate">(<?php echo $qtd_media; ?> avaliações)</div>
+                                <a href="#review-post-modal" class="btn btn-primary write-review wm-lightbox">Avalie este produto</a>
+                            </div>
+                        </div>
+                    </span>
+                <ul id="social-bar">
+                    <li class="facebook social-item">
+                        <span class="icon facebook-icon"></span>
+                        <div class="tooltip-wrapper">
+                            <div class="tooltip-content" id="product-face">
+                                <div fb-iframe-plugin-query="#" fb-xfbml-state="rendered" class="fb-like fb_iframe_widget" data-send="true" data-layout="button_count" data-width="200" data-show-faces="false">
+                                        <span style="vertical-align: bottom; width: 0px; height: 0px;">
+                                        </span></div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="pinterest social-item">
+                        <span class="icon pinterest-icon"></span>
+                        <div class="tooltip-wrapper">
+                            <div class="tooltip-content"><a id="pinterestLink" href="" class="pin-it-button" count-layout="horizontal" always-show-count="1"><img src="//assets.pinterest.com/images/PinExt.png" title="Pin It" border="0"></a></div>
+                        </div>
+                        <div class="pinterest-tooltip"></div>
+                    </li>
+                    <li class="twitter social-item">
+                        <span class="icon twitter-icon"></span>
+                        <div class="tooltip-wrapper">
+                            <div class="tooltip-content">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="google-plus social-item">
+                        <span class="icon google-plus-icon"></span>
+                        <div class="tooltip-wrapper">
+                            <div class="tooltip-content">
+                                <div id="___plusone_0" style="text-indent: 0px; margin: 0px; padding: 0px; background: transparent none repeat scroll 0% 0%; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block; width: 106px; height: 24px;">
+
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+
+
+        <div class="product-info-center">
+
+
+            <div class="wm-pictures-wrapper" >
+                <div id="wm-pictures" >
+                    <div id="product-pictures" class="wm-pictures" >
+                        <div style="position: relative; overflow: hidden;" class="main-picture-wrapper">
+                            <img style="display: block;" class="main-picture" src="/images/img<?php echo $data_prod['img_id'] . '.' . $data_prod['ext']; ?>" alt="<?php echo $data_prod['nome_prod']; ?>" itemprop="image">
+                            <div class="hint"><span class="zoom-icon"></span><span class="zoom-label">Clique e arraste para ver o zoom</span></div>
+                            <img style="position: absolute; top: 0px; left: 0px; opacity: 0; width: 1000px; height: 1000px; border: medium none; max-width: none;" class="zoomImg" src="img<?php echo $data_prod['img_id'] . '.' . $data_prod['ext']; ?>">
+                        </div>
+
+                        <!--thumbs images#####################-->
+                        <div class="content-wrapper" style="width: 550px; position: relative; right: 60px; text-align: center;">
+
+
+                            <div class="pictures-thumbs carousel" >
+                                <div id="wm-pictures-carousel" class="owl-carousel owl-theme disabled">
+                                    <div class="owl-wrapper-outer">
+                                        <ul class="owl-wrapper">
+
+
+                                            <?php
+                                            $hit = 0;
+
+                                            foreach ($prod_image as $img_data) {
+
+                                                if ($hit == 0) {
+                                                    $active = 'active';
+                                                } else {
+                                                    $active = '';
+                                                }
+
+                                                echo '<li class="owl-item"><a class="item ' . $active . '" data-zoom="/images/img' . $img_data['id'] . '.' . $img_data['ext'] . '" data-normal="/images/img' . $img_data['id'] . '.' . $img_data['ext'] . '"><img class="thumb" src="/images/img' . $img_data['id'] . '.' . $img_data['ext'] . '" alt="' . $data_prod['nome_prod'] . '"></a></li>';
+
+                                                $hit++;
+                                            }
+                                            ?>
+
+
+                                        </ul>
+                                    </div>
+                                    <!--                                            <div class="owl-controls clickable">
+                                             <div class="owl-buttons">
+                                                <div class="owl-prev"></div>
+                                                <div class="owl-next"></div>
+                                             </div>
+                                          </div>-->
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <!--thumbs images#####################-->
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <aside class="product-info-right " ng-controller="cartActions">
+            <div id="buy-box" class="buy-box clearfix">
+                <div id="buy-box-accordion" class="buy-box-container buy-box-wrapper clearfix wm-accordion vertical buy-box-accordion" itemprop="offers" itemscope="" itemtype="//schema.org/Offer">
+                    <section id="buybox-Walmart" class="item opened" data-ref-sku="534933" data-sku="1222607" data-product="3088158" data-seller="1" data-seller-sku-id="" data-service-id="1" data-price="1699" data-seller-name="Walmart" data-quantity="3340">
+                        <meta itemprop="availability" itemtype="//schema.org/ItemAvailability" content="//schema.org/InStock">
+                        <meta itemprop="priceCurrency" content="BRL">
+                        <div class="title" data-sellprice="1699" data-sellerid="1">
+                            <strong class="clearfix price">
+
+                                <abbr class="currency">R$  </abbr>
+                                <span class="int"><?php echo $preco_promo; ?></span>
+                                <span class="dec">,<?php echo $preco_promo_dec; ?></span>
+                            </strong>
+                            <i class="icon right blue more">+</i>
+                        </div>
+                        <div style="height: 264px;" class="content content-Walmart">
+                            <div class="content-wrapper">
+                                <div class="clearfix stickers stickers-wrapper stickers-buy-box seller-flag-wrapper"></div>
+
+                                <div class="product-price" data-sellprice="1699" data-sellerid="1">
+
+                                        <span class="payment-price-old" <?php echo $hide; ?>>
+                                            <span class="label">
+                                                <span class="payment-currency">R$ </span>
+                                                <del><?php echo $preco_promo_format; ?></del>
+                                            </span>
+                                        </span>
+
+                                    <span class="payment-sell">
+
+                                            <span class="payment-currency">R$ </span>
+                                            <span class="payment-price">
+                                                <strong>
+                                                    <span class="int"><?php echo $preco_promo; ?></span><span class="dec">,<?php echo $preco_promo_dec; ?></span>
+                                                </strong>
+                                            </span>
+                                        </span>
+
+                                    <span class="payment-installment" itemprop="itemCondition">
+                                            <span class="payment-installment-amount">10x <span>de </span></span><span class="payment-installment-currency">R$ </span><span class="payment-installment-price"><?php echo $preco_parcelado; ?> </span><span class="payment-installment-condition">sem juros</span></span></div>
+
+
+                                <div class="product-quantity-range" style="padding-left: 52px;">
+
+                                    <div style="position: relative; float: left; padding-top: 6px; font-size: 14px; font-weight: bold; color: #999; margin-right: 4px;">Qtd: </div>
+
+                                    <div style="position: relative; float: left;">
+                                        <input type="text" id="qtde_prod" name="qtde" maxlength="2" class="form-control" style="width: 60px; font-weight: bold;" ng-model="qtdeItem" ng-init="qtdeItem = '1'">
+                                    </div>
+
+
+                                </div>
+
+
+
+                                <div class="buy-button-wrapper">
+                                    <button ng-click="addCart('<?php echo $data_prod['prod_id']; ?>')" type="button" class="buy-button btn btn-success" style="width: 224px;">
+                                        <span class="icon small"></span>
+                                        <span class="text">Adicionar ao carrinho</span>
+                                    </button>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+
+
+            <!--frete - formas de pagamento - politica de troca#######################-->
+            <div id="buy-box-consult" ng-controller="consultaList" class="buy-box-consult-list clearfix buy-box-container consult-list">
+                <div class="estimate-shipping consult-item">
+                    <div id="estimate-shipping-modal" class="estimate-shipping-modal mfp-hide">
+                        <div class="title">Consultar frete para sua região</div>
+                        <form><label for="cep-prefix">Informe seu CEP</label><input autocomplete="off" class="cep-number" id="cep-number" maxlength="9" type="text"><input class="btn btn-primary" value="Calcular" type="submit"></form>
+                        <div class="info hidden"></div>
+                        <div class="icon"></div>
+                    </div>
+                    <a data-onclose="wm.estimateShipping.clearAll" ng-click="modalFrete()" href="#" class="consult-shipping consult-button">
+                        <i class="icon"></i>Frete <br>e prazo</a><span class="consult-shipping consult-button disabled hide"><i class="icon"></i>Frete <br>e prazo</span>
+                </div>
+
+                <!-- ####formas de pagamento##################-->
+                <div id="buy-box-consult-installment" class="buy-box-consult-installment consult-item">
+                    <a href="#" class="consult-payment consult-button" ng-click="modalFormaPagamento('modal-sm')">
+                        <i class="icon"></i>
+                        Formas de <br>pagamento</a>
+                    <span class="consult-payment consult-button installment-button disabled hide">
+                            <i class="icon"></i>Formas de <br>pagamento
+                        </span>
+                </div>
+                <!--##########################################-->
+
+
+                <div class="seller-return-policy consult-item">
+                    <div id="seller-return-policy-modal" class="seller-return-policy-modal mfp-hide">
+                        <div class="title">Consultar política de troca</div>
+                        <ul class="info">
+                            <li>
+                                <p><strong>Política ÓtimoNegócio</strong></p>
+                                <p>4. Troca de produtos com defeito</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="#" ng-click="modalPoliticaTroca()" class="consult-exchange consult-button"><i class="icon"></i>Política <br>de troca</a>
+                </div>
+
+                <!--########################################################################-->
+                <span ng-model="teste">{{interface.text}}</span>
+
+
+
+                <!--modal calculo de frete##############################-->
+                <modal title="Calcular frete" visible="CalcFreteModal" ng-cloak>
+                    <div style="width: 340px; margin: auto; min-height: 300px;">
+
+                        <form>
+                            <div style=" width:160px; position:relative; float:left; margin-right: 10px;">
+                                <input type="text" id="cep_dest" name="cep_dest" ng-model="cep_dest" maxlength="10" class="form-control" onkeypress='return onlyNum(event)' style="height:40px; font-weight: bold;">
+                            </div>
+
+                            <div style=" width:50px; position:relative; float:left;">
+                                <button class="btn btn-primary" href="#" ng-click="calcFrete()" style="font-weight: bold;"><span class="glyphicon glyphicon-globe"></span> Calcular</button>
+
+                            </div>
+                            <div style="clear: both"></div>
+                        </form>
+
+
+
+                    </div>
+
+                    <div id="result_frete" style=" border: 1px solid #ccc; position: relative; bottom: 250px; background-color: #f5f5f5;"></div>
+
+                </modal>
+
+
+                <!--####################################################-->
+
+
+
+                <modal title="Formas de Pagamento" visible="formaPagamentoModal" ng-cloak>
+
+                    <!--abas##############################-->
+                    <div>
+                        <ul class="tabs-nav">
+
+                            <?php
+                            $count = 1;
+                            foreach ($forma_pagamento_produto as $fpagamento) {
+
+                                $imagem_id = $fpagamento['imagemId'];
+
+                                echo '<li><a ng-click="tab=' . $count . '" ng-class="{\'active\' : tab==' . $count . '}"><img src="/images/img' . $imagem_id . '.png" width="70" height="40"></a></li>';
+
+                                $count++;
+                            }
+                            ?>
+
+
+                        </ul>
+
+                        <div class="tabs-container">
+
+                            <?php
+                            $count = 1;
+                            $calc_juros = false;
+                            foreach ($forma_pagamento_produto as $fpagamento) {
+
+                                //echo $fpagamento[0].'<br>';
+                                $fpagamento_nome = $fpagamento[0];
+                                $fpagamento_obs = $fpagamento['obspedido'];
+                                $fpagamento_obs_pgto = $fpagamento['obstipopagto'];
+
+                                //echo $fpagamento['parcelaate'];
+
+                                if (array_key_exists('parcelaate', $fpagamento)) {
+
+
+                                    if (array_key_exists('percjuros', $fpagamento)) {
+
+                                        $percentual_juros = $fpagamento['percjuros'];
+
+                                        if (($percentual_juros != 0.00) || ($percentual_juros != 0)) {
+
+                                            $calc_juros = true;
+                                        }
+                                    }
+
+                                    $parcela = 'Em até ' . $fpagamento['parcelaate'] . 'x  - com juros de (' . round($percentual_juros) . '%)';
+                                } else {
+
+                                    $parcela = '';
+                                }
+
+
+
+                                echo '<div class="tab-content" ng-show="tab == ' . $count . '" style="text-align:left; line-height:28px;">
+			<h3>' . $fpagamento_nome . '</h3>
+                        <p>' . $parcela . '</p>';
+
+
+
+                                if ($calc_juros) {
+
+                                    ##parcela juros teste#############################
+                                    $parcelas = $fpagamento['parcelaate'];
+                                    $juros = $percentual_juros;
+                                    $valor_total = $preco_final;
+                                    $count2 = 1;
+
+                                    for ($i = 2; $i <= $parcelas; $i++) {
+
+                                        $juros_percent = $juros / 100;
+
+                                        $valor_calc = $valor_total * (1 + $juros_percent * $i);
+                                        $valor_calc = $valor_calc / $i;
+
+
+                                        $preco_parcela = number_format($valor_calc, 2, ",", ".");
+                                        echo '<span style=" font-size:14px; font-weight:bold; color:#646464">Em ' . $i . ' X de ' . $preco_parcela . '</span><br>';
+                                    }
+                                    #################################################
+                                }
+                                echo '<p>' . $fpagamento_obs . '</p>
+                         <p>' . $fpagamento_obs_pgto . '</p>
+		</div>';
+                                $count++;
+                            }
+                            ?>
+
+                        </div>
+
+                    </div>
+                </modal>
+                <!--########################################################################-->
+
+
+
+                <!--modal politica de trocas ############################## -->
+                <modal title="Política de trocas" visible="politicaTrocaModal" ng-cloak>
+                    <div style="width: 340px; margin: auto; min-height: 300px;">
+
+                        Politicas de troca
+
+                    </div>
+                </modal>
+                <!--####################################################-->
+
+
+
+                <!--modal avaliacao ############################## -->
+                <modal title="Política de trocas" visible="avaliacaoModal" ng-cloak>
+
+
+                    <div class="review-post">
+                        <div id="review-post-modal" class="review-post-modal mfp-hide">
+                            <h4 class="section-title">Avalie este produto</h4>
+                            <div class="rating-review">
+                                <span class="label">Avaliação </span>
+                                <div class="rating-buttons">
+                                    <ul class="buttons clearfix" data-value="0">
+                                        <li class="rating-option item-1 first-item" onclick="setvalue(1)">1</li>
+                                        <li class="rating-option item-2" onclick="setvalue(2)">2</li>
+                                        <li class="rating-option item-3" onclick="setvalue(3)">3</li>
+                                        <li class="rating-option item-4" onclick="setvalue(4)">4</li>
+                                        <li class="rating-option item-5  last-item" onclick="setvalue(5)">5</li>
+                                    </ul>
+                                    <div class="small-chart">
+                                        <div class="rating small average-0 average-undefined">
+                                            <div class="arc-mask-divisor"><span></span></div>
+                                            <div class="arc-mask left">
+                                                <div class="arc-shape"></div>
+                                            </div>
+                                            <div class="arc-mask right">
+                                                <div class="arc-shape"></div>
+                                            </div>
+                                            <div class="arc-bg"></div>
+                                            <div class="arc-content"><span class="arc-content-title">Nota</span><span class="arc-content-value">1</span><span class="arc-content-no-rate">Sem Nota</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!--formulario de envio rate############################-->
+                            <span ng-controller="rateForm">
+                                <span id="msg_rate"></span>
+                                <form>
+                                    <span class="label">Título </span>
+                                    <input name="titulo" ng-model="titulo" maxlength="100" class="title-review" id="title-review" placeholder="Digite aqui o título do seu comentário..." type="text">
+
+                                    <span class="label">Comentário </span>
+                                    <textarea name="txt" ng-model="txt" maxlength="5000" class="comment-review" id="comment-review" rows="4" placeholder="Digite aqui seu comentário..."></textarea>
+
+                                    <div class="button-container">
+                                        <input style="display: none;" type="text" ng-model="rate_average" name="rate_average" id="average_value">
+                                        <input style="display: none;" type="text" ng-model="nota_product" value="<?php echo $data_prod['prod_id']; ?>" ng-value="<?php echo $data_prod['prod_id']; ?>" name="rate_product" id="product_valueid">
+                                        <input ng-click="submitRate()" class="btn btn-primary" value="Enviar avaliação" type="submit">
+                                    </div>
+
+
+                                </form>
+
+                            </span>
+                            <!--###################################################-->
+
+
+                            <div class="review-footer">
+                                <p>Este é um espaço destinado a sua opinião sobre os produtos do site. A sua participação é muito importante para nós. Veja as <a href="#" target="_blank">regras de publicação aqui</a>. Qualquer problema com seu pedido, <a href="#" target="_blank">entre em contato com a gente</a> por e-mail, chat ou telefone</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </modal>
+
+                <!--####################################################-->
+
+
+
+
+            </div>
+
+        </aside>
+        <div class="clearfix"></div>
+        <div class="product-description">
+            <div class="description">
+                <div class="toggle-switch translate-description"></div>
+                <h2 class="section-title"><span class="icon-description"></span>Descrição do produto</h2>
+
+                <div class="description-content">
+                    <?php
+                    echo $data_prod['prod_desc'];
+                    ?>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div id="product-characteristics-container">
+
+
+
+
+            <div id="product-characteristics" class="product-characteristics">
+                <h2 class="section-title"><span class="icon-characteristics"></span>Características do produto</h2>
+                <table style="border-bottom-width: 0px;" class="characteristics table-striped" cellspacing="0">
+                    <tfoot>
+                    <tr class="odd">
+                        <td colspan="2"><button type="button" class="more-characteristics btn-link">Ver todas as características<span class="arrow"></span></button></td>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+
+
+                    <?php
+                    //print_r($caracteristica_produto);
+
+
+                    $zcount = 0;
+                    $css_zebrar = '';
+                    foreach ($caracteristica_produto as $cprod) {
+
+
+                        if ($zcount % 2 == 0) {
+
+                            $css_zebrar = 'class="odd"';
+                        } else {
+
+                            $css_zebrar = '';
+                        }
+
+
+                        $caracteristica = $cprod['caracteristica'];
+                        $valor_caracter = $cprod['opcao'];
+
+
+                        //echo $caracteristica.' - '.$valor_caracter.'<br>';
+
+
+                        echo '<tr ' . $css_zebrar . '>
+                                                                <th class="name-field ">' . $caracteristica . '</th>
+                                                                <td class="value-field">' . $valor_caracter . '</td>
+                                                             </tr>';
+
+
+                        $zcount++;
+                    }
+                    ?>
+
+
+
+
+                    <tr class="odd limit">
+                        <th class="name-field Recursos-Gerais">Recursos Gerais</th>
+                        <td class="value-field Recursos-Gerais">Bloqueio de Canais</td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+        <div class="product-dimensions">
+            <h2 class="section-title"><span class="icon-dimensions"></span>Dimensões do produto: </h2>
+            <dl class="dimensions-list">
+
+                <dt class="dimensions-title"><span class="icon-width"></span>Largura:</dt>
+                <dd class="dimensions-description" itemprop="width">     <?php echo $data_prod['prod_largura']; ?></dd>
+                <dt class="dimensions-title"><span class="icon-height"></span>Altura:</dt>
+                <dd class="dimensions-description" itemprop="height">     <?php echo $data_prod['prod_altura']; ?> cm</dd>
+                <dt class="dimensions-title"><span class="icon-depth"></span>Profundidade:</dt>
+                <dd class="dimensions-description" itemprop="depth">      <?php echo $data_prod['prod_comprimento']; ?></dd>
+                <dt class="dimensions-title"><span class="icon-weight"></span>Peso:</dt>
+                <dd class="dimensions-description" itemprop="weight">     <?php
+
+                    $medida = '';
+                    #em gramas
+                    $peso = $data_prod['prod_peso'];
+                    //$peso = number_format($data_prod['prod_peso'], 0,",",".");
+
+                    if($peso <= 0.999){
+
+                        $medida =  'g';
+                        $peso = $peso*1000;
+                    } else{
+
+                        $medida = 'Kg';
+                        $peso = number_format($data_prod['prod_peso'], 2,",","");
+                    }
+                    echo $peso.''.$medida;
+
+                    ?></dd>
+            </dl>
+        </div>
+
+
+
+        <section id="product-review" class="product-review">
+
+            <h3 class="section-title"><span class="icon-review"></span><?php echo $qtd_media; ?> Avaliações <?php echo $msg; ?></h3>
+            <header>
+                <div class="review-header-resume content-panel-area">
+                    <div class="content-panel clearfix">
+                        <div class="rating small average-<?php echo $media; ?>" data-productid="<?php echo $stcs['id']; ?>" data-rating="<?php echo $media; ?>">
+                            <div class="arc-mask-divisor"><span></span></div>
+                            <div class="arc-mask left">
+                                <div class="arc-shape"></div>
+                            </div>
+                            <div class="arc-mask right">
+                                <div class="arc-shape"></div>
+                            </div>
+                            <div class="arc-bg"></div>
+                            <div class="arc-content"><span class="arc-content-title">Avaliação</span><span class="arc-content-value"><?php echo str_replace('.', ',', $media / 10); ?></span><span class="arc-content-no-rate">Sem nota</span></div>
+                        </div>
+                        <div class="section-title"><span class="title">Avaliação média</span><span></span><span class="rating-info-total-rate"></span></div>
+                        <a href="#review-post-modal" class="btn btn-primary write-review wm-lightbox">Avalie este produto</a>
+                    </div>
+                </div>
+            </header>
+
+
+
+            <div class="content-review clearfix">
+                <ol>
+
+
+                    <?php
+                    foreach ($prod_rates as $rate_data) {
+
+                        $nota_filter = $rate_data['nota'] * 10;
+
+                        echo '
+                                    <li class="item-review clearfix">
+                                      <article class="item-article-review clearfix" itemprop="review" itemscope="" itemtype="//schema.org/Review">
+                                          <div class="customer-rating" itemprop="reviewRating" itemscope="" itemtype="//schema.org/Rating">
+                                              <div id="rating" class="rating average-' . $nota_filter . '" data-productid="' . $rate_data['id'] . '" data-rating="' . $nota_filter . '">
+                                                  <div class="arc-mask-divisor"><span></span></div>
+                                                  <div class="arc-mask left">
+                                                      <div class="arc-shape"></div>
+                                                  </div>
+                                                  <div class="arc-mask right">
+                                                      <div class="arc-shape"></div>
+                                                  </div>
+                                                  <div class="arc-bg"></div>
+                                                  <div class="arc-content">
+                                                      <span class="arc-content-title">Nota</span><span class="arc-content-value" itemprop="ratingValue">' . $rate_data['nota'] . '</span><span class="arc-content-no-rate">Sem Nota</span>
+                                                      <meta itemprop="worstRating" content="0">
+                                                      <meta itemprop="bestRating" content="5">
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <div class="customer-review">
+                                              <strong class="title-customer-review" itemprop="author">"' . $rate_data['titulo'] . ' "</strong>
+                                              <p class="description-customer-review" itemprop="description">" ' . $rate_data['comentario'] . ' "</p>
+                                              <p class="customer-data">
+                                                  <cite class="customer-author" itemprop="author">' . $rate_data['nomefantasia'] . ' </cite>
+                                                      <span class="location">&nbsp;<em class="city-client" itemprop="contentLocation">
+                                                      </em> (' . $rate_data['local'] . ')</span>
+                                                          
+<span class="location">&nbsp;<em class="city-client" itemprop="contentLocation">
+                                                      </em> ' . str_replace('-', '/', $rate_data['data']) . '</span>
+                                                  
+                                              </p>
+                                          </div>
+                                          <ul class="helped-review" data-id="' . $rate_data['id'] . '">
+                                              <li class="helped-item"><button type="button" class="btn helped-yes"><span class="icon"></span></button>Me ajudou <span class="amount">(0)</span></li>
+                                              <li class="helped-item"><button type="button" class="btn helped-no"><span class="icon"></span></button>Não ajudou <span class="amount">(0)</span></li>
+                                          </ul>
+                                      </article>
+                                  </li>';
+                    }
+                    ?>
+
+                </ol>
+            </div>
+
+
+            <footer>
+                <div style="display: none;" id="review-pagination" class="pagination-wm-wrapper" data-itemsperpage="4" data-totalpages="9" data-pageselected="1" data-urlpages="/xhr/reviews/3088158/" data-parampage="pageNumber" data-ajax-container="#product-review .content-review" data-parameterurl="pageNumber" data-anchor="#product-review" data-find="ol">
+                    <ul class="pagination pagination-list pagination-wm page-initload-1 show-last-dots">
+                        <li class="pagination-item pagination-item-prev"><button class="btn btn-page btn-disabled">« Anterior</button></li>
+                        <li class="pagination-item pagination-item-1 item-page first selected-item"><a href="/3088158/pr?pageNumber=1" data-href="/xhr/reviews/3088158/?pageNumber=1" class="btn btn-page active">1</a></li>
+                        <li class="pagination-item pagination-item-2 item-page"><a href="/3088158/pr?pageNumber=2" data-href="/xhr/reviews/3088158/?pageNumber=2" class="btn btn-page">2</a></li>
+
+                        <li class="pagination-item pagination-item-9 item-page last"><a href="/otn-idproduto/pr?pageNumber=9" data-href="/xhr/reviews/3088158/?pageNumber=9" class="btn btn-page">3</a></li>
+                        <li class="pagination-item pagination-item-next"><button data-href="/xhr/reviews/3088158/?pageNumber=2" class="btn btn-page">Próxima »</button></li>
+
+
+                    </ul>
+                </div>
+                <div class="review-post">
+                    <div id="review-post-modal" class="review-post-modal mfp-hide">
+                        <h4 class="section-title">Avalie este produto</h4>
+                        <div class="rating-review">
+                            <span class="label">Avaliação </span>
+                            <div class="rating-buttons">
+                                <ul class="buttons clearfix" data-value="0">
+                                    <li class="rating-option item-1 first-item" onclick="setvalue(1)">1</li>
+                                    <li class="rating-option item-2" onclick="setvalue(2)">2</li>
+                                    <li class="rating-option item-3" onclick="setvalue(3)">3</li>
+                                    <li class="rating-option item-4" onclick="setvalue(4)">4</li>
+                                    <li class="rating-option item-5  last-item" onclick="setvalue(5)">5</li>
+                                </ul>
+                                <div class="small-chart">
+                                    <div class="rating small average-0 average-undefined">
+                                        <div class="arc-mask-divisor"><span></span></div>
+                                        <div class="arc-mask left">
+                                            <div class="arc-shape"></div>
+                                        </div>
+                                        <div class="arc-mask right">
+                                            <div class="arc-shape"></div>
+                                        </div>
+                                        <div class="arc-bg"></div>
+                                        <div class="arc-content"><span class="arc-content-title">Nota</span><span class="arc-content-value">1</span><span class="arc-content-no-rate">Sem Nota</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!--formulario de envio rate############################-->
+                        <span ng-controller="rateForm">
+                                <span id="msg_rate"></span>
+                                <form>
+                                    <span class="label">Título </span>
+                                    <input name="titulo" ng-model="titulo" maxlength="100" class="title-review" id="title-review" placeholder="Digite aqui o título do seu comentário..." type="text">
+
+                                    <span class="label">Comentário </span>
+                                    <textarea name="txt" ng-model="txt" maxlength="5000" class="comment-review" id="comment-review" rows="4" placeholder="Digite aqui seu comentário..."></textarea>
+
+                                    <div class="button-container">
+                                        <input style="display: none;" type="text" ng-model="rate_average" name="rate_average" id="average_value">
+                                        <input style="display: none;" type="text" ng-model="nota_product" value="<?php echo $data_prod['prod_id']; ?>" ng-value="<?php echo $data_prod['prod_id']; ?>" name="rate_product" id="product_valueid">
+                                        <input ng-click="submitRate()" class="btn btn-primary" value="Enviar avaliação" type="submit">
+                                    </div>
+
+
+                                </form>
+
+                            </span>
+                        <!--###################################################-->
+
+
+                        <div class="review-footer">
+                            <p>Este é um espaço destinado a sua opinião sobre os produtos do site. A sua participação é muito importante para nós. Veja as <a href="#" target="_blank">regras de publicação aqui</a>. Qualquer problema com seu pedido, <a href="#" target="_blank">entre em contato com a gente</a> por e-mail, chat ou telefone</p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </section>
+        <script>
+
+            angular.module('ui.bootstrap.app').controller('rateForm', function ($scope, $http) {
+
+                $scope.submitRate = function ($rootScope) {
+                    document.getElementById("msg_rate").textContent = ".";
+                    var rate = document.getElementById("average_value").value;
+                    //  var prod_id = document.getElementById("product_valueid").value = ;
+
+                    $scope.rate_average = rate;
+                    $scope.rate_product = '<?php echo $data_prod['prod_id']; ?>';
+
+                    // alert($scope.rate_product);
+                    var request = $http({
+                        method: "post",
+                        url: "/rating",
+                        data: {
+                            titulo: $scope.titulo,
+                            desc_txt: $scope.txt,
+                            rate_value: $scope.rate_average,
+                            produto_id: $scope.rate_product,
+                        },
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    });
+                    /* Check whether the HTTP Request is successful or not. */
+                    request.success(function (data) {
+                        document.getElementById("msg_rate").textContent = data;
+                        //$scope.$emit('CadastrarOff');
+                        //document.getElementById("emailreserva").value = $scope.email;
+                        //$scope.$emit('Cadastrar2On');
+                    });
+                    request.error(function (data) {
+                        document.getElementById("msg_rate").textContent = "Houve um problema [" + data + "]";
+                    });
+                }
+            });
+        </script>
+        <div id="Desktop_Produto_Similares" class="clearfix similaritems shelf-container wm-recommend" data-size="10" data-display="Desktop_Produto_Similares">
+            <h3 class="section-title"><span class=" wm-icon icon-similar"></span>Similares</h3>
+            <section class="shelf-container">
+                <ul class="shelf-itens clearfix" itemprop="itemOffered" itemscope="" itemtype="http://schema.org/ItemList">
+
+
+
+                    <?php
+                    // print_r($prod_similares);
+                    $position = 0;
+
+                    foreach ($prod_similares as $prod_data) {
+
+
+
+                        $preco_unit = $prod_data['precounitario'];
+                        $preco_promocional = $prod_data['precopromocional'];
+
+
+
+                        $preco_parcelado = $preco_unit / 10;
+                        $preco_parcelado = number_format($preco_parcelado, 2, ",", ".");
+
+
+                        if ($preco_promocional == 0.00) {
+
+                            $preco_normal = number_format(substr($preco_unit, 0, -3), 0, ",", ".");
+                            $preco_normal_dec = substr($preco_unit, -2);
+                            $hide = 'style="visibility:hidden"';
+                        } else {
+
+                            $preco_normal = number_format(substr($preco_promocional, 0, -3), 0, ",", ".");
+                            $preco_normal_dec = substr($preco_promocional, -2);
+                            $hide = '';
+                        }
+
+
+                        $preco_promo_format = number_format($preco_unit, 2, ",", ".");
+
+                        // echo $prod_data['nome'];
+
+                        $filtra_url = filterUrl($prod_data['nome'], '-');
+
+                        echo '<li class="shelf-item  item-' . $position . ' with-buy-box" data-tooltip-class="left" itemprop="itemListElement" itemscope="" itemtype="http://schema.org/Product" data-productid="' . $prod_data['id'] . '" data-position="' . $position . '" data-available="true" data-hastree="" data-skipservice="true">
+                            <figure><a href="" title="' . $prod_data['nome'] . '" itemprop="url">
+                                <img src="/images/img' . $prod_data['img_id'] . '.' . $prod_data['ext'] . '" width="220" height="220" class="loading"></a></figure>
+                            <div class="inner-content">
+                                <a href="/produto/' . $prod_data['id'] . '/' . $filtra_url . '" class="product-link">
+                                    <span class="product-title" itemprop="name" style="height:50px;">' . $prod_data['nome'] . '</span>
+                                    <p class="shelf-price" itemprop="offers" itemscope="" itemtype="//schema.org/Offer"><span class="payment-price-old" ' . $hide . '><span class="label">De: </span><del>R$ ' . $preco_promo_format . '</del></span><span class="payment-sell"><span class="label">Por</span>
+                                        <span itemprop="priceCurrency" content="BRL" class="payment-currency">R$ </span>
+                                        <span class="payment-price" itemprop="price"><strong><span class="int">' . $preco_normal . '</span><span class="dec">,' . $preco_normal_dec . '</span></strong></span></span><span class="tooltip-container"></span><span class="payment-installment"><span class="payment-installment-amount" itemprop="itemCondition">10x <span>de </span><span class="payment-installment-currency"></span><span class="payment-installment-price">R$ ' . $preco_parcelado . ' </span><span class="payment-installment-condition">sem juros</span></span></span></p>
+                                </a>
+                                <div class="stickers">
+                                    <ul>
+                                        <li class="stamp-top"></li>
+                                        <li class="stamp-middle"></li>
+                                        <li class="stamp-bottom"></li>
+                                    </ul>
+                                </div>
+                                <div class="button-container"><button type="button" class="buy-button btn btn-success hidden" data-sku="1222680" data-product="3088224" data-seller="1" data-available="true" data-skipservice="true" data-departmentid="4791" data-categoryid="4792" data-subcategoryid="4799"><span class="icon"></span></button></div>
+                            </div>
+                        </li>';
+
+
+                        $position++;
+                    }
+                    ?>
+
+
+
+
+                </ul>
+            </section>
+        </div>
+
+
+
+
+    </article>
+
+
+
+</div>
+
+<script>
+
+
+    function setvalue(value) {
+
+        var value = value;
+
+        $("#average_value").val(value);
+    }
+
+
+</script>
+
+<?php
+
+function filterUrl($string, $slug = false) {
+    $string = strtolower($string);
+    $ascii['a'] = range(224, 230);
+    $ascii['e'] = range(232, 235);
+    $ascii['i'] = range(236, 239);
+    $ascii['o'] = array_merge(range(242, 246), array(240, 248));
+    $ascii['u'] = range(249, 252);
+    $ascii['b'] = array(223);
+    $ascii['c'] = array(231);
+    $ascii['d'] = array(208);
+    $ascii['n'] = array(241);
+    $ascii['y'] = array(253, 255);
+    foreach ($ascii as $key => $item) {
+        $acentos = '';
+        foreach ($item AS $codigo)
+            $acentos .= chr($codigo);
+        $troca[$key] = '/[' . $acentos . ']/i';
+    }
+    $string = preg_replace(array_values($troca), array_keys($troca), $string);
+
+    if ($slug) {
+
+        $string = preg_replace('/[^a-z0-9]/i', $slug, $string);
+
+        $string = preg_replace('/' . $slug . '{2,}/i', $slug, $string);
+        $string = trim($string, $slug);
+    }
+    return $string;
+}
+
+
+?>
+<script>
+    angular.module('ui.bootstrap.app').controller('cartActions', function ($scope, $http) {
+
+        $scope.addCart = function (data) {
+
+
+            $scope.prod_id = data;
+            var qtd_produto = $("input#qtde_prod").val();
+
+            $('#num_itens').css('display', 'inline-block');
+            //$("#num_itens").load("/cart/qtd");
+
+
+
+            var request = $http({
+                method: "post",
+                url: "/cart/add",
+                data: {
+                    prod_id: $scope.prod_id,
+                    qtde_prod:qtd_produto,
+                },
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            });
+
+
+            /* Check whether the HTTP Request is successful or not. */
+            request.success(function (data) {
+
+
+                $("span#num_itens").load("/cart/qtd");
+                $("div#cart").load("/cart/queryCart");
+
+
+
+            });
+            request.error(function (data) {
+                document.getElementById("messageCadastrar1").textContent = "Houve um problema [" + data + "]";
+            });
+        };
+    });
+</script>
+
+<script>
+
+
+    function onlyNum(e) {
+        var tecla = (window.event) ? event.keyCode : e.which;
+        if ((tecla > 47 && tecla < 58))
+            return true;
+        else {
+            if (tecla == 8 || tecla == 0)
+                return true;
+            else
+                return false;
+        }
+    }
+
+
+    var modal_test = angular.module('ui.bootstrap.app');
+
+    modal_test.controller('consultaList', function ($scope,$http) {
+
+        $scope.formaPagamentoModal = false;
+        $scope.modalFormaPagamento = function () {
+
+            $scope.tab = 1;
+            $scope.formaPagamentoModal = !$scope.showModal;
+        };
+
+
+
+        $scope.modalFrete = function () {
+
+            $scope.CalcFreteModal = !$scope.showModal;
+        };
+
+
+        $scope.modalPoliticaTroca = function () {
+
+            $scope.politicaTrocaModal = !$scope.showModal;
+        };
+
+        $scope.modalAvaliar = function () {
+
+            $scope.avaliacaoModal = !$scope.showModal;
+        };
+
+
+
+
+
+        $scope.calcFrete = function () {
+
+            var cep = $("input#cep_dest").val();
+            var cep_lenght = cep.length;
+
+
+            $scope.peso = '<?php echo round($data_prod['prod_peso']); ?>';
+            $scope.altura = '<?php echo $data_prod['prod_altura']; ?>';
+            $scope.largura = '<?php echo $data_prod['prod_largura']; ?>';
+            $scope.comp = '<?php echo $data_prod['prod_comprimento']; ?>';
+            $scope.prod_id = '<?php echo $data_prod['prod_id']; ?>';
+            $scope.preco = '<?php echo round($preco_final); ?>';
+
+
+
+            if (cep == '') {
+
+                alert('Campo cep é obrigatório!');
+                return false;
+
+            } else if (cep_lenght < 8) {
+
+                alert('O CEP digitado é inválido!');
+                return false;
+
+            }
+
+            var request = $http({
+                method: "post",
+                url: "/frete",
+                data: {
+
+                    prod_id: $scope.prod_id,
+                    peso: $scope.peso,
+                    altura: $scope.altura,
+                    largura: $scope.largura,
+                    comp:$scope.comp,
+                    cep: cep,
+                    preco: $scope.preco
+
+                },
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            });
+
+
+            /* Check whether the HTTP Request is successful or not. */
+            request.success(function (data) {
+
+                //alert(data);
+
+
+
+                document.getElementById("result_frete").innerHTML = data;
+                // $("span#num_itens").load("/cart/qtd");
+                // $("div#cart").load("/cart/queryCart");
+
+
+
+            });
+            request.error(function (data) {
+                //document.getElementById("messageCadastrar1").textContent = "Houve um problema [" + data + "]";
+            });
+        };
+
+    });
+
+
+
+</script>
+
+</div>
+</div>
+</body>
+
+<link rel="stylesheet" href="//static.wmobjects.com.br/webstore/style/product.min.css">
+<!--<script src="/js/orion/product.min.js"></script>-->
+
+<!--[if lt IE 9]>
+<!--<script src="//static.wmobjects.com.br/webstore/js/vendor/jquery/jquery-1.10.2.min.js"></script>-->
+<![endif]--><!--[if gte IE 9]><!-->
+<!--<![endif]-->
+

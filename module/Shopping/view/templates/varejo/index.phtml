@@ -28,13 +28,17 @@
         $scope.myInterval = 5000;
         $scope.slides = [
             <?php
-            foreach ($slides as $slideData) {
-                echo '                
-                        {
-                            image: "/directory/' . DB_PROFILE . '/images/' . $slideData->getImagemId()->getId() . '.' . $slideData->getImagemId()->getExt() . '"
-                        },                
-                ';
-            }
+                $i = 0;
+                foreach ($slides as $slideData) {
+                    if($i == 0){
+                        echo '                
+                            {
+                                image: "/directory/' . DB_PROFILE . '/images/' . $slideData->getImagemId()->getId() . '.' . $slideData->getImagemId()->getExt() . '"
+                            },                
+                        ';
+                    }
+                    $i++;
+                }
             ?>
         ];
     })
@@ -53,8 +57,10 @@
         foreach ($products as $productInfo) {
             echo '                
                         <div class="frame-product">
-                            <div class="product-thumb">photo</div>
-                            <div class="product-title">' . substr($productInfo["nome"], 0, 50) . '</div>
+                            <a href="">
+                                <div class="product-thumb">photo</div>
+                                <div class="product-title">' . substr($productInfo["nome"], 0, 50) . '</div>
+                            </a>
                             <div class="prev-price">De <strike>R$ ' . $productInfo["precounitario"] . '</strike></div>
                             <div class="current-price">R$ ' . $productInfo["precopromocional"] . '</div>
                             <div class="drop-price">10x ' . $productInfo["precopromocional"] / 10 . ' sem juros!</div>
@@ -84,8 +90,10 @@
         foreach ($products as $productInfo) {
             echo '                
                         <div class="frame-product">
-                            <div class="product-thumb">photo</div>
-                            <div class="product-title">' . substr($productInfo["nome"], 0, 50) . '</div>
+                            <a href="/produto/888/produtos-provisorios">
+                                <div class="product-thumb">photo</div>
+                                <div class="product-title">' . substr($productInfo["nome"], 0, 50) . '</div>
+                            </a>
                             <div class="prev-price">De <strike>R$ ' . $productInfo["precounitario"] . '</strike></div>
                             <div class="current-price">R$ ' . $productInfo["precopromocional"] . '</div>
                             <div class="drop-price">10x ' . $productInfo["precopromocional"] / 10 . ' sem juros!</div>
@@ -102,3 +110,4 @@
 <div class="atend-bar">Barra de atendimento</div>
 <!--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>-->
 <!--<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.min.js"></script>-->
+<script src="https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.min.js"></script>

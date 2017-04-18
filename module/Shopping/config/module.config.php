@@ -12,6 +12,7 @@ use Shopping\Controller\Factory\IndexControllerFactory;
 use Shopping\Controller\Factory\MenuFactory;
 use Shopping\Controller\Factory\ServiceFactory;
 use Shopping\Controller\Factory\UsersControllerFactory;
+use Shopping\Controller\ProdutoController;
 use Shopping\Controller\UsersController;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
@@ -95,6 +96,21 @@ return [
                ),
            ],
 
+           'produto' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/produto[/:id][/:seo]',
+                    'constraints' => [
+                        'controller' => '[a-z_-]+',
+                        'id'     => '[0-9_-]+',
+                        'seo'     => '[a-z0-9_-]+',
+                    ],
+                    'defaults' => [
+                        'controller' => ProdutoController::class,
+                        'action' => 'index',
+                    ],
+                ],
+            ],
         ],
     ],
     'controllers' => [
@@ -102,6 +118,7 @@ return [
             Controller\IndexController::class => IndexControllerFactory::class,
             Controller\AtendController::class => ServiceFactory::class,
             Controller\UsersController::class => UsersControllerFactory::class,
+            Controller\ProdutoController::class => InvokableFactory::class,
         ],
 
         'invokables' => [
@@ -145,6 +162,7 @@ return [
             'shopping/index/iso' => __DIR__ . '/../view/templates/'.TEMPLATE.'/iso.phtml',
 //            'shopping/index/logout' => __DIR__ . '/../view/templates/'.TEMPLATE.'/iso.phtml',
             'generic' => __DIR__ . '/../view/templates/'.TEMPLATE.'/generic.phtml',
+            'product-profile' => __DIR__ . '/../view/templates/'.TEMPLATE.'/product-profile.phtml',
         ],
 
         'template_path_stack' => [

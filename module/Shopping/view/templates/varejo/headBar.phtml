@@ -103,7 +103,7 @@
                                 
                                 <div ng-cloak ng-show="sessionIsVisible" class="dropdown-default user-actions">
                                     <div class="header-dropdown">'.$session->nomeUser .'</div>
-                                    <div class="content" ng-controller="userControls">
+                                    <div class="content">
                                         <div class=""><a href="#"><span class="glyphicon glyphicon-user"></span> Minha conta</a> </div>
                                         <div class=""><a href="#"><span class="glyphicon glyphicon-th-large"></span> Pedidos</a></div>
                                         <div class=""><a href="/logout?hash='.$session->keyUser.'"><span class="glyphicon glyphicon-off"></span> Sair</a></div>
@@ -115,70 +115,6 @@
                     }
                     ?>
 </span>
-<!--angular busca####################-->
-<!--<div class="topbar-search" style="position: relative; width: 250px;">-->
-<!--    <div>-->
-<!--        <form id="searchInputForm">-->
-<!--            <input type="text" name="searchInput" id="searchInput" placeholder="Olá, o que você procura?"-->
-<!--                   class="input-box">-->
-<!--            <!--              <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>              -->
-<!--            <button class="search-icon">Procurar</button>-->
-<!--        </form>-->
-<!--        <div id="searchResult"></div>-->
-<!--    </div>-->
-<!---->
-<!--    <script>-->
-<!--        $('input#searchInput').keyup(function () {-->
-<!---->
-<!--            // var searchInput = document.getElementById("searchInput").value;-->
-<!--            var searchInput = $('input#searchInput').val();-->
-<!--            var stringLenght = $(this).val().length;-->
-<!--            if (stringLenght >= 1) {-->
-<!--                $.ajax({-->
-<!--                    type: "POST",-->
-<!--                    url: '/search',-->
-<!--                    data: {tag: searchInput},-->
-<!--                }).done(function (data) {-->
-<!--                    $('div#searchResult').fadeIn('fast').html(data);-->
-<!--                });-->
-<!---->
-<!--                $('div#searchResult').mouseleave(function () {-->
-<!--                    $('div#searchResult').fadeOut('fast');-->
-<!--                });-->
-<!---->
-<!--            } else if (stringLenght == 0) {-->
-<!--                $('div#searchResult').fadeOut('fast');-->
-<!--            }-->
-<!--        });-->
-<!--        $(document).not('div#searchResult').click(function () {-->
-<!--            $('div#searchResult').fadeOut('fast');-->
-<!--        });-->
-<!--    </script>-->
-<!---->
-<!--</div>-->
-<!--angular busca####################-->
-
-<!--<div class="contact">-->
-<!--    <a href="" class="topbar-buttons button-link contact-link"><span class="contact-icon"></span>Ajuda</a>-->
-<!--    <div class="dropdown clearfix">-->
-<!--        <div class="dropdown-position">-->
-<!--            <header id="self-help-header" class="header-dropdown clearfix">-->
-<!--                <form class="help-form"><input class="input-box" placeholder="Como podemos ajudar?" type="text">-->
-<!--                    <input class="search-icon" value="Procurar" type="submit"></form>-->
-<!--            </header>-->
-<!--            <section class="body-dropdown clearfix">-->
-<!--                <strong class="title-dropdown">Ajudas mais buscadas</strong><a href="#" class="link">Veja todas</a>-->
-<!--                <ul class="list">-->
-<!--                    <li class="item"><a href="#"><span class="index">1</span>&nbsp;Acompanhe seu pedido</a></li>-->
-<!--                    <li class="item"><a href="#"><span class="index">2</span>&nbsp;Central de atendimento</a></li>-->
-<!--                    <li class="item"><a href="#"><span class="index">3</span>&nbsp;Como cancelar um pedido</a></li>-->
-<!--                    <li class="item"><a href="#"><span class="index">4</span>&nbsp;Como realizar uma troca</a></li>-->
-<!--                    <li class="item"><a href="#"><span class="index">5</span>&nbsp;Assistência técnica</a></li>-->
-<!--                </ul>-->
-<!--            </section>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
 </div>
 </header><!--FEcha #site-topbar################-->
 </div><!--fecha div.page###############-->

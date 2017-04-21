@@ -187,3 +187,30 @@ div.container a.navbar-brand > img {
     line-height: 60px;
     font-size: 15px;
 }
+
+div.teste-dropdownAAA{ background-color: #fff; width: 220px; height: 200px; float: left; position: relative;}
+
+/*div.header-dropdown{ text-align: left; font-weight: bold;}*/
+.header-dropdown{padding:11px 20px;position:relative;border-bottom:1px solid #E8E6E6; text-align: left;}
+.header-dropdown .link{color:#1a75ce;display:inline-block;float:right;margin:8px 0 0}
+.header-dropdown .link:hover{color:#f37b20}
+.header-dropdown form{margin:0 0 10px;position:relative}
+div.user-actions{text-align: left;}
+div.cart-info .content{padding: 10px 0px 0px 20px; font-size: 15px;}
+
+/*div.profile-info{*/
+    /*width: 400px;*/
+    /*height:200px;*/
+    /*background-color: #ffffff;*/
+    /*color: #3c3c3c;*/
+    /*position: absolute;*/
+    /*float: right;*/
+    /*z-index: 999;*/
+    /*top: 40px;*/
+    /*right: 30px;*/
+    /*display: block;*/
+    /*-webkit-box-shadow: 7px 7px 14px -4px rgba(0,0,0,0.17);*/
+    /*-moz-box-shadow: 7px 7px 14px -4px rgba(0,0,0,0.17);*/
+    /*box-shadow: 7px 7px 14px -4px rgba(0,0,0,0.17);*/
+    /*font-size: 18px;*/
+/*}*/

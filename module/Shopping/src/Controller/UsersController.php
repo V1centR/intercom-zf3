@@ -3,6 +3,7 @@
 namespace Shopping\Controller;
 
 use Shopping\Entity\Usuario;
+use Shopping\Entity\Visitante;
 use Zend\EventManager\Event;
 use Zend\Http\Header\SetCookie;
 use Zend\Mvc\Application;
@@ -48,7 +49,6 @@ class UsersController extends AbstractActionController
     {
         $this->entityManager = $entityManager;
     }
-
 
 
     public function indexAction() {
@@ -435,9 +435,21 @@ class UsersController extends AbstractActionController
                 $new_session->nomeUser       = $this->passLoginData['nome'];
                 $new_session->keyUser        = $keyUser;
 
+                //insert user visit hash
+                $registerVisita = new Visitante();
+                $registerVisita->setSessao($keyUser);
+                $registerVisita->setIpacesso($_SERVER['REMOTE_ADDR']);
+                $registerVisita->setDatahora(new \DateTime("now"));
+                $this->entityManager->persist($registerVisita);
+                $this->entityManager->flush();
+
                 // TODO setCokie nativo, futuramente implementar setCookie ZF3
                 if($conectado){
-                    setcookie("uc", $keyUser, time()+432000, '/');
+                    //smc = stay me connected
+                    setcookie("smc", true, time()+432000, '/');
+                    if(empty($_COOKIE['uc'])){
+                        setcookie("uc", $keyUser, time()+432000, '/');
+                    }
 //                        $newCookie = new SetCookie("userConected", '1', time()+432000);
 //                        $teste = $this->getResponse()->getHeaders()->addHeader($newCookie);
                 }

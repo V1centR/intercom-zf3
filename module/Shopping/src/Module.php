@@ -32,17 +32,21 @@ class Module
         $services = $e->getApplication()->getServiceManager();
 
         $eventManager = $e->getApplication()->getEventManager();
-        $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'getMenuSettings'), -100);
+        $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'startVisit'), -100);
 
 
     }
 
 
-    // Classe responsavel por renderizar e montar o menu
-    public function getMenuSettings(){
+    // funcao responsavel por start visitor
+    public function startVisit(){
 
-       // return "init exec OK";
-
+        if(empty($_COOKIE['uc'])){
+            $signal = ['.', ' '];
+            $timeKey = str_replace($signal, '', microtime());
+            $keyUser = strtoupper(sha1($timeKey));
+            setcookie("uc", $keyUser, time()+432000, '/');
+        }
     }
 
 }

@@ -10,7 +10,7 @@ use Zend\Session\Container;
 use Shopping\Repository as Repo;
 
 
-class ProdutoController extends AbstractActionController{
+class ProdutoController extends AbstractActionController {
 
 
 

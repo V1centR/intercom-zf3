@@ -5,6 +5,7 @@ namespace Shopping\Controller;
 use Shopping\Entity\Banners;
 use Shopping\Entity\Categorias;
 use Shopping\Entity\Usuario;
+use Shopping\Entity\Visitante;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Doctrine\ORM\Mapping as ORM;
@@ -51,25 +52,12 @@ class IndexController extends AbstractActionController
 
     public function isoAction()
     {
-        $new_session = new Container('sessionUser');
+        $hash_user = $_COOKIE['uc'];
+        $userVisit = $this->entityManager->getRepository(Visitante::class)
+            ->findOneBy(['sessao' => $hash_user]);
 
-        $signal = ['.', ' '];
-        $timeKey = str_replace($signal, '', microtime());
-
-        echo strtoupper(sha1($timeKey)).'<br>';
-
-
-
-        print_r($_SESSION['sessionUser']);
-
-        if(isset($new_session->idUser)){
-            echo 'session ok';
-            echo $new_session->emailUser;
-
-        }else{
-
-            echo 'sem sessao';
-        }
+        echo count($userVisit);
+        print_r($userVisit);
 
         $view = new ViewModel(array(
 //            'logo_shop' => $testOk,

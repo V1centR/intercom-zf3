@@ -8,6 +8,8 @@
 namespace Shopping;
 
 use Shopping\Controller\AtendController;
+use Shopping\Controller\CartController;
+use Shopping\Controller\Factory\CartControllerFactory;
 use Shopping\Controller\Factory\IndexControllerFactory;
 use Shopping\Controller\Factory\MenuFactory;
 use Shopping\Controller\Factory\ServiceFactory;
@@ -111,6 +113,20 @@ return [
                     ],
                 ],
             ],
+            'cart' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/cart[/:action][/:id]',
+                    'constraints' => [
+                        'controller' => '[a-z_-]+',
+                        'param'     => '[a-z0-9_-]+',
+                    ],
+                    'defaults' => [
+                        'controller' => CartController::class,
+                        'action' => 'index',
+                    ],
+                ],
+            ],
         ],
     ],
     'controllers' => [
@@ -119,6 +135,7 @@ return [
             Controller\AtendController::class => ServiceFactory::class,
             Controller\UsersController::class => UsersControllerFactory::class,
             Controller\ProdutoController::class => InvokableFactory::class,
+            Controller\CartController::class => CartControllerFactory::class,
         ],
 
         'invokables' => [

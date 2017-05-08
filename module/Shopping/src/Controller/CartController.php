@@ -5,15 +5,13 @@ namespace Shopping\Controller;
 use Shopping\Entity\Carrinho;
 use Shopping\Entity\Carrinhoitens;
 use Shopping\Entity\Visitante;
+use Shopping\Entity\Produto;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Doctrine\ORM\Mapping as ORM;
-
 use Zend\Session\Container;
 
-
-class CartController extends AbstractActionController{
-
+class CartController extends AbstractActionController {
 
     /**
      * Entity manager.
@@ -21,42 +19,49 @@ class CartController extends AbstractActionController{
      */
     private $entityManager;
 
-    public function __construct($entityManager)
-    {
+    public function __construct($entityManager) {
         $this->entityManager = $entityManager;
     }
-    
 
     public function indexAction() {
-        
-        //echo 'dentro do cart';
-        
-        $view = new ViewModel();      
-        $view->setTemplate('templates/orion/generic.phtml');
-        $view->setTerminal(true); 
+
+        $view = new ViewModel();
+        $view->setTemplate('generic');
+        $view->setTerminal(true);
 
         return $view;
     }
 
     public function addAction() {
 
+        //get
         $getdata = $this->getRequest()->getQuery();
 
+        $getdataJson = json_encode($getdata);
+        $getdataJson2 = json_decode($getdataJson);
+
+        //echo $getdataJson2->prod_id;
+
+        print_r($getdataJson);
+
+
+        //post
+//        $getdata = $this->getRequest()->getContent();
 //       $postdata = file_get_contents("php://input");
 //       $request = json_decode($postdata);
-        @$prod_id = $getdata->prod_id;
-        @$prod_qtd = $getdata->qtde_prod;
+        @$prod_id = $getdataJson2->prod_id;
+        @$prodQtd = $getdataJson2->qtde_prod;
 
         // TODO implementar validacao com banco de dados
-        if(empty($getdata->hash) || strlen($getdata->hash) < 40){
-            $model = new ViewModel();
-            $model->setTemplate('error/404');
-            // $model->setTerminal(true);
-            return $model;
-            exit;
-        }
+//        if(empty($getdata->hash) || strlen($getdata->hash) < 40){
+//            $model = new ViewModel();
+//            $model->setTemplate('error/404');
+//            // $model->setTerminal(true);
+//            return $model;
+//            exit;
+//        }
 
-        if(!preg_match('/^[0-9]+$/', $prod_id)){
+        if (!preg_match('/^[0-9]+$/', $prod_id)) {
             $model = new ViewModel();
             $model->setTemplate('error/404');
             $model->setTerminal(true);
@@ -64,112 +69,117 @@ class CartController extends AbstractActionController{
             exit;
         }
 
-        $this->qtd_item = $prod_qtd;
-
         $hash_user = $_COOKIE['uc'];
         $date = date('Y-m-d H:i:s');
 
-        #select na hash########################
+        //select user hash
         $userVisit = $this->entityManager->getRepository(Visitante::class)
-            ->findOneBy(['sessao' => $hash_user]);
-        $idUser = $userVisit->getId();
+                ->findOneBy(['sessao' => $hash_user]);
 
-        #verifica se existe um carrinho aberto
+        //if user not registered
+        if (count($userVisit) == 0) {
+
+            $registerVisita = new Visitante();
+            $registerVisita->setSessao($hash_user);
+            $registerVisita->setIpacesso($_SERVER['REMOTE_ADDR']);
+            $registerVisita->setDatahora(new \DateTime("now"));
+
+            $this->entityManager->persist($registerVisita);
+            $this->entityManager->flush();
+            $registerId = $registerVisita->getId();
+        } else {
+            $registerId = $userVisit->getId();
+            $registerHash = $userVisit->getSessao();
+        }
+
+        //check cart exists
         $data_carrinho = $this->entityManager->getRepository(Carrinho::class)
-            ->findBy(['visitanteId' => $idUser]);
+                ->findOneBy(['visitanteid' => $registerId]);
 
-        $cartId = $data_carrinho->getId();
-        $cartIdVisitante = $data_carrinho->getVisitanteId();
-        #######################################
+        //get product data
+        $dataProd = $this->entityManager->getRepository(Produto::class)
+                ->findOneBy(['id' => $prod_id]);
 
-        if($data_carrinho->rowCount() == 0){
+
+        if (count($data_carrinho) == 0) {
 
             #executa strings passadas como parametros na funcao
             $registerCart = new Carrinho();
-            $registerCart->setVisitanteId($idUser);
+            $registerCart->setVisitanteId($registerId);
             $registerCart->setDatahora(new \DateTime("now"));
             $this->entityManager->persist($registerCart);
 
-            if($this->entityManager->flush()){
+            if ($this->entityManager->flush()) {
 
                 $this->id_carrinho = $registerCart->getId();
                 #executa insert de itens no carrinho ##########################
                 $insertItensCart = new Carrinhoitens();
                 $insertItensCart->setCarrinhoId($this->id_carrinho);
-                $insertItensCart->setProdutoid($prod_id);
-                $insertItensCart->setQuantidade(1);
+                $insertItensCart->setProdutoid($dataProd);
+                $insertItensCart->setQuantidade($prodQtd);
             }
-
         } else {
 
-            $data_carrinho = $this->entityManager->getRepository(Carrinhoitens::class)
-                ->findOneBy([
-                    'carrinhoid' => $cartId,
-                    'produtoId' => $prod_id]);
+            $cartId = $data_carrinho->getId();
+            $cartIdVisitante = $data_carrinho->getVisitanteid();
 
-            if(count($data_carrinho) == 0){
+            $dataCarrinhoItens = $this->entityManager->getRepository(Carrinhoitens::class)
+                    ->findBy([
+                'carrinhoid' => $cartId,
+                'produtoid' => $prod_id]);
+
+
+            if (count($dataCarrinhoItens) == 0) {
 
                 $insertItensCart = new Carrinhoitens();
-                $insertItensCart->setCarrinhoId($cartId);
-                $insertItensCart->setProdutoid($prod_id);
-                $insertItensCart->setQuantidade(1);
-
+                $insertItensCart->setCarrinhoId($data_carrinho);
+                $insertItensCart->setProdutoid($dataProd);
+                $insertItensCart->setQuantidade($prodQtd);
+                $this->entityManager->persist($insertItensCart);
+                $this->entityManager->flush();
             } else {
 
                 #executa insert de itens no carrinho
-                $insertItensCart = new Carrinhoitens();
-                $insertItensCart->setCarrinhoId($cartId);
-                $insertItensCart->setProdutoid($prod_id);
-                $insertItensCart->setQuantidade(+1);
+//                $insertItensCart = new Carrinhoitens();
+//                $insertItensCart->setCarrinhoId($data_carrinho);
+//                $insertItensCart->setProdutoid($dataProd);
+//                $insertItensCart->setQuantidade(2);
+//                $this->entityManager->merge($insertItensCart);
 
-//                $this->object = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-//                $this->str_update_prod = "UPDATE `$db`.CarrinhoItens SET quantidade=quantidade+1 WHERE carrinhoId = '$cartId' AND produtoId = '$prod_id' ";
-//                $query2 = $this->object->getConnection()->prepare($this->str_update_prod);
-//                $query2->execute();
-
+                $em = $this->entityManager->getConnection();
+                $this->str_update_prod = "UPDATE carrinhoitens SET quantidade=quantidade+1 WHERE carrinhoId = '$cartId' AND produtoId = '$prod_id' ";
+                $query = $em->prepare($this->str_update_prod);
+                $query->execute();
             }
-
-
         }
-
-
-
-
 
         $view = new ViewModel();
         $view->setTemplate('generic');
         $view->setTerminal(true);
-
         return $view;
-
     }
-    
-    
-    
-     public function checkoutAction() {
-        
+
+    public function checkoutAction() {
+
         $db = 'db1';
-        
-       
+
+
         //session_start();       
-        $active_hash_user = $_COOKIE['hashUser'];       
-       
+        $active_hash_user = $_COOKIE['hashUser'];
+
         $this->object = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        
-       
+
+
         #caracteristicas do produto#########################################        
         $this->sql_get_user = "SELECT id, sessao
                                                 FROM `$db`.Visitante
                                                 WHERE sessao = '$active_hash_user'";
-      
+
         $query1 = $this->object->getConnection()->prepare($this->sql_get_user);
         $query1->execute();
         $this->data_active_user = $query1->fetch();
         $id_user = $this->data_active_user['id'];
         ####################################################################
-     
-        
-        
         #get carrinho info#########################        
         $this->sql_checkout = "SELECT Carrinho.id, 
                                         Carrinho.visitanteId,
@@ -198,105 +208,101 @@ class CartController extends AbstractActionController{
                                         WHERE Carrinho.visitanteId = '$id_user'
 
  ";
-       $query0 = $this->object->getConnection()->prepare($this->sql_checkout);
-       $query0->execute();
-       $this->checkout_info = $query0->fetchAll();
-       ###########################################
-       
-      //echo $this->sql_checkout;
-      //print_r($this->checkout_info);
-       
-       
-       
-   
-        
-       
-       
-     if(!array_keys($this->checkout_info)){
-         
-                            echo '
+        $query0 = $this->object->getConnection()->prepare($this->sql_checkout);
+        $query0->execute();
+        $this->checkout_info = $query0->fetchAll();
+        ###########################################
+        //echo $this->sql_checkout;
+        //print_r($this->checkout_info);
+
+
+
+
+
+
+
+        if (!array_keys($this->checkout_info)) {
+
+            echo '
                             <script>$("div#sessao_checkout").hide();
                                     $("div#ops").show();
                             </script>
                             
                              ';
-                            
-                            
-                    }
-  
-       
-       
-       echo '<ul class="my-cart-content-wrapper" id="checkout_info" >       ';
-                        $contador = 0;
-                        $subtotal = 0;
-                        foreach ($this->checkout_info as $checkout) {
-                         
-                        $prod_id = $checkout['produtoId'];
-                        $preco_unit = $checkout['precounitario'];
-                        $preco_promocional = $checkout['precopromocional'];
-                        
-                        $produto_qtde = $checkout['quantidade'];
-                      
+        }
 
 
 
-                        $preco_parcelado = $preco_unit / 10;
-                        $preco_parcelado = number_format($preco_parcelado, 2, ",", ".");
+        echo '<ul class="my-cart-content-wrapper" id="checkout_info" >       ';
+        $contador = 0;
+        $subtotal = 0;
+        foreach ($this->checkout_info as $checkout) {
+
+            $prod_id = $checkout['produtoId'];
+            $preco_unit = $checkout['precounitario'];
+            $preco_promocional = $checkout['precopromocional'];
+
+            $produto_qtde = $checkout['quantidade'];
 
 
-                        if ($preco_promocional == 0.00) {
 
-                            $preco_normal = number_format(substr($preco_unit, 0, -3), 0, ",", ".");
-                            $preco_normal_dec = substr($preco_unit, -2);
-                            $preco_normal_decimal = $preco_unit;
-                            $preco_anterior = '';
-                            $hide = 'style="visibility:hidden"';
-                            $total_item = $produto_qtde*$preco_unit;
-                            
-                        } else {
 
-                            $preco_normal = number_format(substr($preco_promocional, 0, -3), 0, ",", ".");
-                            $preco_normal_decimal = $preco_promocional;
-                            $preco_normal_dec = substr($preco_promocional, -2);
-                            $preco_anterior = number_format($preco_unit, 2, ",", ".");
-                            $hide = '';
-                            
-                            $total_item = $produto_qtde*$preco_promocional;
-                        }
-                            
-                            
-                            
-                            
-                            $produto_nome = $checkout['prod_nome'];
-                            $produto_marca = $checkout['marca_nome'];
-                            $imagem_prod   = 'img'.$checkout['img_id'].'.'.$checkout['ext'];
-                           
-                            
-                            
-                            
-                            
-                            echo '<li class="my-cart-content-item"><ul class="my-cart-product-wrapper clearfix"><li class="my-cart-product-item my-cart-product-description ">
-                                    <figure class="product-list-image"><img class="img-responsive" src="/images/'.$imagem_prod.'" alt=""></figure>
+            $preco_parcelado = $preco_unit / 10;
+            $preco_parcelado = number_format($preco_parcelado, 2, ",", ".");
+
+
+            if ($preco_promocional == 0.00) {
+
+                $preco_normal = number_format(substr($preco_unit, 0, -3), 0, ",", ".");
+                $preco_normal_dec = substr($preco_unit, -2);
+                $preco_normal_decimal = $preco_unit;
+                $preco_anterior = '';
+                $hide = 'style="visibility:hidden"';
+                $total_item = $produto_qtde * $preco_unit;
+            } else {
+
+                $preco_normal = number_format(substr($preco_promocional, 0, -3), 0, ",", ".");
+                $preco_normal_decimal = $preco_promocional;
+                $preco_normal_dec = substr($preco_promocional, -2);
+                $preco_anterior = number_format($preco_unit, 2, ",", ".");
+                $hide = '';
+
+                $total_item = $produto_qtde * $preco_promocional;
+            }
+
+
+
+
+            $produto_nome = $checkout['prod_nome'];
+            $produto_marca = $checkout['marca_nome'];
+            $imagem_prod = 'img' . $checkout['img_id'] . '.' . $checkout['ext'];
+
+
+
+
+
+            echo '<li class="my-cart-content-item"><ul class="my-cart-product-wrapper clearfix"><li class="my-cart-product-item my-cart-product-description ">
+                                    <figure class="product-list-image"><img class="img-responsive" src="/images/' . $imagem_prod . '" alt=""></figure>
                                     <div class="product-list-item">
                                         <div>
-                                            <a href="#" class="link link-description">'.$produto_nome.'</a><span class="brand-text"> - '.$produto_marca.'</span>
+                                            <a href="#" class="link link-description">' . $produto_nome . '</a><span class="brand-text"> - ' . $produto_marca . '</span>
                                         </div>
                                         <div class="my-cart-sub-text">
                                             <span class="sub-text-first">Vendido e entregue por <a class="openknowMore">ÓtimoNegócio</a></span></div>
                                         <div class="country-label"></div>
-                                    </div></li><li class="my-cart-product-item my-cart-product-price"><div class="price-normal" '.$hide.'>De R$ '.$preco_anterior.'</div><div class="price-low">Por R$ '.$preco_normal.','.$preco_normal_dec.'</div></li><li class="my-cart-product-item my-cart-product-quantity">
+                                    </div></li><li class="my-cart-product-item my-cart-product-price"><div class="price-normal" ' . $hide . '>De R$ ' . $preco_anterior . '</div><div class="price-low">Por R$ ' . $preco_normal . ',' . $preco_normal_dec . '</div></li><li class="my-cart-product-item my-cart-product-quantity">
                                     <a class="link-trash visible-phone"><i class="icon-wm-trash"></i></a>
                                     
 //                                   
                                         <span class="ui-spinner ui-widget ui-widget-content ui-corner-all">
-                                        <input id="val'.$contador.'" role="spinbutton" autocomplete="off" aria-valuenow="1" aria-valuemax="10" aria-valuemin="0" class="visible-desktop quantity-spinner ui-spinner-input" name="value" value="'.number_format($produto_qtde,0,'','').'" ng-model="'.$contador.'" maxlength="2">
+                                        <input id="val' . $contador . '" role="spinbutton" autocomplete="off" aria-valuenow="1" aria-valuemax="10" aria-valuemin="0" class="visible-desktop quantity-spinner ui-spinner-input" name="value" value="' . number_format($produto_qtde, 0, '', '') . '" ng-model="' . $contador . '" maxlength="2">
 
 
-                                       <a id="add'.$contador.'" aria-disabled="false" role="button" tabindex="-1" class="ui-spinner-button ui-spinner-up ui-corner-tr ui-button ui-widget ui-state-default ui-button-text-only" >
+                                       <a id="add' . $contador . '" aria-disabled="false" role="button" tabindex="-1" class="ui-spinner-button ui-spinner-up ui-corner-tr ui-button ui-widget ui-state-default ui-button-text-only" >
                                           <span class="ui-button-text" ></span>
                                        </a>
 
-                                       <a id="rm'.$contador.'" aria-disabled="false" role="button" tabindex="-1" class="ui-spinner-button ui-spinner-down ui-corner-br ui-button ui-widget ui-state-default ui-button-text-only"  >
+                                       <a id="rm' . $contador . '" aria-disabled="false" role="button" tabindex="-1" class="ui-spinner-button ui-spinner-down ui-corner-br ui-button ui-widget ui-state-default ui-button-text-only"  >
                                        
                                                <span class="ui-button-text">
                                                             <span class="ui-icon ui-icon-triangle-1-s">▼</span>
@@ -304,9 +310,9 @@ class CartController extends AbstractActionController{
                                        </a>                                    
                                         </span>
                                     
-                                    <a id="del'.$contador.'" class="link-trash visible-desktop">Remover</a>
+                                    <a id="del' . $contador . '" class="link-trash visible-desktop">Remover</a>
                                     <span class="visible-phone my-cart-label-quantity">Qtde.</span><input class="quantity-counter visible-phone input-box" name="value" step="1" min="0" max="10" maxlength="2" value="1" type="tel"></li><li class="my-cart-product-item my-cart-product-subtotal my-cart-product-price">
-                                    <div class="price-low">R$ '.number_format($total_item, 2, ",", ".").'</div></li></ul>
+                                    <div class="price-low">R$ ' . number_format($total_item, 2, ",", ".") . '</div></li></ul>
                         </li>
                         
 
@@ -314,15 +320,15 @@ class CartController extends AbstractActionController{
                     <script>
                     
                     
-                        $("a#add'.$contador.'").click(function() {
+                        $("a#add' . $contador . '").click(function() {
                            
-                            // val'.$contador.'.value = parseInt(val'.$contador.'.value) + 1;
+                            // val' . $contador . '.value = parseInt(val' . $contador . '.value) + 1;
                               
 
                             $.ajax({
                                 type: "POST",
                                 url: "/cart/add",
-                                data: JSON.stringify({prod_id: "'.$prod_id.'", qtde_prod: "1" }),                               
+                                data: JSON.stringify({prod_id: "' . $prod_id . '", qtde_prod: "1" }),                               
                                 success: function(data){},
                                 contentType: "application/json",
                                 dataType: "json",
@@ -335,19 +341,19 @@ class CartController extends AbstractActionController{
                         
 
 
-                       $("a#rm'.$contador.'").click(function() {
+                       $("a#rm' . $contador . '").click(function() {
                            
-                             var valor = val'.$contador.'.value;
+                             var valor = val' . $contador . '.value;
                             
 
                              if(valor > 1){
-                                //val'.$contador.'.value = parseInt(val'.$contador.'.value) - 1;
+                                //val' . $contador . '.value = parseInt(val' . $contador . '.value) - 1;
                                 
                                 $.ajax({
                                 type: "POST",
                                 url: "/cart/remove",
                                 cache: false,
-                                data: JSON.stringify({prod_id: "'.$prod_id.'", qtde_prod: "1" }),                               
+                                data: JSON.stringify({prod_id: "' . $prod_id . '", qtde_prod: "1" }),                               
                                 success: function(data){},
                                 contentType: "application/json",
                                 dataType: "json",
@@ -364,13 +370,13 @@ class CartController extends AbstractActionController{
                         });
                         
 
-                        $("a#del'.$contador.'").click(function() {
+                        $("a#del' . $contador . '").click(function() {
 
                             $.ajax({
                                 type: "POST",
                                 url: "/cart/remove",
                                 async: true,  
-                                data: JSON.stringify({prod_id: "'.$prod_id.'", qtde_prod: "del" }),                               
+                                data: JSON.stringify({prod_id: "' . $prod_id . '", qtde_prod: "del" }),                               
                                 success: $("ul#checkout_info").parent().load("/cart/checkout"),
                                 contentType: "application/json",
                                 dataType: "json",
@@ -385,18 +391,16 @@ class CartController extends AbstractActionController{
 
 
 ';
-                            
-                            $subtotal += $total_item;
-                            $contador++;
-                            
-                            
-                        }
-                        $numero_parcelas = 10;
-                        $preco_parcela = $subtotal/$numero_parcelas;
-                        
 
-           
-              echo '</ul><footer>
+            $subtotal += $total_item;
+            $contador++;
+        }
+        $numero_parcelas = 10;
+        $preco_parcela = $subtotal / $numero_parcelas;
+
+
+
+        echo '</ul><footer>
                         <section class="visible-desktop my-cart-footer-wrapper clearfix">
 
                             <article class="my-cart-gift-box">
@@ -409,7 +413,7 @@ class CartController extends AbstractActionController{
                             <article class="my-cart-totals">
                                 <div class="my-cart-totals-item my-cart-subtotal">
                                     <span class="my-cart-subtotal-item my-cart-subtotal-label">Subtotal (itens):</span>
-                                    <span class="my-cart-subtotal-item my-cart-subtotal-text">R$ '.number_format($subtotal, 2, ",", ".").'</span>
+                                    <span class="my-cart-subtotal-item my-cart-subtotal-text">R$ ' . number_format($subtotal, 2, ",", ".") . '</span>
                                 </div>
 
 
@@ -434,11 +438,11 @@ class CartController extends AbstractActionController{
 
                                 <div class="my-cart-totals-item my-cart-total">
                                     <span class="my-cart-total-item my-cart-total-label">Valor total:</span>
-                                    <span class="my-cart-total-item my-cart-total-text">R$ '.number_format($subtotal, 2, ",", ".").'</span>
+                                    <span class="my-cart-total-item my-cart-total-text">R$ ' . number_format($subtotal, 2, ",", ".") . '</span>
 
 
                                     <div class="my-cart-installment">
-                                        <span>em até</span><span class="my-cart-installment-text"> '.$numero_parcelas.'x de  R$ '.number_format($preco_parcela, 2, ",", ".").'<span> sem juros</span></span>
+                                        <span>em até</span><span class="my-cart-installment-text"> ' . $numero_parcelas . 'x de  R$ ' . number_format($preco_parcela, 2, ",", ".") . '<span> sem juros</span></span>
                                     </div>
 
 
@@ -485,7 +489,7 @@ class CartController extends AbstractActionController{
 
 
                                     <div class="my-cart-installment">
-                                        <span>em até</span><span class="my-cart-installment-text"> 10x de  R$ '.number_format($preco_parcela, 2, ",", ".").'<span> sem juros</span></span>
+                                        <span>em até</span><span class="my-cart-installment-text"> 10x de  R$ ' . number_format($preco_parcela, 2, ",", ".") . '<span> sem juros</span></span>
                                     </div>
 
 
@@ -507,17 +511,15 @@ class CartController extends AbstractActionController{
 
 
 ';
-    
-       
-       
-       
-       
-       //echo $this->sql_checkout;    
-       // print_r($this->checkout_info);
-       
-       // print_r($_COOKIE);
-              
-       ###Selecionar similares ###############       
+
+
+
+
+
+        //echo $this->sql_checkout;    
+        // print_r($this->checkout_info);
+        // print_r($_COOKIE);
+        ###Selecionar similares ###############       
         $this->sql_similares = "SELECT  cat2_id, 
                                         id, nome, 
                                         prod_marca, 
@@ -532,79 +534,67 @@ class CartController extends AbstractActionController{
         $query4->execute();
         $this->data_prod_similares = $query4->fetchAll();
         #######################################
-        
-        
-       
-      
-        
         ######View###################################
-        $view = new ViewModel(array(           
+        $view = new ViewModel(array(
             'checkout_info' => $this->checkout_info,
             'compre_junto' => $this->data_prod_similares,
         ));
         $view->setTemplate('templates/orion/generic.phtml')->setTerminal(true);
         return $view;
         ########################
-        
-       
     }
-    
-    
-    
-     public function removeAction() {
-        
-       $db = 'db1';
-       $postdata = file_get_contents("php://input");
-       $request = json_decode($postdata);       
-       @$prod_id = $request->prod_id;
-       @$prod_qtd = $request->qtde_prod;
-       
-       
-       
-       
-       if(!empty($postdata)){
-           
-           if(!preg_match('/^[0-9]+$/', $prod_id)){
-               
+
+    public function removeAction() {
+
+        $db = 'db1';
+        $postdata = file_get_contents("php://input");
+        $request = json_decode($postdata);
+        @$prod_id = $request->prod_id;
+        @$prod_qtd = $request->qtde_prod;
+
+
+
+
+        if (!empty($postdata)) {
+
+            if (!preg_match('/^[0-9]+$/', $prod_id)) {
+
                 $model = new ViewModel();
                 $model->setTemplate('error/404');
-                $model->setTerminal(true); 
-                return $model;       
+                $model->setTerminal(true);
+                return $model;
 
                 exit;
-           }       
-                    
+            }
         }
-        
-        
-        
-        
-        
+
+
+
+
+
         $hash_user = $_COOKIE['hashUser'];
         $this->object = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        
-        $this->sql_cat = "SELECT id FROM `$db`.Visitante WHERE sessao = '$hash_user' ";       
-        $query2 = $this->object->getConnection()->prepare($this->sql_cat); 
-        $query2->execute();       
+
+        $this->sql_cat = "SELECT id FROM `$db`.Visitante WHERE sessao = '$hash_user' ";
+        $query2 = $this->object->getConnection()->prepare($this->sql_cat);
+        $query2->execute();
         $this->data_user = $query2->fetch();
         $this->idUser = $this->data_user['id'];
         #######################################
-        
         #verifica se existe um carrinho aberto
-            $this->sql_cat = "SELECT id, visitanteId FROM `$db`.Carrinho WHERE visitanteId = '$this->idUser' ";       
-            $query_carrinho = $this->object->getConnection()->prepare($this->sql_cat); 
-            $query_carrinho->execute();
+        $this->sql_cat = "SELECT id, visitanteId FROM `$db`.Carrinho WHERE visitanteId = '$this->idUser' ";
+        $query_carrinho = $this->object->getConnection()->prepare($this->sql_cat);
+        $query_carrinho->execute();
 
-            $data_carrinho = $query_carrinho->fetch();
-            $cartId = $data_carrinho['id'];
-            $cartIdVisitante = $data_carrinho['visitanteId'];      
-        
-        
-        if($prod_qtd == 'del'){            
+        $data_carrinho = $query_carrinho->fetch();
+        $cartId = $data_carrinho['id'];
+        $cartIdVisitante = $data_carrinho['visitanteId'];
+
+
+        if ($prod_qtd == 'del') {
             $this->str_delete_prod = "DELETE FROM `$db`.CarrinhoItens WHERE carrinhoId = '$cartId' AND produtoId = '$prod_id' ";
             $query0 = $this->object->getConnection()->prepare($this->str_delete_prod);
             $query0->execute();
-          
         } else {
 
             #remove iten no carrinho ##########################        
@@ -613,61 +603,55 @@ class CartController extends AbstractActionController{
             $query2->execute();
         }
 
-        
-        
-        
-        $view = new ViewModel();      
+
+
+
+        $view = new ViewModel();
         $view->setTemplate('templates/orion/generic.phtml');
-        $view->setTerminal(true); 
+        $view->setTerminal(true);
 
         return $view;
-        
-        
     }
-    
-    
-    
-    public function getLojaInfo(){        
+
+    public function getLojaInfo() {
         $db = 'db1';
-        $this->object = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default'); 
+        $this->object = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         #get formas de pagamentos na view get_forma_pagamento######
         $this->sql_lojaInfo = "SELECT * FROM `$db`.Local ORDER by Local.id ASC";
-        $query2 = $this->object->getConnection()->prepare($this->sql_lojaInfo); 
-        $query2->execute();       
-       return $query2->fetch();       
-        
+        $query2 = $this->object->getConnection()->prepare($this->sql_lojaInfo);
+        $query2->execute();
+        return $query2->fetch();
     }
-    
-    
+
     public function queryCartAction() {
-        
+
         $db = 'db1';
-        $this->object = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default'); 
-       
-        
+        $this->object = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+
+
         ####################################
-         $active_hash_user = $_COOKIE['hashUser'];
-         
-         
+        $active_hash_user = $_COOKIE['hashUser'];
+
+
         #get carrinho user #########################################        
-            $this->sql_get_user = "SELECT id, sessao
+        $this->sql_get_user = "SELECT id, sessao
                                                     FROM `$db`.Visitante
                                                     WHERE sessao = '$active_hash_user'";
 
-            $query1 = $this->object->getConnection()->prepare($this->sql_get_user);
-            $query1->execute();
-            $this->data_active_user = $query1->fetch();
-            $id_user = $this->data_active_user['id'];
+        $query1 = $this->object->getConnection()->prepare($this->sql_get_user);
+        $query1->execute();
+        $this->data_active_user = $query1->fetch();
+        $id_user = $this->data_active_user['id'];
         ####################################
-        
-        
-    
-        
-        
-        
-        if(!empty($active_hash_user)){
-            
-            
+
+
+
+
+
+
+        if (!empty($active_hash_user)) {
+
+
             #get carrinho info#########################
             $this->sql_checkout = "SELECT
                                     Carrinho.id,
@@ -677,19 +661,19 @@ class CartController extends AbstractActionController{
                                     get_view_produtos.imagemId as img_id,
                                     CarrinhoItens.produtoId 
                                     FROM ((`$db`.CarrinhoItens INNER JOIN `$db`.Carrinho ON CarrinhoItens.CarrinhoId = Carrinho.id) INNER JOIN `$db`.get_view_produtos ON CarrinhoItens.produtoId = get_view_produtos.produtoId) INNER JOIN `$db`.Marca ON get_view_produtos.prod_Marca = Marca.id WHERE Carrinho.visitanteId = '$id_user'";
-            
-           
-           $query0 = $this->object->getConnection()->prepare($this->sql_checkout);
-           $query0->execute();
-           $this->cart_info = $query0->fetchAll();
-           $this->cart_numItens = $query0->rowCount();
-           ###########################################
-        
-           
-           
-           if($this->cart_numItens == 0){
-              
-                 echo '<div>
+
+
+            $query0 = $this->object->getConnection()->prepare($this->sql_checkout);
+            $query0->execute();
+            $this->cart_info = $query0->fetchAll();
+            $this->cart_numItens = $query0->rowCount();
+            ###########################################
+
+
+
+            if ($this->cart_numItens == 0) {
+
+                echo '<div>
                     <header class="header-dropdown clearfix">
                         <a href="#" class="title-dropdown">Meu carrinho (0) itens</a> 
                     </header>
@@ -703,37 +687,35 @@ class CartController extends AbstractActionController{
                     </div>
                     </section>
                 </div>';
-                 
-               
-           } else {
-               
-               
-               echo '<header class="header-dropdown clearfix">
-                                    <a href="#" class="title-dropdown">Meu carrinho ('.$this->cart_numItens.') itens</a>
+            } else {
+
+
+                echo '<header class="header-dropdown clearfix">
+                                    <a href="#" class="title-dropdown">Meu carrinho (' . $this->cart_numItens . ') itens</a>
                                 </header>
                                 
                     <div class="cart-info">
                           <ul class="cart-list product-list clearfix">
 
-';      
-            
-            
-            
-            
-            
-           
-           foreach($this->cart_info as $cartD1){
-          
-               $qtd = intval($cartD1['quantidade']);
-               
-               echo '<li class="product-item">
+';
+
+
+
+
+
+
+                foreach ($this->cart_info as $cartD1) {
+
+                    $qtd = intval($cartD1['quantidade']);
+
+                    echo '<li class="product-item">
                          <img src="/images/img' . $cartD1['img_id'] . '.' . $cartD1['ext'] . '" class="product-image" width="48" height="48">
                          <p class="product-title"><a href="">' . $cartD1['prod_nome'] . '</a></p>
                          <p class="product-quantity">Quantidade: ' . $qtd . '</p></li>  ';
-           }
-           #################################################
-        
-         echo '
+                }
+                #################################################
+
+                echo '
              </ul>
              
              <script>             
@@ -746,87 +728,67 @@ class CartController extends AbstractActionController{
                                                 <span class="icon-minicart-buttom"></span>
                                                 <span class="label-minicart-buttom">Ver carrinho</span>
                                             </a></div>';
-           }
+            }
         }
-  
-        
+
+
         #get carrinho info#########################       
-        
+
         $this->sql_cartItens = "SELECT
                                         SUM(CarrinhoItens.quantidade) as qtd_itens
                                          FROM ((`$db`.CarrinhoItens INNER JOIN `$db`.Carrinho ON CarrinhoItens.CarrinhoId = Carrinho.id)) WHERE Carrinho.visitanteId = '$id_user'";
 
 
-       $query3 = $this->object->getConnection()->prepare($this->sql_cartItens);
-       $query3->execute();
-       $this->cart_numItens = $query3->fetch();
-       ###########################################
+        $query3 = $this->object->getConnection()->prepare($this->sql_cartItens);
+        $query3->execute();
+        $this->cart_numItens = $query3->fetch();
+        ###########################################
 
-       if($this->cart_numItens){
+        if ($this->cart_numItens) {
 
-           $soma_itens = intval($this->cart_numItens['qtd_itens']);
-           
-           if($soma_itens != 0){
-               
-                echo ' <script>$("span#num_itens").text("'.$soma_itens.'");                        
+            $soma_itens = intval($this->cart_numItens['qtd_itens']);
+
+            if ($soma_itens != 0) {
+
+                echo ' <script>$("span#num_itens").text("' . $soma_itens . '");                        
                         $("span#num_itens").css("display", "inline");                        
                         </script>';
-               
-           }
-       }
-        
+            }
+        }
+
         $view = new ViewModel(array(
-             'cart_data' => 'OK',
-            
-        ));      
+            'cart_data' => 'OK',
+        ));
         $view->setTemplate('orion/generic');
-        $view->setTerminal(true); 
+        $view->setTerminal(true);
 
         return $view;
-        
-       // return $json_cart;
-        
+
+        // return $json_cart;
     }
 
-    
     public function qtdAction() {
-        
-      
-        
+
         if (@$_SESSION['carrinho']) {
 
             $num_itens = array_sum($_SESSION['carrinho']);
-            
-            
-
-          
-        } else{
-            
+        } else {
             $num_itens = false;
-            
+
             $model = new ViewModel();
             $model->setTemplate('error/404');
-            $model->setTerminal(true); 
-            return $model;    
-          
-            exit;       
-            
-            
+            $model->setTerminal(true);
+            return $model;
+            exit;
         }
-        
-        
+
         echo $num_itens;
-       
-        
-        $view = new ViewModel();      
-        $view->setTemplate('templates/orion/generic.phtml');
-        $view->setTerminal(true); 
+
+        $view = new ViewModel();
+        $view->setTemplate('generic');
+        $view->setTerminal(true);
 
         return $view;
-        
-        
     }
-    
-    
-    
+
 }

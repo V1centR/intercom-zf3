@@ -16,10 +16,21 @@ class ProdutoController extends AbstractActionController {
 
     public function indexAction() {
 
+        //futuramente estes dados virão do banco de dados
+        $data_prod = [
+            'precounitario' => 1999.99,
+            'precopromocional' => 999.99,
+            'prod_peso' => 1200,
+            'prod_altura' => 30,
+            'prod_largura' => 180,
+            'prod_comprimento' => 200,
+            'prod_id' => 88                
+        ];        
+        
         $view = new ViewModel([
 
             'teste' => 'template ok',
-
+            'data_prod' => $data_prod
         ]);
         $view->setTemplate('product-profile');
         //$view->setTerminal(true);
@@ -67,7 +78,7 @@ class ProdutoController extends AbstractActionController {
 
        #get formas de pagamento "serve pra nada"
        $this->forma_pagamento = $this->defaults->getFormaPagamento($em);
-
+       
        #get rodape info###
        $this->rodape_info = $this->defaults->getRodapeInfo($em);
 

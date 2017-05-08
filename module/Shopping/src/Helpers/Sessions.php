@@ -12,7 +12,7 @@ class Sessions extends AbstractHelper
     {
         $status = false;
         $session = new Container('sessionUser');
-
+        
         if(isset($session->idUser)){
             $status = true;
         }else{
@@ -20,6 +20,4 @@ class Sessions extends AbstractHelper
         }
         return $status;
     }
-
-
 }

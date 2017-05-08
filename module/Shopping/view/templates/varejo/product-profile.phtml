@@ -1,434 +1,424 @@
-<?= $this->headLink()
-    ->appendStylesheet($this->basePath('templates/' . TEMPLATE . '/css/product.css'))
+<?=
+        $this->headLink()
+        ->appendStylesheet($this->basePath('templates/' . TEMPLATE . '/css/product.css'))
 ?>
-
 
 <div class="webstore department" class="ng-cloak">
 
-<script>//angular.module('ui.bootstrap.app', []);</script>
+    <?php
+    $preco_unit = $data_prod['precounitario'];
+    $preco_promocional = $data_prod['precopromocional'];
 
-<?php
-$preco_unit = $data_prod['precounitario'];
-$preco_promocional = $data_prod['precopromocional'];
-
-
-$preco_promo = substr($data_prod['precopromocional'], 0, -3);
-$preco_promo_dec = substr($data_prod['precopromocional'], -2);
-
-
-$preco_parcelado = $preco_unit / 10;
-$preco_parcelado = number_format($preco_parcelado, 2, ",", ".");
-
-
-if ($preco_promocional == 0.00) {
-
-    $preco_final = $preco_unit;
-
-    $preco_promo = number_format(substr($preco_unit, 0, -3), 0, ",", ".");
-    $preco_promo_dec = substr($preco_unit, -2);
-    $hide = 'style="display:none"';
+    $preco_promo = substr($data_prod['precopromocional'], 0, -3);
+    $preco_promo_dec = substr($data_prod['precopromocional'], -2);
 
     $preco_parcelado = $preco_unit / 10;
     $preco_parcelado = number_format($preco_parcelado, 2, ",", ".");
-} else {
-    $hide = '';
-    $preco_promo = number_format(substr($preco_promocional, 0, -3), 0, ",", ".");
-    $preco_parcelado = $preco_promocional / 10;
-    $preco_parcelado = number_format($preco_parcelado, 2, ",", ".");
-    $preco_final = $preco_promocional;
-}
-$preco_promo_format = number_format($preco_unit, 2, ",", ".");
+
+    if ($preco_promocional == 0.00) {
+
+        $preco_final = $preco_unit;
+
+        $preco_promo = number_format(substr($preco_unit, 0, -3), 0, ",", ".");
+        $preco_promo_dec = substr($preco_unit, -2);
+        $hide = 'style="display:none"';
+
+        $preco_parcelado = $preco_unit / 10;
+        $preco_parcelado = number_format($preco_parcelado, 2, ",", ".");
+    } else {
+        $hide = '';
+        $preco_promo = number_format(substr($preco_promocional, 0, -3), 0, ",", ".");
+        $preco_parcelado = $preco_promocional / 10;
+        $preco_parcelado = number_format($preco_parcelado, 2, ",", ".");
+        $preco_final = $preco_promocional;
+    }
+    $preco_promo_format = number_format($preco_unit, 2, ",", ".");
 
 // echo $preco_promo.'.'.$preco_promo_dec;
-$preco_funcao = number_format($preco_promocional, 2, ",", ".");
+    $preco_funcao = number_format($preco_promocional, 2, ",", ".");
 
-#tratamento das avaliacoes##########################
-$soma = 0;
-$qtd_media = 0;
-#estatisticas####################
-foreach ($prod_rates as $stcs) {
-
-    $soma += $stcs['nota'] * 10;
-    $qtd_media++;
-}
-
-@$media = $soma / $qtd_media;
-$media = number_format($media, 0, '', '');
-
-$media_principal = str_replace('.', ',', $media / 10);
-if ($qtd_media == 0) {
-    $msg = ' - Seja a primeira pessoa a avaliar!';
-} else {
-
-    $msg = '';
-}
-?>
-
-
-<div class="container-product">
-
-    <div class="price-qty-frame">
+    #tratamento das avaliacoes##########################
+//    $soma = 0;
+//    $qtd_media = 0;
+//    #estatisticas####################
+//    foreach ($prod_rates as $stcs) {
+//
+//        $soma += $stcs['nota'] * 10;
+//        $qtd_media++;
+//    }
+//
+//    @$media = $soma / $qtd_media;
+//    $media = number_format($media, 0, '', '');
+//
+//    $media_principal = str_replace('.', ',', $media / 10);
+//    if ($qtd_media == 0) {
+//        $msg = ' - Seja a primeira pessoa a avaliar!';
+//    } else {
+//
+//        $msg = '';
+//    }
+    ?>
 
 
-        <div class="price-info">R$ 99,90</div>
-        <div style=" text-align: center; font-size: 12px; font-weight: bold;">Ou 10x sem juros!</div>
+    <div class="container-product">
 
-        <span>Quantidade</span>
-            <input type="text" name="qty" placeholder="Qtd" class="form-control" style="width: 50px;">
+        <div class="price-qty-frame" ng-controller="cartActions">
+
+
+            <div class="price-info-promo">De R$ <strike><?php echo $preco_promo_format; ?></strike> <br> Por </div>            
+            
+            <div class="price-info">R$ <?php echo $preco_promo.','; ?><span style="font-size: 20px;"><?php echo $preco_promo_dec; ?></span></div>
+            <div style=" text-align: center; font-size: 12px; font-weight: bold;">Ou 10x sem juros!</div>
+
+            <hr size="1">
+            
+            <span>Quantidade</span>
+            <input ng-model="qtde_prod" type="text" name="qty" id="qtde_prod" placeholder="Qtd" class="form-control" onkeydown="return onlyNum()" style="width: 50px; position: relative; float: right; right: 120px; top: -10px;" value="1">
+            <div class="clear"></div>
+
+            <div class="btn-cart-session">
+                <button class="btn btn-primary" id="addCart" ng-click="addCart(888)">Adicionar ao carrinho</button>
+            </div>
+            
+
+            <div class="payment-options">
+
+                <!-- ####formas de pagamento##################-->
+                <div id="buy-box-consult-installment" class="buy-box-consult-installment consult-item">
+                    <a href="#" class="consult-payment consult-button" ng-click="modalFormaPagamento('modal-sm')">
+                        <i class="icon"></i>
+                        Formas de <br>pagamento</a>
+                    <span class="consult-payment consult-button installment-button disabled hide">
+                        <i class="icon"></i>Formas de <br>pagamento
+                    </span>
+                </div>
+                <!--##########################################-->
+            </div>
+
+            <!--        <div class="calc-ship">-->
+            <!--            Calcular Frete:-->
+            <!--            <div class="clear"></div>-->
+            <!--            <button class="btn btn-primary" style="position: relative; float: right; width: 120px;">Calcular</button>-->
+            <!--            <input type="text" name="ship" class="form-control" style="width: 120px;" placeholder="CEP">-->
+            <!---->
+            <!--        </div>-->
+
+        </div>
+        <script>
+        angular.module('ui.bootstrap.app').controller('cartActions', function ($scope, $http) {
+
+            $scope.addCart = function (data) {               
+
+                var prod_id = data;
+                
+                var qtd_produto = $scope.qtde_prod;
+                $('#num_itens').css('display', 'inline-block');
+                
+                $("#num_itens").load("/cart/qtd");
+
+                var request = $http({
+                    method: "get",
+                    url: "/cart/add",
+                    data: {
+                        prod_id: prod_id,
+                        qtde_prod: qtd_produto,
+                    },
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                });             
+
+                /* Check whether the HTTP Request is successful or not. */
+                request.success(function (data) {
+                    
+                    $("span#num_itens").load("/cart/qtd");
+                    $("div#cart").load("/cart/queryCart");
+                    
+                });
+                request.error(function (data) {
+                    document.getElementById("messageCadastrar1").textContent = "Houve um problema [" + data + "]";
+                });
+            }; //fecha addCart
+        });
+    </script>
+
+
+        <div class="rate-product">Avalie este produto</div>
+
+        <div class="demo-product">
+            <img src="<?php echo '/directory/' . DB_PROFILE . '/images/444.jpg'; ?>" style="width: 300px;">
+        </div>
+
+        <hr size="1" style="margin-top: 0px;">
+
+        <div class="product-description product-description-title">Descrição do produto</div>
+        <div class="description-text">
+
+            <strong>A Smart TV 43LH6000, da LG</strong>, possui tela LED de 43”, em formato Widescreen (16:9), com resolução de imagem Full HD (1920x1080 pixels), taxa de atualização de quadros do painel com frequência de 60 Hz e painel IPS que tornam os movimentos na tela mais naturais. O espectador obtém o máximo de qualidade em entretenimento em toda forma de programação, seja assistindo filmes e seriados, jogando videogames de última geração com conexão HDMI ou até curtindo a programação local.
+            <div class="description-text-topic"> WebOS 3.0</div>
+            A webOS 3.0 é uma plataforma de fácil navegação desenvolvida para o usuário acessar as funcionalidades do sistema de multitarefas, como alternar conteúdos e descobrir novidades através das recomendações da programação.
+            <div class="description-text-topic">Painel IPS</div>
+            O Painel IPS garante uma experiência diferenciada para um público que precisa estar atento a todos os detalhes, em qualquer ângulo que o usuário estiver da tela.
+            <div class="description-text-topic">Tecnologia Intel WiDi</div>
+            A tecnologia Intel WiDi é um recurso de conexão sem fio que conecta aparelhos compatíveis a Smart TV, com qualidade de uso e exportando a resolução de imagem.
+            <div class="description-text-topic">Smart Share</div>
+            As tecnologias Smart Share e Smart Mobile Link oferecem ao usuário uma experiência alternativa para acessar a tela do smartphone ou tablet espelhando a tela destes dispositivos diretamente na Smart TV.
+            <div class="description-text-topic">Parceria E.I. Plus</div>
+            A LG possui uma parceria exclusiva com o canal Esporte Interativo, que oferece ao consumidor acesso ao aplicativo, onde é possível acompanhar os diversos campeonatos ao redor do mundo, de graça e por 1 ano (*ativação até 31/12/16).
+            <div class="description-text-topic">Entradas Multimídia</div>
+            A TV vem equipada com 2 portas USB e 3 entradas HDMI, que permitem ao usuário conectar videogames de última geração, notebooks, aparelhos de DVD e Blu-ray, entre outros dispositivos para desfrutar do conteúdo em alta resolução, com brilho e contrastes intensos.
+
+        </div>
+
+
+        <hr size="1">
+
+        <div class="product-description product-description-title"">Características do produto</div>
+
         <div class="clear"></div>
 
-        <div class="btn-cart-session">
-            <button class="btn btn-primary">Adicionar ao carrinho</button>
-        </div>
+        <div class="table-description">
 
-        <div class="payment-options">
-
-
-            <!-- ####formas de pagamento##################-->
-            <div id="buy-box-consult-installment" class="buy-box-consult-installment consult-item">
-                <a href="#" class="consult-payment consult-button" ng-click="modalFormaPagamento('modal-sm')">
-                    <i class="icon"></i>
-                    Formas de <br>pagamento</a>
-                <span class="consult-payment consult-button installment-button disabled hide">
-                            <i class="icon"></i>Formas de <br>pagamento
-                        </span>
+            <div class="table-row-negative">
+                <div class="table-row-item1"> Conexões e Entradas</div>
+                <div class="table-row-item2"> LAN (Rede)</div>
+                <div class="clear"></div>
             </div>
-            <!--##########################################-->
-        </div>
-
-<!--        <div class="calc-ship">-->
-<!--            Calcular Frete:-->
-<!--            <div class="clear"></div>-->
-<!--            <button class="btn btn-primary" style="position: relative; float: right; width: 120px;">Calcular</button>-->
-<!--            <input type="text" name="ship" class="form-control" style="width: 120px;" placeholder="CEP">-->
-<!---->
-<!--        </div>-->
-
-    </div>
-
-
-    <div class="rate-product">Avalie este produto</div>
-
-    <div class="demo-product">
-        <img src="<?php echo '/directory/' . DB_PROFILE . '/images/444.jpg'; ?>" style="width: 300px;">
-    </div>
-
-    <hr size="1" style="margin-top: 0px;">
-
-    <div class="product-description product-description-title">Descrição do produto</div>
-    <div class="description-text">
-
-        <strong>A Smart TV 43LH6000, da LG</strong>, possui tela LED de 43”, em formato Widescreen (16:9), com resolução de imagem Full HD (1920x1080 pixels), taxa de atualização de quadros do painel com frequência de 60 Hz e painel IPS que tornam os movimentos na tela mais naturais. O espectador obtém o máximo de qualidade em entretenimento em toda forma de programação, seja assistindo filmes e seriados, jogando videogames de última geração com conexão HDMI ou até curtindo a programação local.
-        <div class="description-text-topic"> WebOS 3.0</div>
-        A webOS 3.0 é uma plataforma de fácil navegação desenvolvida para o usuário acessar as funcionalidades do sistema de multitarefas, como alternar conteúdos e descobrir novidades através das recomendações da programação.
-        <div class="description-text-topic">Painel IPS</div>
-        O Painel IPS garante uma experiência diferenciada para um público que precisa estar atento a todos os detalhes, em qualquer ângulo que o usuário estiver da tela.
-        <div class="description-text-topic">Tecnologia Intel WiDi</div>
-        A tecnologia Intel WiDi é um recurso de conexão sem fio que conecta aparelhos compatíveis a Smart TV, com qualidade de uso e exportando a resolução de imagem.
-        <div class="description-text-topic">Smart Share</div>
-        As tecnologias Smart Share e Smart Mobile Link oferecem ao usuário uma experiência alternativa para acessar a tela do smartphone ou tablet espelhando a tela destes dispositivos diretamente na Smart TV.
-        <div class="description-text-topic">Parceria E.I. Plus</div>
-        A LG possui uma parceria exclusiva com o canal Esporte Interativo, que oferece ao consumidor acesso ao aplicativo, onde é possível acompanhar os diversos campeonatos ao redor do mundo, de graça e por 1 ano (*ativação até 31/12/16).
-        <div class="description-text-topic">Entradas Multimídia</div>
-        A TV vem equipada com 2 portas USB e 3 entradas HDMI, que permitem ao usuário conectar videogames de última geração, notebooks, aparelhos de DVD e Blu-ray, entre outros dispositivos para desfrutar do conteúdo em alta resolução, com brilho e contrastes intensos.
-
-    </div>
-
-
-    <hr size="1">
-
-    <div class="product-description product-description-title"">Características do produto</div>
-
-    <div class="clear"></div>
-
-    <div class="table-description">
-
-        <div class="table-row-negative">
-            <div class="table-row-item1"> Conexões e Entradas</div>
-            <div class="table-row-item2"> LAN (Rede)</div>
-            <div class="clear"></div>
-        </div>
-        <div class="table-row">
-            <div class="table-row-item1"> Conexões e Entradas</div>
-            <div class="table-row-item2"> HDMI</div>
-            <div class="clear"></div>
-        </div>
-
-        <div class="table-row-negative">
-            <div class="table-row-item1"> Conexões e Entradas</div>
-            <div class="table-row-item2"> USB</div>
-            <div class="clear"></div>
-        </div>
-        <div class="table-row">
-            <div class="table-row-item1"> Conexões e Entradas</div>
-            <div class="table-row-item2"> LAN (Rede)</div>
-            <div class="clear"></div>
-        </div>
-
-        <div class="table-row-negative">
-            <div class="table-row-item1"> Informações adicionais</div>
-            <div class="table-row-item2">
-                Espessura: 7,94<br>
-                Diagonal Visual: 107,9<br>
-                Energia em Standby: 0,1084<br>
-                Consumo Standby (kwh/mês): 0,078<br>
-                Label Size: 0,07
+            <div class="table-row">
+                <div class="table-row-item1"> Conexões e Entradas</div>
+                <div class="table-row-item2"> HDMI</div>
+                <div class="clear"></div>
             </div>
-            <div class="clear"></div>
+
+            <div class="table-row-negative">
+                <div class="table-row-item1"> Conexões e Entradas</div>
+                <div class="table-row-item2"> USB</div>
+                <div class="clear"></div>
+            </div>
+            <div class="table-row">
+                <div class="table-row-item1"> Conexões e Entradas</div>
+                <div class="table-row-item2"> LAN (Rede)</div>
+                <div class="clear"></div>
+            </div>
+
+            <div class="table-row-negative">
+                <div class="table-row-item1"> Informações adicionais</div>
+                <div class="table-row-item2">
+                    Espessura: 7,94<br>
+                    Diagonal Visual: 107,9<br>
+                    Energia em Standby: 0,1084<br>
+                    Consumo Standby (kwh/mês): 0,078<br>
+                    Label Size: 0,07
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="table-row">
+                <div class="table-row-item1"> Referência do Modelo</div>
+                <div class="table-row-item2"> 43LH6000</div>
+                <div class="clear"></div>
+            </div>
         </div>
-        <div class="table-row">
-            <div class="table-row-item1"> Referência do Modelo</div>
-            <div class="table-row-item2"> 43LH6000</div>
-            <div class="clear"></div>
+
+
+        <div class="comments">
+
+            <div style="font-size: 26px;">Avaliações do produto!</div>
+
+
+            <div class="comment-slot">
+                <div class="comments-title">Produto muito bom! <span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span> </div>
+                <div class="comment-text">O smartphone tem memória interna de 16 GB que possibilita armazenar diversas fotos, documentos, músicas e vídeos. Caso haja a necessidade de mais espaço, o aparelho possui leitor de cartão no formato MicroSD, que consegue expandir essa memória até 128GB.</div>
+                <div class="comment-author">Miguel Carvalho - S Bernardo do Campo - 22/04/2017</div>
+                <hr size="1">
+            </div>
+
+            <div class="comment-slot">
+                <div class="comments-title">Produto muito bom! <span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span></div>
+                <div class="comment-text">O smartphone tem memória interna de 16 GB que possibilita armazenar diversas fotos, documentos, músicas e vídeos. Caso haja a necessidade de mais espaço, o aparelho possui leitor de cartão no formato MicroSD, que consegue expandir essa memória até 128GB.</div>
+                <div class="comment-author">Miguel Carvalho - S Bernardo do Campo - 22/04/2017</div>
+
+                <hr size="1">
+            </div>
+
+            <div class="comment-slot">
+                <div class="comments-title">Produto muito bom! <span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span></div>
+                <div class="comment-text">O smartphone tem memória interna de 16 GB que possibilita armazenar diversas fotos, documentos, músicas e vídeos. Caso haja a necessidade de mais espaço, o aparelho possui leitor de cartão no formato MicroSD, que consegue expandir essa memória até 128GB.</div>
+                <div class="comment-author">Miguel Carvalho - S Bernardo do Campo - 22/04/2017</div>
+
+                <hr size="1">
+            </div>
+
+            <div class="comment-slot">
+                <div class="comments-title">Produto muito bom! <span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span></div>
+                <div class="comment-text">O smartphone tem memória interna de 16 GB que possibilita armazenar diversas fotos, documentos, músicas e vídeos. Caso haja a necessidade de mais espaço, o aparelho possui leitor de cartão no formato MicroSD, que consegue expandir essa memória até 128GB.</div>
+                <div class="comment-author">Miguel Carvalho - S Bernardo do Campo - 22/04/2017</div>
+
+                <hr size="1">
+            </div>
+
+
         </div>
+
+
     </div>
+    <!--    fecha container-->
 
 
-    <div class="comments">
+    <?php
 
-        <div style="font-size: 26px;">Avaliações do produto!</div>
-
-
-        <div class="comment-slot">
-            <div class="comments-title">Produto muito bom! <span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span> </div>
-            <div class="comment-text">O smartphone tem memória interna de 16 GB que possibilita armazenar diversas fotos, documentos, músicas e vídeos. Caso haja a necessidade de mais espaço, o aparelho possui leitor de cartão no formato MicroSD, que consegue expandir essa memória até 128GB.</div>
-            <div class="comment-author">Miguel Carvalho - S Bernardo do Campo - 22/04/2017</div>
-<hr size="1">
-        </div>
-
-        <div class="comment-slot">
-            <div class="comments-title">Produto muito bom! <span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span></div>
-            <div class="comment-text">O smartphone tem memória interna de 16 GB que possibilita armazenar diversas fotos, documentos, músicas e vídeos. Caso haja a necessidade de mais espaço, o aparelho possui leitor de cartão no formato MicroSD, que consegue expandir essa memória até 128GB.</div>
-            <div class="comment-author">Miguel Carvalho - S Bernardo do Campo - 22/04/2017</div>
-
-            <hr size="1">
-        </div>
-
-        <div class="comment-slot">
-            <div class="comments-title">Produto muito bom! <span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span></div>
-            <div class="comment-text">O smartphone tem memória interna de 16 GB que possibilita armazenar diversas fotos, documentos, músicas e vídeos. Caso haja a necessidade de mais espaço, o aparelho possui leitor de cartão no formato MicroSD, que consegue expandir essa memória até 128GB.</div>
-            <div class="comment-author">Miguel Carvalho - S Bernardo do Campo - 22/04/2017</div>
-
-            <hr size="1">
-        </div>
-
-        <div class="comment-slot">
-            <div class="comments-title">Produto muito bom! <span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span></div>
-            <div class="comment-text">O smartphone tem memória interna de 16 GB que possibilita armazenar diversas fotos, documentos, músicas e vídeos. Caso haja a necessidade de mais espaço, o aparelho possui leitor de cartão no formato MicroSD, que consegue expandir essa memória até 128GB.</div>
-            <div class="comment-author">Miguel Carvalho - S Bernardo do Campo - 22/04/2017</div>
-
-            <hr size="1">
-        </div>
-
-
-        </div>
-
-
-</div>
-<!--    fecha container-->
-
-
-<?php
-
-function filterUrl($string, $slug = false) {
-    $string = strtolower($string);
-    $ascii['a'] = range(224, 230);
-    $ascii['e'] = range(232, 235);
-    $ascii['i'] = range(236, 239);
-    $ascii['o'] = array_merge(range(242, 246), array(240, 248));
-    $ascii['u'] = range(249, 252);
-    $ascii['b'] = array(223);
-    $ascii['c'] = array(231);
-    $ascii['d'] = array(208);
-    $ascii['n'] = array(241);
-    $ascii['y'] = array(253, 255);
-    foreach ($ascii as $key => $item) {
-        $acentos = '';
-        foreach ($item AS $codigo)
-            $acentos .= chr($codigo);
-        $troca[$key] = '/[' . $acentos . ']/i';
-    }
-    $string = preg_replace(array_values($troca), array_keys($troca), $string);
-
-    if ($slug) {
-
-        $string = preg_replace('/[^a-z0-9]/i', $slug, $string);
-
-        $string = preg_replace('/' . $slug . '{2,}/i', $slug, $string);
-        $string = trim($string, $slug);
-    }
-    return $string;
-}
-
-
-?>
-<script>
-    angular.module('ui.bootstrap.app').controller('cartActions', function ($scope, $http) {
-
-        $scope.addCart = function (data) {
-
-
-            $scope.prod_id = data;
-            var qtd_produto = $("input#qtde_prod").val();
-
-            $('#num_itens').css('display', 'inline-block');
-            //$("#num_itens").load("/cart/qtd");
-
-
-
-            var request = $http({
-                method: "post",
-                url: "/cart/add",
-                data: {
-                    prod_id: $scope.prod_id,
-                    qtde_prod:qtd_produto,
-                },
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-            });
-
-
-            /* Check whether the HTTP Request is successful or not. */
-            request.success(function (data) {
-
-
-                $("span#num_itens").load("/cart/qtd");
-                $("div#cart").load("/cart/queryCart");
-
-
-
-            });
-            request.error(function (data) {
-                document.getElementById("messageCadastrar1").textContent = "Houve um problema [" + data + "]";
-            });
-        };
-    });
-</script>
-
-<script>
-
-
-    function onlyNum(e) {
-        var tecla = (window.event) ? event.keyCode : e.which;
-        if ((tecla > 47 && tecla < 58))
-            return true;
-        else {
-            if (tecla == 8 || tecla == 0)
-                return true;
-            else
-                return false;
+    function filterUrl($string, $slug = false) {
+        $string = strtolower($string);
+        $ascii['a'] = range(224, 230);
+        $ascii['e'] = range(232, 235);
+        $ascii['i'] = range(236, 239);
+        $ascii['o'] = array_merge(range(242, 246), array(240, 248));
+        $ascii['u'] = range(249, 252);
+        $ascii['b'] = array(223);
+        $ascii['c'] = array(231);
+        $ascii['d'] = array(208);
+        $ascii['n'] = array(241);
+        $ascii['y'] = array(253, 255);
+        foreach ($ascii as $key => $item) {
+            $acentos = '';
+            foreach ($item AS $codigo)
+                $acentos .= chr($codigo);
+            $troca[$key] = '/[' . $acentos . ']/i';
         }
+        $string = preg_replace(array_values($troca), array_keys($troca), $string);
+
+        if ($slug) {
+
+            $string = preg_replace('/[^a-z0-9]/i', $slug, $string);
+
+            $string = preg_replace('/' . $slug . '{2,}/i', $slug, $string);
+            $string = trim($string, $slug);
+        }
+        return $string;
     }
+    ?>
+    
+
+    <script>
 
 
-    var modal_test = angular.module('ui.bootstrap.app');
-
-    modal_test.controller('consultaList', function ($scope,$http) {
-
-        $scope.formaPagamentoModal = false;
-        $scope.modalFormaPagamento = function () {
-
-            $scope.tab = 1;
-            $scope.formaPagamentoModal = !$scope.showModal;
-        };
-
-
-
-        $scope.modalFrete = function () {
-
-            $scope.CalcFreteModal = !$scope.showModal;
-        };
-
-
-        $scope.modalPoliticaTroca = function () {
-
-            $scope.politicaTrocaModal = !$scope.showModal;
-        };
-
-        $scope.modalAvaliar = function () {
-
-            $scope.avaliacaoModal = !$scope.showModal;
-        };
-
-
-
-
-
-        $scope.calcFrete = function () {
-
-            var cep = $("input#cep_dest").val();
-            var cep_lenght = cep.length;
-
-
-            $scope.peso = '<?php echo round($data_prod['prod_peso']); ?>';
-            $scope.altura = '<?php echo $data_prod['prod_altura']; ?>';
-            $scope.largura = '<?php echo $data_prod['prod_largura']; ?>';
-            $scope.comp = '<?php echo $data_prod['prod_comprimento']; ?>';
-            $scope.prod_id = '<?php echo $data_prod['prod_id']; ?>';
-            $scope.preco = '<?php echo round($preco_final); ?>';
-
-
-
-            if (cep == '') {
-
-                alert('Campo cep é obrigatório!');
-                return false;
-
-            } else if (cep_lenght < 8) {
-
-                alert('O CEP digitado é inválido!');
-                return false;
-
+        function onlyNum(e) {
+            var tecla = (window.event) ? event.keyCode : e.which;
+            if ((tecla > 47 && tecla < 58))
+                return true;
+            else {
+                if (tecla == 8 || tecla == 0)
+                    return true;
+                else
+                    return false;
             }
-
-            var request = $http({
-                method: "post",
-                url: "/frete",
-                data: {
-
-                    prod_id: $scope.prod_id,
-                    peso: $scope.peso,
-                    altura: $scope.altura,
-                    largura: $scope.largura,
-                    comp:$scope.comp,
-                    cep: cep,
-                    preco: $scope.preco
-
-                },
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-            });
+        }
 
 
-            /* Check whether the HTTP Request is successful or not. */
-            request.success(function (data) {
+        var modal_test = angular.module('ui.bootstrap.app');
 
-                //alert(data);
+        modal_test.controller('consultaList', function ($scope, $http) {
+
+            $scope.formaPagamentoModal = false;
+            $scope.modalFormaPagamento = function () {
+
+                $scope.tab = 1;
+                $scope.formaPagamentoModal = !$scope.showModal;
+            };
 
 
 
-                document.getElementById("result_frete").innerHTML = data;
-                // $("span#num_itens").load("/cart/qtd");
-                // $("div#cart").load("/cart/queryCart");
+            $scope.modalFrete = function () {
+
+                $scope.CalcFreteModal = !$scope.showModal;
+            };
+
+
+            $scope.modalPoliticaTroca = function () {
+
+                $scope.politicaTrocaModal = !$scope.showModal;
+            };
+
+            $scope.modalAvaliar = function () {
+
+                $scope.avaliacaoModal = !$scope.showModal;
+            };
 
 
 
-            });
-            request.error(function (data) {
-                //document.getElementById("messageCadastrar1").textContent = "Houve um problema [" + data + "]";
-            });
-        };
-
-    });
 
 
+            $scope.calcFrete = function () {
 
-</script>
+                var cep = $("input#cep_dest").val();
+                var cep_lenght = cep.length;
+
+
+                $scope.peso = '<?php echo round($data_prod['prod_peso']); ?>';
+                $scope.altura = '<?php echo $data_prod['prod_altura']; ?>';
+                $scope.largura = '<?php echo $data_prod['prod_largura']; ?>';
+                $scope.comp = '<?php echo $data_prod['prod_comprimento']; ?>';
+                $scope.prod_id = '<?php echo $data_prod['prod_id']; ?>';
+                $scope.preco = '<?php //echo round($preco_final); ?>';
+
+
+
+                if (cep == '') {
+
+                    alert('Campo cep é obrigatório!');
+                    return false;
+
+                } else if (cep_lenght < 8) {
+
+                    alert('O CEP digitado é inválido!');
+                    return false;
+
+                }
+
+                var request = $http({
+                    method: "post",
+                    url: "/frete",
+                    data: {
+
+                        prod_id: $scope.prod_id,
+                        peso: $scope.peso,
+                        altura: $scope.altura,
+                        largura: $scope.largura,
+                        comp: $scope.comp,
+                        cep: cep,
+                        preco: $scope.preco
+
+                    },
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                });
+
+
+                /* Check whether the HTTP Request is successful or not. */
+                request.success(function (data) {
+
+                    //alert(data);
+
+
+
+                    document.getElementById("result_frete").innerHTML = data;
+                    // $("span#num_itens").load("/cart/qtd");
+                    // $("div#cart").load("/cart/queryCart");
+
+
+
+                });
+                request.error(function (data) {
+                    //document.getElementById("messageCadastrar1").textContent = "Houve um problema [" + data + "]";
+                });
+            };
+
+        });
+
+    </script>
 
 </div>
 </div>
 </div>
 
 <link rel="stylesheet" href="//static.wmobjects.com.br/webstore/style/product.min.css">
-<script src="//static.wmobjects.com.br/webstore/js/product.min.js?5a9d353bdd6f833052e351d7b10dd92a"></script>
+<!--<script src="//static.wmobjects.com.br/webstore/js/product.min.js?5a9d353bdd6f833052e351d7b10dd92a"></script>-->
 <!--<script src="/js/orion/product.min.js"></script>-->
 
 <!--[if lt IE 9]>

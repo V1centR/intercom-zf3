@@ -37,7 +37,6 @@ class Module
 
     }
 
-
     // funcao responsavel por start visitor
     public function startVisit(){
 

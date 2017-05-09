@@ -198,6 +198,11 @@ div.teste-dropdownAAA{ background-color: #fff; width: 220px; height: 200px; floa
 div.user-actions{text-align: left;}
 div.cart-info .content{padding: 10px 0px 0px 20px; font-size: 15px;}
 
+.num_itens{font-size: 11px; width: 20px; height: 20px; background-color: #f00; padding: 2px; color: #fff; position: relative; float: right; top: -8px; right: 26px; display: none;
+-moz-border-radius:50%;
+-webkit-border-radius:50%;
+ border-radius:50%;}
+
 /*div.profile-info{*/
     /*width: 400px;*/
     /*height:200px;*/

@@ -66,20 +66,20 @@
 
 
             <div class="price-info-promo">De R$ <strike><?php echo $preco_promo_format; ?></strike> <br> Por </div>            
-            
-            <div class="price-info">R$ <?php echo $preco_promo.','; ?><span style="font-size: 20px;"><?php echo $preco_promo_dec; ?></span></div>
+
+            <div class="price-info">R$ <?php echo $preco_promo . ','; ?><span style="font-size: 20px;"><?php echo $preco_promo_dec; ?></span></div>
             <div style=" text-align: center; font-size: 12px; font-weight: bold;">Ou 10x sem juros!</div>
 
             <hr size="1">
-            
+
             <span>Quantidade</span>
             <input ng-model="qtde_prod" type="text" name="qty" id="qtde_prod" placeholder="Qtd" class="form-control" onkeydown="return onlyNum()" style="width: 50px; position: relative; float: right; right: 120px; top: -10px;" value="1">
             <div class="clear"></div>
 
             <div class="btn-cart-session">
-                <button class="btn btn-primary" id="addCart" ng-click="addCart(888)">Adicionar ao carrinho</button>
+                <button class="btn btn-primary" id="addCart" ng-click="addCart('65')">Adicionar ao carrinho</button>
             </div>
-            
+
 
             <div class="payment-options">
 
@@ -105,40 +105,61 @@
 
         </div>
         <script>
-        angular.module('ui.bootstrap.app').controller('cartActions', function ($scope, $http) {
+            angular.module('ui.bootstrap.app').controller('cartActions', function ($scope, $http) {
 
-            $scope.addCart = function (data) {               
+                $scope.addCart = function (data) {
 
-                var prod_id = data;
-                
-                var qtd_produto = $scope.qtde_prod;
-                $('#num_itens').css('display', 'inline-block');
-                
-                $("#num_itens").load("/cart/qtd");
+                    var prod_id = data;
 
-                var request = $http({
-                    method: "get",
-                    url: "/cart/add",
-                    data: {
-                        prod_id: prod_id,
-                        qtde_prod: qtd_produto,
-                    },
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                });             
+                    var qtd_produto = $scope.qtde_prod;
+                    $('#num_itens').css('display', 'inline-block');
 
-                /* Check whether the HTTP Request is successful or not. */
-                request.success(function (data) {
-                    
-                    $("span#num_itens").load("/cart/qtd");
-                    $("div#cart").load("/cart/queryCart");
-                    
-                });
-                request.error(function (data) {
-                    document.getElementById("messageCadastrar1").textContent = "Houve um problema [" + data + "]";
-                });
-            }; //fecha addCart
-        });
-    </script>
+                    var request = $http({
+                        method: "post",
+                        url: "/cart/add",
+                        data: {
+                            prod_id: prod_id,
+                            qtde_prod: qtd_produto,
+                        },
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    }).then(function successCallback(response) {
+               
+                        $.getJSON('/cart/qtd', function(data) {
+                            var qtd = parseInt(data.cartQtdItems);                           
+                            $("div#num_itens").text(qtd);
+                            if(qtd >= 1){                    
+                                $("div#num_itens").show();
+                            }
+                        });
+
+                         //$("#num_itens").load("/cart/qtd");
+
+//                        var cartItens = response.data.cartNumItens;
+//                        $('#num_itens').text(cartItens);
+//                        localStorage.setItem('ca', true);
+//                        localStorage.setItem('cait', cartItens);
+
+                        console.log('cart exec ok');
+                       //console.log(cartItens);
+
+                    }, function errorCallback(response) {
+                        console.log('error');
+                        $scope.loading = false;
+                    });
+
+                    /* Check whether the HTTP Request is successful or not. */
+//                request.success(function (data) {
+//                    
+//                    $("span#num_itens").load("/cart/qtd");
+//                    $("div#cart").load("/cart/queryCart");
+//                    
+//                });
+//                request.error(function (data) {
+//                    document.getElementById("messageCadastrar1").textContent = "Houve um problema [" + data + "]";
+//                });
+                }; //fecha addCart
+            });
+        </script>
 
 
         <div class="rate-product">Avalie este produto</div>
@@ -294,7 +315,7 @@
         return $string;
     }
     ?>
-    
+
 
     <script>
 
@@ -356,7 +377,7 @@
                 $scope.largura = '<?php echo $data_prod['prod_largura']; ?>';
                 $scope.comp = '<?php echo $data_prod['prod_comprimento']; ?>';
                 $scope.prod_id = '<?php echo $data_prod['prod_id']; ?>';
-                $scope.preco = '<?php //echo round($preco_final); ?>';
+                $scope.preco = '<?php //echo round($preco_final);  ?>';
 
 
 

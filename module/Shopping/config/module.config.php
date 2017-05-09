@@ -14,6 +14,7 @@ use Shopping\Controller\Factory\IndexControllerFactory;
 use Shopping\Controller\Factory\MenuFactory;
 use Shopping\Controller\Factory\ServiceFactory;
 use Shopping\Controller\Factory\UsersControllerFactory;
+use Shopping\Controller\Factory\SessionFactory;
 use Shopping\Controller\ProdutoController;
 use Shopping\Controller\UsersController;
 use Zend\Router\Http\Literal;
@@ -154,7 +155,7 @@ return [
         'factories' => [
           //  \Shopping\Helpers\Menu::class => InvokableFactory::class,
             \Shopping\Helpers\Menu::class => MenuFactory::class,
-            \Shopping\Helpers\Sessions::class => InvokableFactory::class
+            \Shopping\Helpers\Sessions::class => SessionFactory::class
         ],
         'aliases' => [
             'mainMenu' =>   \Shopping\Helpers\Menu::class,

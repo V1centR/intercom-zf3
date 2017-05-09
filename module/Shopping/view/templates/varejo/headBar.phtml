@@ -1,7 +1,16 @@
 <span ng-controller="modalUsersAssistente">
+    <input type="hidden" id="caItem">
     <script>
         $(document).ready(function () {
-
+             
+            $.getJSON('/cart/qtd', function(data) {                
+                var qtd = parseInt(data.cartQtdItems);               
+                var qtdItemsCart = $("div#num_itens").text(qtd);                
+                if(qtd >= 1){                    
+                    $("div#num_itens").show();
+                }
+            });
+            
             $('button.close').click(function () {
                 $('form').trigger("reset");
                 document.getElementById("messageLogin").textContent = "";
@@ -33,12 +42,12 @@
                 <div class="wraper-right-icons">
 
             <div ng-controller="initDropDown" class="session-buttom" ng-mouseover="showSession()" ng-click="goCart()" ng-mouseleave="hideSession()" id="showCart" >
-                <span id="num_itens" style="font-size: 12px; background-color: #f00; padding: 2px; color: #fff; font-weight: bold; position: relative; float: right; top: -14px; display: none;">99</span>
-                <span class="glyphicon glyphicon-shopping-cart"></span>                
+                <div id="num_itens" class="num_itens"></div>
+                <span style="position: absolute; float: right; right: 23px; top: 18px;" class="glyphicon glyphicon-shopping-cart"></span>                
                 <div ng-cloak ng-show="sessionIsVisible" class="dropdown-default cart-info">
                     Seu carrinho esta vazio!
                 </div>
-            </div>
+            </div>                    
                     <div class="cart">
                         <!--#############################################################-->
                         <span id="cartInfo">

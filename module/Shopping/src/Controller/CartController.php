@@ -6,6 +6,7 @@ use Shopping\Entity\Carrinho;
 use Shopping\Entity\Carrinhoitens;
 use Shopping\Entity\Visitante;
 use Shopping\Entity\Produto;
+use Shopping\Helpers\Sessions;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Doctrine\ORM\Mapping as ORM;
@@ -35,22 +36,15 @@ class CartController extends AbstractActionController {
     public function addAction() {
 
         //get
-        $getdata = $this->getRequest()->getQuery();
-
-        $getdataJson = json_encode($getdata);
-        $getdataJson2 = json_decode($getdataJson);
-
-        //echo $getdataJson2->prod_id;
-
-        print_r($getdataJson);
-
+//        $getdata = $this->getRequest()->getQuery();
 
         //post
-//        $getdata = $this->getRequest()->getContent();
+        $postData = $this->getRequest()->getContent();
 //       $postdata = file_get_contents("php://input");
-//       $request = json_decode($postdata);
-        @$prod_id = $getdataJson2->prod_id;
-        @$prodQtd = $getdataJson2->qtde_prod;
+        $request = json_decode($postData);
+        @$prod_id = $request->prod_id;
+        @$prodQtd = $request->qtde_prod;
+        
 
         // TODO implementar validacao com banco de dados
 //        if(empty($getdata->hash) || strlen($getdata->hash) < 40){
@@ -64,7 +58,7 @@ class CartController extends AbstractActionController {
         if (!preg_match('/^[0-9]+$/', $prod_id)) {
             $model = new ViewModel();
             $model->setTemplate('error/404');
-            $model->setTerminal(true);
+            //$model->setTerminal(true);
             return $model;
             exit;
         }
@@ -91,6 +85,11 @@ class CartController extends AbstractActionController {
             $registerId = $userVisit->getId();
             $registerHash = $userVisit->getSessao();
         }
+        
+        //register visit
+        $new_session = new Container('sessionCart');
+        $new_session->idUser = $registerId;
+        $new_session->keyUser        = $hash_user;
 
         //check cart exists
         $data_carrinho = $this->entityManager->getRepository(Carrinho::class)
@@ -100,10 +99,8 @@ class CartController extends AbstractActionController {
         $dataProd = $this->entityManager->getRepository(Produto::class)
                 ->findOneBy(['id' => $prod_id]);
 
-
         if (count($data_carrinho) == 0) {
-
-            #executa strings passadas como parametros na funcao
+            //executa strings passadas como parametros na funcao
             $registerCart = new Carrinho();
             $registerCart->setVisitanteId($registerId);
             $registerCart->setDatahora(new \DateTime("now"));
@@ -112,11 +109,12 @@ class CartController extends AbstractActionController {
             if ($this->entityManager->flush()) {
 
                 $this->id_carrinho = $registerCart->getId();
-                #executa insert de itens no carrinho ##########################
+                //executa insert de itens no carrinho
                 $insertItensCart = new Carrinhoitens();
                 $insertItensCart->setCarrinhoId($this->id_carrinho);
                 $insertItensCart->setProdutoid($dataProd);
                 $insertItensCart->setQuantidade($prodQtd);
+                
             }
         } else {
 
@@ -139,19 +137,46 @@ class CartController extends AbstractActionController {
                 $this->entityManager->flush();
             } else {
 
-                #executa insert de itens no carrinho
-//                $insertItensCart = new Carrinhoitens();
-//                $insertItensCart->setCarrinhoId($data_carrinho);
-//                $insertItensCart->setProdutoid($dataProd);
-//                $insertItensCart->setQuantidade(2);
-//                $this->entityManager->merge($insertItensCart);
-
                 $em = $this->entityManager->getConnection();
-                $this->str_update_prod = "UPDATE carrinhoitens SET quantidade=quantidade+1 WHERE carrinhoId = '$cartId' AND produtoId = '$prod_id' ";
+                $this->str_update_prod = "UPDATE carrinhoitens SET quantidade=quantidade+'$prodQtd' WHERE carrinhoId = '$cartId' AND produtoId = '$prod_id' ";
                 $query = $em->prepare($this->str_update_prod);
                 $query->execute();
             }
-        }
+        } 
+
+        //get total cart itens
+        $numItensCart = new Sessions($this->entityManager);
+        $cartItensCount = $numItensCart->cartItens($cartId);
+        
+        echo $cartItensCount;
+
+        $view = new ViewModel();
+        $view->setTemplate('generic');
+        $view->setTerminal(true);
+        return $view;
+    }
+    
+    public function qtdAction() {
+
+        $new_session = new Container('sessionCart');
+        $hash_user = $new_session->keyUser;
+        $userId = $new_session->idUser;
+        
+        $userVisit = $this->entityManager->getRepository(Visitante::class)
+                ->findOneBy([
+                    'sessao' => $hash_user,
+                    'id' => $userId
+                ]);
+        
+        $data_carrinho = $this->entityManager->getRepository(Carrinho::class)
+                ->findOneBy(['visitanteid' => $userVisit]);
+        
+        $idCart =  $data_carrinho->getId();
+
+        $cartqtd = new Sessions($this->entityManager);
+        $cartItensCount = $cartqtd->cartItens($idCart);
+        
+        echo $cartItensCount;
 
         $view = new ViewModel();
         $view->setTemplate('generic');
@@ -766,29 +791,4 @@ class CartController extends AbstractActionController {
 
         // return $json_cart;
     }
-
-    public function qtdAction() {
-
-        if (@$_SESSION['carrinho']) {
-
-            $num_itens = array_sum($_SESSION['carrinho']);
-        } else {
-            $num_itens = false;
-
-            $model = new ViewModel();
-            $model->setTemplate('error/404');
-            $model->setTerminal(true);
-            return $model;
-            exit;
-        }
-
-        echo $num_itens;
-
-        $view = new ViewModel();
-        $view->setTemplate('generic');
-        $view->setTerminal(true);
-
-        return $view;
-    }
-
 }

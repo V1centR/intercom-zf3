@@ -22,6 +22,16 @@ class Sessions extends AbstractHelper
     {
         $status = false;
         $session = new Container('sessionUser');
+        $hash_user = $_COOKIE['uc'];
+        
+        $sessionCart = new Container('sessionCart');
+        if($sessionCart->keyUser != $hash_user){            
+//             $sessionCart->getManager()->getStorage()->clear('sessionCart');
+
+        $sessionCart->keyUser = '';            
+        }        
+//        $new_session->getManager()->getStorage()->clear('sessionUser');
+        
         
         if(isset($session->idUser)){
             $status = true;

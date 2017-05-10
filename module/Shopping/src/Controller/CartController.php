@@ -34,7 +34,6 @@ class CartController extends AbstractActionController {
     }
 
     public function addAction() {
-
         
         $new_session = new Container('sessionVisitor');       
         
@@ -63,13 +62,13 @@ class CartController extends AbstractActionController {
 //            exit;
 //        }
 
-//        if (!preg_match('/^[0-9]+$/', $prod_id)) {
-//            $model = new ViewModel();
-//            $model->setTemplate('error/404');
-//            //$model->setTerminal(true);
-//            return $model;
-//            exit;
-//        }
+        if (!preg_match('/^[0-9]+$/', $prod_id)) {
+            $model = new ViewModel();
+            $model->setTemplate('error/404');
+            //$model->setTerminal(true);
+            return $model;
+            exit;
+        }
 
         //select user hash
         $userVisit = $this->entityManager->getRepository(Visitante::class)

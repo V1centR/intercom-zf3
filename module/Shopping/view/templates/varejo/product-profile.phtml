@@ -112,7 +112,10 @@
                     var prod_id = data;
 
                     var qtd_produto = $scope.qtde_prod;
-                    $('#num_itens').css('display', 'inline-block');
+                    
+                    if(qtd_produto == null){                        
+                        qtd_produto = 1;
+                    }
 
                     var request = $http({
                         method: "post",
@@ -126,20 +129,14 @@
                
                         $.getJSON('/cart/qtd', function(data) {
                             var qtd = parseInt(data.cartQtdItems);                           
-                            $("div#num_itens").text(qtd);
-                            if(qtd >= 1){                    
+                             $("div#num_itens").text(qtd);
+                            if(qtd >= 1){                               
                                 $("div#num_itens").show();
                             }
                         });
 
-                         //$("#num_itens").load("/cart/qtd");
-
-//                        var cartItens = response.data.cartNumItens;
-//                        $('#num_itens').text(cartItens);
-//                        localStorage.setItem('ca', true);
-//                        localStorage.setItem('cait', cartItens);
-
                         console.log('cart exec ok');
+                        console.log('cart qtd: ' + qtd_produto);
                        //console.log(cartItens);
 
                     }, function errorCallback(response) {

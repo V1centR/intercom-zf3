@@ -15,8 +15,6 @@ class ProdutoController extends AbstractActionController {
 
 
     public function indexAction() {
-
-  
         
         //futuramente estes dados virão do banco de dados
         $data_prod = [

@@ -5,8 +5,9 @@
              
             $.getJSON('/cart/qtd', function(data) {                
                 var qtd = parseInt(data.cartQtdItems);               
-                var qtdItemsCart = $("div#num_itens").text(qtd);                
-                if(qtd >= 1){                    
+                    $("div#num_itens").text(qtd); 
+                if(qtd >= 1){
+                    
                     $("div#num_itens").show();
                 }
             });

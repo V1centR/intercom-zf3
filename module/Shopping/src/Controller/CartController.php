@@ -35,6 +35,11 @@ class CartController extends AbstractActionController {
 
     public function addAction() {
 
+        
+        $new_session = new Container('sessionVisitor');       
+        
+        $hash_user = $new_session->keyUser;
+        $date = date('Y-m-d H:i:s');
         //get
 //        $getdata = $this->getRequest()->getQuery();
 
@@ -44,6 +49,9 @@ class CartController extends AbstractActionController {
         $request = json_decode($postData);
         @$prod_id = $request->prod_id;
         @$prodQtd = $request->qtde_prod;
+        
+//        @$prod_id = 65;
+//        @$prodQtd = 1;
         
 
         // TODO implementar validacao com banco de dados
@@ -55,16 +63,13 @@ class CartController extends AbstractActionController {
 //            exit;
 //        }
 
-        if (!preg_match('/^[0-9]+$/', $prod_id)) {
-            $model = new ViewModel();
-            $model->setTemplate('error/404');
-            //$model->setTerminal(true);
-            return $model;
-            exit;
-        }
-
-        $hash_user = $_COOKIE['uc'];
-        $date = date('Y-m-d H:i:s');
+//        if (!preg_match('/^[0-9]+$/', $prod_id)) {
+//            $model = new ViewModel();
+//            $model->setTemplate('error/404');
+//            //$model->setTerminal(true);
+//            return $model;
+//            exit;
+//        }
 
         //select user hash
         $userVisit = $this->entityManager->getRepository(Visitante::class)
@@ -80,42 +85,47 @@ class CartController extends AbstractActionController {
 
             $this->entityManager->persist($registerVisita);
             $this->entityManager->flush();
-            $registerId = $registerVisita->getId();
+            $registerId = $registerVisita->getId();        
+        
         } else {
             $registerId = $userVisit->getId();
             $registerHash = $userVisit->getSessao();
-        }
+        }       
         
-        //register visit
-        $new_session = new Container('sessionCart');
-        $new_session->idUser = $registerId;
-        $new_session->keyUser        = $hash_user;
 
         //check cart exists
         $data_carrinho = $this->entityManager->getRepository(Carrinho::class)
                 ->findOneBy(['visitanteid' => $registerId]);
 
+
         //get product data
         $dataProd = $this->entityManager->getRepository(Produto::class)
                 ->findOneBy(['id' => $prod_id]);
 
+        
         if (count($data_carrinho) == 0) {
             //executa strings passadas como parametros na funcao
             $registerCart = new Carrinho();
             $registerCart->setVisitanteId($registerId);
             $registerCart->setDatahora(new \DateTime("now"));
             $this->entityManager->persist($registerCart);
-
-            if ($this->entityManager->flush()) {
-
-                $this->id_carrinho = $registerCart->getId();
-                //executa insert de itens no carrinho
-                $insertItensCart = new Carrinhoitens();
-                $insertItensCart->setCarrinhoId($this->id_carrinho);
-                $insertItensCart->setProdutoid($dataProd);
-                $insertItensCart->setQuantidade($prodQtd);
-                
-            }
+            $this->entityManager->flush();
+            $cartId = $registerCart->getId(); //ok
+            
+            echo '<br>cart id: '.$cartId.'<br>';
+            
+            $dataNewCart = $this->entityManager->getRepository(Carrinho::class)
+                ->findOneBy(['visitanteid' => $registerId]);
+            
+            //executa insert de itens no carrinho
+            $firstItem = new Carrinhoitens();
+            $firstItem->setCarrinhoid($dataNewCart);
+            $firstItem->setProdutoid($dataProd);
+            $firstItem->setQuantidade($prodQtd);
+            $this->entityManager->persist($firstItem);
+            $this->entityManager->flush();           
+            
+            
         } else {
 
             $cartId = $data_carrinho->getId();
@@ -157,25 +167,31 @@ class CartController extends AbstractActionController {
     }
     
     public function qtdAction() {
+        
+        //implements method post
 
-        $new_session = new Container('sessionCart');
+        $new_session = new Container('sessionVisitor');
         $hash_user = $new_session->keyUser;
-        $userId = $new_session->idUser;
         
-        $userVisit = $this->entityManager->getRepository(Visitante::class)
+        $cartItensCount = 0;
+        $idCart = 0;
+            
+            $userVisit = $this->entityManager->getRepository(Visitante::class)
                 ->findOneBy([
-                    'sessao' => $hash_user,
-                    'id' => $userId
-                ]);
+                    'sessao' => $hash_user
+            ]);
         
-        $data_carrinho = $this->entityManager->getRepository(Carrinho::class)
-                ->findOneBy(['visitanteid' => $userVisit]);
-        
-        $idCart =  $data_carrinho->getId();
+            $data_carrinho = $this->entityManager->getRepository(Carrinho::class)
+                    ->findOneBy(['visitanteid' => $userVisit]);
 
-        $cartqtd = new Sessions($this->entityManager);
-        $cartItensCount = $cartqtd->cartItens($idCart);
-        
+            if(!empty($data_carrinho)){                
+                $idCart =  $data_carrinho->getId();               
+            }
+
+            $cartqtd = new Sessions($this->entityManager);
+            $cartItensCount = $cartqtd->cartItens($idCart);
+            
+        //json str
         echo $cartItensCount;
 
         $view = new ViewModel();

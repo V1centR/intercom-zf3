@@ -84,13 +84,47 @@
             <div class="payment-options">
 
                 <!-- ####formas de pagamento##################-->
-                <div id="buy-box-consult-installment" class="buy-box-consult-installment consult-item">
-                    <a href="#" class="consult-payment consult-button" ng-click="modalFormaPagamento('modal-sm')">
-                        <i class="icon"></i>
-                        Formas de <br>pagamento</a>
-                    <span class="consult-payment consult-button installment-button disabled hide">
-                        <i class="icon"></i>Formas de <br>pagamento
-                    </span>
+                <div class="payment-items">
+                    
+                    <ul>
+                        
+                        <a href="#">
+                        <li>
+                            <div class="price-opt-icon">
+                                <span class="glyphicon glyphicon-credit-card"></span>
+                            </div>
+                            <div class="price-opt-label">
+                                Formas de pagamento
+                            </div>
+                        </li>
+                        </a>
+                        
+                        <a href="#">
+                        <li>
+                            <div class="price-opt-icon">
+                                <span class="glyphicon glyphicon-globe"></span>
+                            </div>
+                            <div class="price-opt-label">
+                                Calcular frete
+                            </div>
+                        </li>
+                        </a>
+
+                        <a href="#">
+                         <li>
+                            <div class="price-opt-icon">
+                                <span class="glyphicon glyphicon-transfer"></span>
+                            </div>
+                            <div class="price-opt-label">
+                                Política de troca
+                            </div>
+                        </li>
+                        </a>
+                        
+                        
+                    </ul>
+                    <div class="clear"></div>
+                    
                 </div>
                 <!--##########################################-->
             </div>
@@ -110,7 +144,6 @@
                 $scope.addCart = function (data) {
 
                     var prod_id = data;
-
                     var qtd_produto = $scope.qtde_prod;
                     
                     if(qtd_produto == null){                        

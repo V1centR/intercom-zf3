@@ -1,15 +1,19 @@
 <span ng-controller="modalUsersAssistente">
-    <input type="hidden" id="caItem">
     <script>
         $(document).ready(function () {
-             
-            $.getJSON('/cart/qtd', function(data) {                
+            
+            $("div#emptyAlert").hide();
+            $.getJSON('/cart/qtd', function(data) {
+                
                 var qtd = parseInt(data.cartQtdItems);               
                     $("div#num_itens").text(qtd); 
                 if(qtd >= 1){
-                    
                     $("div#num_itens").show();
-                }
+                    $("div#emptyAlert").hide();
+                } else {
+                    console.log('carrinho vazio');
+                    $("div#emptyAlert").show();
+                }                
             });
             
             $('button.close').click(function () {
@@ -42,21 +46,48 @@
                 </div>
                 <div class="wraper-right-icons">
 
-            <div ng-controller="initDropDown" class="session-buttom" ng-mouseover="showSession()" ng-click="goCart()" ng-mouseleave="hideSession()" id="showCart" >
+                <div ng-controller="initDropDown" class="session-buttom" ng-model="showCartBtn" ng-mouseover="showSession()" ng-mouseleave="hideSession()" id="showCart" >
                 <div id="num_itens" class="num_itens"></div>
                 <span style="position: absolute; float: right; right: 23px; top: 18px;" class="glyphicon glyphicon-shopping-cart"></span>                
-                <div ng-cloak ng-show="sessionIsVisible" class="dropdown-default cart-info">
+                <div ng-cloak class="dropdown-default">
+                <!--<div ng-cloak ng-show="sessionIsVisible" class="dropdown-default cart-info">-->
+                    
+                <div class="empty-cart-info" id="emptyAlert">
                     Seu carrinho esta vazio!
+                    <div style="font-size: 48px;">
+                        <span class="glyphicon glyphicon-unchecked"></span>
+                    </div>
                 </div>
+                
+                <div class="cart-item-popup" ng-repeat="itemData in cartData">
+                    <table>
+                        <tr>
+                            <th style="width:80px;" rowspan="2">
+                                <div class="thumb-item-cart"><img src="<?php echo '/directory/' . DB_PROFILE . '/images/{{itemData.thumb}}'; ?>" width="64" /></div>                                
+                            </th>
+                            <th class="tg-yw4l" colspan="2" style="font-size: 12px;">{{itemData.prodNome}}</th>
+                        </tr>
+                        <tr>
+                          <td class="tg-yw4l">Quantidade: {{itemData.qtd}}</td>
+                          <td class="preco-item">{{itemData.preco}}</td>
+                        </tr>
+                    </table>
+                </div>
+                
             </div>                    
-                    <div class="cart">
-                        <!--#############################################################-->
+                    <div class="cart">                       
                         <span id="cartInfo">
-
-
                             <script>
-                                angular.module('ui.bootstrap.app').controller('initDropDown', function ($scope, $interval) {
+                                
+                                angular.module('ui.bootstrap.app').controller('initDropDown', function ($scope, $interval, $http) {
                                     var c = 0;
+                                    
+                                    $http.get('/cart/queryCart')
+                                    .then(function(res){                                        
+                                       $scope.cartData = res.data;
+                                        console.log(res);                                        
+                                     });
+                                    
                                     $scope.showSession = function () {
                                         $scope.sessionIsVisible = true;
                                     };
@@ -73,6 +104,7 @@
 
                                     $scope.showCartBtn = function () {
                                         $scope.cartIsVisible = true;
+                                        console.log('load exec ok');
                                         $("div#cart").load("/cart/queryCart");
                                         var timer = $interval(function () {
                                             $scope.counter = "exec " + c + ".";
@@ -90,40 +122,40 @@
                     </div>
 
                     <?php
-                    $menuData =  $this->sessions()->checkSession();
+                        $menuData =  $this->sessions()->checkSession();
 
-                    if (!$menuData) {
-                        echo '<div class="login">
-                                    <div class="wrapper">
-                                    <a href="" ng-click="open(\'sm\', \'1\')" id="loginOpen"><div style="position:relative; float:left;"><span class="glyphicon glyphicon-log-in"></span>&nbsp; Entre</div></a>&nbsp;
-                                    <span class="color">ou</span>&nbsp;
-                                    <a href="" ng-click="open(\'sm\', \'0\')">Cadastre-se</a>
-                              </div>
-                            </div>';
-                    }
+                        if (!$menuData) {
+                            echo '<div class="login">
+                                        <div class="wrapper">
+                                        <a href="" ng-click="open(\'sm\', \'1\')" id="loginOpen"><div style="position:relative; float:left;"><span class="glyphicon glyphicon-log-in"></span>&nbsp; Entre</div></a>&nbsp;
+                                        <span class="color">ou</span>&nbsp;
+                                        <a href="" ng-click="open(\'sm\', \'0\')">Cadastre-se</a>
+                                  </div>
+                                </div>';
+                        }
                     ?>
 
                     <?php
-                    if ($menuData) {
+                        if ($menuData) {
 
-                        $session = new \Zend\Session\Container('sessionUser');
+                            $session = new \Zend\Session\Container('sessionUser');
 
-                        echo '
-                            <div ng-controller="initDropDown" class="session-buttom" ng-mouseover="showSession()" ng-mouseleave="hideSession()" id="showCart" >
-                                <span class="glyphicon glyphicon-user"></span>
-                                
-                                <div ng-cloak ng-show="sessionIsVisible" class="dropdown-default user-actions">
-                                    <div class="header-dropdown">'.$session->nomeUser .'</div>
-                                    <div class="content">
-                                        <div class=""><a href="#"><span class="glyphicon glyphicon-user"></span> Minha conta</a> </div>
-                                        <div class=""><a href="#"><span class="glyphicon glyphicon-th-large"></span> Pedidos</a></div>
-                                        <div class=""><a href="/logout?hash='.$session->keyUser.'"><span class="glyphicon glyphicon-off"></span> Sair</a></div>
-                                    </div>
+                            echo '
+                                <div ng-controller="initDropDown" class="session-buttom" ng-mouseover="showSession()" ng-mouseleave="hideSession()" id="showCart" >
+                                    <span class="glyphicon glyphicon-user"></span>
 
-                                </div>                                
-                            </div>                        
-                        ';
-                    }
+                                    <div ng-cloak ng-show="sessionIsVisible" class="dropdown-default user-actions">
+                                        <div class="header-dropdown">'.$session->nomeUser .'</div>
+                                        <div class="content">
+                                            <div class=""><a href="#"><span class="glyphicon glyphicon-user"></span> Minha conta</a> </div>
+                                            <div class=""><a href="#"><span class="glyphicon glyphicon-th-large"></span> Pedidos</a></div>
+                                            <div class=""><a href="/logout?hash='.$session->keyUser.'"><span class="glyphicon glyphicon-off"></span> Sair</a></div>
+                                        </div>
+
+                                    </div>                                
+                                </div>                        
+                            ';
+                        }
                     ?>
 </span>
 </div>

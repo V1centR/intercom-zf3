@@ -37,6 +37,7 @@ class Module {
     public function startVisit() {
         
         $new_session = new Container('sessionVisitor');
+       // echo $new_session->keyUser;
 //        $new_session->getManager()->getStorage()->clear('sessionVisitor');
 //        exit;
 

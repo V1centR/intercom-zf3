@@ -653,153 +653,176 @@ class CartController extends AbstractActionController {
         return $view;
     }
 
-    public function getLojaInfo() {
-        $db = 'db1';
-        $this->object = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        #get formas de pagamentos na view get_forma_pagamento######
-        $this->sql_lojaInfo = "SELECT * FROM `$db`.Local ORDER by Local.id ASC";
-        $query2 = $this->object->getConnection()->prepare($this->sql_lojaInfo);
-        $query2->execute();
-        return $query2->fetch();
-    }
+    
 
     public function queryCartAction() {
 
-        $db = 'db1';
-        $this->object = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        $carItemsData = [
+            
+            1 => [  'id' => 65,
+                    'prodNome' => 'Smart TV LED 55" Sony Xbr-55x855d',
+                    'preco' => 2999.99,
+                    'precoPromo' => 2999.99,
+                    'thumb' => '111.jpg',
+                    'qtd' => 1,
+                ],
+            
+            2 => [  'id' => 65,
+                    'prodNome' => 'Smart TV LED 40',
+                    'preco' => 999.99,
+                    'precoPromo' => 999.99,
+                    'thumb' => '111.jpg',
+                    'qtd' => 1,
+                ],
+            
+            3 => [  'id' => 65,
+                    'prodNome' => 'Home Theater Sony',
+                    'preco' => 999.99,
+                    'precoPromo' => 99.99,
+                    'thumb' => '111.jpg',
+                    'qtd' => 1,
+                ],
+            
+            4 => [  'id' => 65,
+                    'prodNome' => 'Home Theater Sony',
+                    'preco' => 999.99,
+                    'precoPromo' => 99.99,
+                    'thumb' => '111.jpg',
+                    'qtd' => 1,
+                ]
+            
+        ];
+        
+        $cartItemsStr = json_encode($carItemsData);
+        
+        echo $cartItemsStr;
+        
+        
+//        $db = 'db1';
+//        $this->object = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+//
+//
+//        ####################################
+//        $active_hash_user = $_COOKIE['hashUser'];
+//
+//
+//        #get carrinho user #########################################        
+//        $this->sql_get_user = "SELECT id, sessao
+//                                    FROM `$db`.Visitante
+//                                    WHERE sessao = '$active_hash_user'";
+//
+//        $query1 = $this->object->getConnection()->prepare($this->sql_get_user);
+//        $query1->execute();
+//        $this->data_active_user = $query1->fetch();
+//        $id_user = $this->data_active_user['id'];
+//        ####################################
+//
+//        if (!empty($active_hash_user)) {
+//
+//
+//            #get carrinho info#########################
+//            $this->sql_checkout = "SELECT
+//                                    Carrinho.id,
+//                                    CarrinhoItens.quantidade,                                   
+//                                    get_view_produtos.nome as prod_nome,
+//                                    get_view_produtos.ext,
+//                                    get_view_produtos.imagemId as img_id,
+//                                    CarrinhoItens.produtoId 
+//                                    FROM ((`$db`.CarrinhoItens INNER JOIN `$db`.Carrinho ON CarrinhoItens.CarrinhoId = Carrinho.id) INNER JOIN `$db`.get_view_produtos ON CarrinhoItens.produtoId = get_view_produtos.produtoId) INNER JOIN `$db`.Marca ON get_view_produtos.prod_Marca = Marca.id WHERE Carrinho.visitanteId = '$id_user'";
+//
+//
+//            $query0 = $this->object->getConnection()->prepare($this->sql_checkout);
+//            $query0->execute();
+//            $this->cart_info = $query0->fetchAll();
+//            $this->cart_numItens = $query0->rowCount();
+//            ###########################################
+//
+//
+//
+//            if ($this->cart_numItens == 0) {
+//
+//                echo '<div>
+//                    <header class="header-dropdown clearfix">
+//                        <a href="#" class="title-dropdown">Meu carrinho (0) itens</a> 
+//                    </header>
+//                    <div class="empty-cart">
+//                    
+//                    <div class="empty-cart-sign" style="font-size:94px; position:relative; float:left; padding-top: 14px; margin-right:20px;">:(</div>
+//                    
+//                        <div class="text" style="position:relative; line-height:30px; width:130px; float:left;">
+//                        
+//                        <strong>Ops!</strong>Seu carrinho<br> está vazio</div>
+//                    </div>
+//                    </section>
+//                </div>';
+//            } else {
+//
+//
+//                echo '<header class="header-dropdown clearfix">
+//                                    <a href="#" class="title-dropdown">Meu carrinho (' . $this->cart_numItens . ') itens</a>
+//                                </header>
+//                                
+//                    <div class="cart-info">
+//                          <ul class="cart-list product-list clearfix">
+//
+//';
+//
+//                foreach ($this->cart_info as $cartD1) {
+//
+//                    $qtd = intval($cartD1['quantidade']);
+//
+//                    echo '<li class="product-item">
+//                         <img src="/images/img' . $cartD1['img_id'] . '.' . $cartD1['ext'] . '" class="product-image" width="48" height="48">
+//                         <p class="product-title"><a href="">' . $cartD1['prod_nome'] . '</a></p>
+//                         <p class="product-quantity">Quantidade: ' . $qtd . '</p></li>  ';
+//                }
+//                #################################################
+//
+//                echo '
+//             </ul>
+//             
+//             <script>             
+//                $("a#checkout").click(function(){                    
+//                window.location.href = "/checkout";
+//                });
+//</script>
+//           <div style="text-align:center; margin-top:12px; background-color:#f4f4f4;">
+//             <a href="/checkout" class="btn btn-success open-cart" id="checkout">
+//                                                <span class="icon-minicart-buttom"></span>
+//                                                <span class="label-minicart-buttom">Ver carrinho</span>
+//                                            </a></div>';
+//            }
+//        }
+//
+//
+//        #get carrinho info#########################       
+//
+//        $this->sql_cartItens = "SELECT
+//                                        SUM(CarrinhoItens.quantidade) as qtd_itens
+//                                         FROM ((`$db`.CarrinhoItens INNER JOIN `$db`.Carrinho ON CarrinhoItens.CarrinhoId = Carrinho.id)) WHERE Carrinho.visitanteId = '$id_user'";
+//
+//
+//        $query3 = $this->object->getConnection()->prepare($this->sql_cartItens);
+//        $query3->execute();
+//        $this->cart_numItens = $query3->fetch();
+//        ###########################################
+//
+//        if ($this->cart_numItens) {
+//
+//            $soma_itens = intval($this->cart_numItens['qtd_itens']);
+//
+//            if ($soma_itens != 0) {
+//
+//                echo ' <script>$("span#num_itens").text("' . $soma_itens . '");                        
+//                        $("span#num_itens").css("display", "inline");                        
+//                        </script>';
+//            }
+//        }
 
-
-        ####################################
-        $active_hash_user = $_COOKIE['hashUser'];
-
-
-        #get carrinho user #########################################        
-        $this->sql_get_user = "SELECT id, sessao
-                                                    FROM `$db`.Visitante
-                                                    WHERE sessao = '$active_hash_user'";
-
-        $query1 = $this->object->getConnection()->prepare($this->sql_get_user);
-        $query1->execute();
-        $this->data_active_user = $query1->fetch();
-        $id_user = $this->data_active_user['id'];
-        ####################################
-
-
-
-
-
-
-        if (!empty($active_hash_user)) {
-
-
-            #get carrinho info#########################
-            $this->sql_checkout = "SELECT
-                                    Carrinho.id,
-                                    CarrinhoItens.quantidade,                                   
-                                    get_view_produtos.nome as prod_nome,
-                                    get_view_produtos.ext,
-                                    get_view_produtos.imagemId as img_id,
-                                    CarrinhoItens.produtoId 
-                                    FROM ((`$db`.CarrinhoItens INNER JOIN `$db`.Carrinho ON CarrinhoItens.CarrinhoId = Carrinho.id) INNER JOIN `$db`.get_view_produtos ON CarrinhoItens.produtoId = get_view_produtos.produtoId) INNER JOIN `$db`.Marca ON get_view_produtos.prod_Marca = Marca.id WHERE Carrinho.visitanteId = '$id_user'";
-
-
-            $query0 = $this->object->getConnection()->prepare($this->sql_checkout);
-            $query0->execute();
-            $this->cart_info = $query0->fetchAll();
-            $this->cart_numItens = $query0->rowCount();
-            ###########################################
-
-
-
-            if ($this->cart_numItens == 0) {
-
-                echo '<div>
-                    <header class="header-dropdown clearfix">
-                        <a href="#" class="title-dropdown">Meu carrinho (0) itens</a> 
-                    </header>
-                    <div class="empty-cart">
-                    
-                    <div class="empty-cart-sign" style="font-size:94px; position:relative; float:left; padding-top: 14px; margin-right:20px;">:(</div>
-                    
-                        <div class="text" style="position:relative; line-height:30px; width:130px; float:left;">
-                        
-                        <strong>Ops!</strong>Seu carrinho<br> está vazio</div>
-                    </div>
-                    </section>
-                </div>';
-            } else {
-
-
-                echo '<header class="header-dropdown clearfix">
-                                    <a href="#" class="title-dropdown">Meu carrinho (' . $this->cart_numItens . ') itens</a>
-                                </header>
-                                
-                    <div class="cart-info">
-                          <ul class="cart-list product-list clearfix">
-
-';
-
-
-
-
-
-
-                foreach ($this->cart_info as $cartD1) {
-
-                    $qtd = intval($cartD1['quantidade']);
-
-                    echo '<li class="product-item">
-                         <img src="/images/img' . $cartD1['img_id'] . '.' . $cartD1['ext'] . '" class="product-image" width="48" height="48">
-                         <p class="product-title"><a href="">' . $cartD1['prod_nome'] . '</a></p>
-                         <p class="product-quantity">Quantidade: ' . $qtd . '</p></li>  ';
-                }
-                #################################################
-
-                echo '
-             </ul>
-             
-             <script>             
-                $("a#checkout").click(function(){                    
-                window.location.href = "/checkout";
-                });
-</script>
-           <div style="text-align:center; margin-top:12px; background-color:#f4f4f4;">
-             <a href="/checkout" class="btn btn-success open-cart" id="checkout">
-                                                <span class="icon-minicart-buttom"></span>
-                                                <span class="label-minicart-buttom">Ver carrinho</span>
-                                            </a></div>';
-            }
-        }
-
-
-        #get carrinho info#########################       
-
-        $this->sql_cartItens = "SELECT
-                                        SUM(CarrinhoItens.quantidade) as qtd_itens
-                                         FROM ((`$db`.CarrinhoItens INNER JOIN `$db`.Carrinho ON CarrinhoItens.CarrinhoId = Carrinho.id)) WHERE Carrinho.visitanteId = '$id_user'";
-
-
-        $query3 = $this->object->getConnection()->prepare($this->sql_cartItens);
-        $query3->execute();
-        $this->cart_numItens = $query3->fetch();
-        ###########################################
-
-        if ($this->cart_numItens) {
-
-            $soma_itens = intval($this->cart_numItens['qtd_itens']);
-
-            if ($soma_itens != 0) {
-
-                echo ' <script>$("span#num_itens").text("' . $soma_itens . '");                        
-                        $("span#num_itens").css("display", "inline");                        
-                        </script>';
-            }
-        }
-
-        $view = new ViewModel(array(
-            'cart_data' => 'OK',
-        ));
-        $view->setTemplate('orion/generic');
+        $view = new ViewModel([
+            'cart_data' => $cartItemsStr,
+        ]);
+        $view->setTemplate('generic');
         $view->setTerminal(true);
 
         return $view;

@@ -136,22 +136,23 @@ ul.dropdown-horizontal li a.dir{
 	-webkit-box-shadow: 2px 4px 17px 1px rgba(0,0,0,0.32);
 	-moz-box-shadow: 2px 4px 17px 1px rgba(0,0,0,0.32);
 	box-shadow: 2px 4px 17px 1px rgba(0,0,0,0.32);
-
 	-moz-border-radius: 4px;
 	border-radius: 4px;
-
 	font-size: 18px;
 }
 
 .dropdown-default, .cart-info{
-	width: 400px;
-	height:200px;
+	width: 300px;
+	height:auto;
+       
 }
 
 .dropdown-default.user-actions{
 	width: 250px;
 	height:160px;
 }
+
+.empty-cart-info{ font-size: 28px; padding-top: 40px; color: #BBB;}
 
 
 

@@ -586,66 +586,62 @@ class CartController extends AbstractActionController {
 
     public function removeAction() {
 
-        $db = 'db1';
-        $postdata = file_get_contents("php://input");
-        $request = json_decode($postdata);
-        @$prod_id = $request->prod_id;
-        @$prod_qtd = $request->qtde_prod;
-
-
-
-
-        if (!empty($postdata)) {
-
-            if (!preg_match('/^[0-9]+$/', $prod_id)) {
-
-                $model = new ViewModel();
-                $model->setTemplate('error/404');
-                $model->setTerminal(true);
-                return $model;
-
-                exit;
-            }
-        }
-
-
-
-
-
-        $hash_user = $_COOKIE['hashUser'];
-        $this->object = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-
-        $this->sql_cat = "SELECT id FROM `$db`.Visitante WHERE sessao = '$hash_user' ";
-        $query2 = $this->object->getConnection()->prepare($this->sql_cat);
-        $query2->execute();
-        $this->data_user = $query2->fetch();
-        $this->idUser = $this->data_user['id'];
-        #######################################
-        #verifica se existe um carrinho aberto
-        $this->sql_cat = "SELECT id, visitanteId FROM `$db`.Carrinho WHERE visitanteId = '$this->idUser' ";
-        $query_carrinho = $this->object->getConnection()->prepare($this->sql_cat);
-        $query_carrinho->execute();
-
-        $data_carrinho = $query_carrinho->fetch();
-        $cartId = $data_carrinho['id'];
-        $cartIdVisitante = $data_carrinho['visitanteId'];
-
-
-        if ($prod_qtd == 'del') {
-            $this->str_delete_prod = "DELETE FROM `$db`.CarrinhoItens WHERE carrinhoId = '$cartId' AND produtoId = '$prod_id' ";
-            $query0 = $this->object->getConnection()->prepare($this->str_delete_prod);
-            $query0->execute();
-        } else {
-
-            #remove iten no carrinho ##########################        
-            $this->str_update_prod = "UPDATE `$db`.CarrinhoItens SET quantidade=quantidade-1 WHERE carrinhoId = '$cartId' AND produtoId = '$prod_id' ";
-            $query2 = $this->object->getConnection()->prepare($this->str_update_prod);
-            $query2->execute();
-        }
-
-
-
-
+//        $db = 'db1';
+//        $postdata = file_get_contents("php://input");
+//        $request = json_decode($postdata);
+//        @$prod_id = $request->prod_id;
+//        @$prod_qtd = $request->qtde_prod;
+//
+//
+//
+//
+//        if (!empty($postdata)) {
+//
+//            if (!preg_match('/^[0-9]+$/', $prod_id)) {
+//
+//                $model = new ViewModel();
+//                $model->setTemplate('error/404');
+//                $model->setTerminal(true);
+//                return $model;
+//
+//                exit;
+//            }
+//        }
+//
+//
+//
+//
+//
+//        $hash_user = $_COOKIE['hashUser'];
+//        $this->object = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+//
+//        $this->sql_cat = "SELECT id FROM `$db`.Visitante WHERE sessao = '$hash_user' ";
+//        $query2 = $this->object->getConnection()->prepare($this->sql_cat);
+//        $query2->execute();
+//        $this->data_user = $query2->fetch();
+//        $this->idUser = $this->data_user['id'];
+//        #######################################
+//        #verifica se existe um carrinho aberto
+//        $this->sql_cat = "SELECT id, visitanteId FROM `$db`.Carrinho WHERE visitanteId = '$this->idUser' ";
+//        $query_carrinho = $this->object->getConnection()->prepare($this->sql_cat);
+//        $query_carrinho->execute();
+//
+//        $data_carrinho = $query_carrinho->fetch();
+//        $cartId = $data_carrinho['id'];
+//        $cartIdVisitante = $data_carrinho['visitanteId'];
+//
+//
+//        if ($prod_qtd == 'del') {
+//            $this->str_delete_prod = "DELETE FROM `$db`.CarrinhoItens WHERE carrinhoId = '$cartId' AND produtoId = '$prod_id' ";
+//            $query0 = $this->object->getConnection()->prepare($this->str_delete_prod);
+//            $query0->execute();
+//        } else {
+//
+//            #remove iten no carrinho ##########################        
+//            $this->str_update_prod = "UPDATE `$db`.CarrinhoItens SET quantidade=quantidade-1 WHERE carrinhoId = '$cartId' AND produtoId = '$prod_id' ";
+//            $query2 = $this->object->getConnection()->prepare($this->str_update_prod);
+//            $query2->execute();
+//        }
         $view = new ViewModel();
         $view->setTemplate('templates/orion/generic.phtml');
         $view->setTerminal(true);
@@ -657,43 +653,81 @@ class CartController extends AbstractActionController {
 
     public function queryCartAction() {
 
-        $carItemsData = [
-            
-            1 => [  'id' => 65,
-                    'prodNome' => 'Smart TV LED 55" Sony Xbr-55x855d',
-                    'preco' => 2999.99,
-                    'precoPromo' => 2999.99,
-                    'thumb' => '111.jpg',
-                    'qtd' => 1,
-                ],
-            
-            2 => [  'id' => 65,
-                    'prodNome' => 'Smart TV LED 40',
-                    'preco' => 999.99,
-                    'precoPromo' => 999.99,
-                    'thumb' => '111.jpg',
-                    'qtd' => 1,
-                ],
-            
-            3 => [  'id' => 65,
-                    'prodNome' => 'Home Theater Sony',
-                    'preco' => 999.99,
-                    'precoPromo' => 99.99,
-                    'thumb' => '111.jpg',
-                    'qtd' => 1,
-                ],
-            
-            4 => [  'id' => 65,
-                    'prodNome' => 'Home Theater Sony',
-                    'preco' => 999.99,
-                    'precoPromo' => 99.99,
-                    'thumb' => '111.jpg',
-                    'qtd' => 1,
-                ]
-            
-        ];
+        $new_session = new Container('sessionVisitor');
+        $keyUser = $new_session->keyUser;
         
-        $cartItemsStr = json_encode($carItemsData);
+        //select products
+        $userVisit = $this->entityManager->getRepository(Visitante::class)
+                ->findOneBy(['sessao' => $keyUser]);
+        
+        $userId =  $userVisit->getId();
+        
+        //get carrinho info
+        $sqlCart = "SELECT carrinho.id, carrinhoitens.quantidade, get_view_produtos.nome as prod_nome, get_view_produtos.imagemId as imgId, get_view_produtos.ext, carrinhoitens.produtoId, precos.precounitario, precos.precopromocional, precos.percdesconto, precos.promocao
+                    FROM ((carrinhoitens INNER JOIN carrinho ON carrinhoitens.CarrinhoId = carrinho.id) 
+                    INNER JOIN get_view_produtos ON carrinhoitens.produtoId = get_view_produtos.produtoId)
+                    INNER JOIN precos ON carrinhoitens.produtoId = get_view_produtos.produtoId
+                    INNER JOIN marca ON get_view_produtos.prod_Marca = marca.id 
+                    WHERE carrinho.visitanteId = ".$userId." GROUP BY carrinhoitens.produtoid";
+            
+        $em = $this->entityManager->getConnection();
+        $query = $em->prepare($sqlCart);
+        $query->execute();
+        $cartItemsData = $query->fetchAll();
+        
+     
+
+        
+//        foreach($items as $itemsCart){
+//            echo '<br>'.$itemsCart['prod_nome'].'<br>';            
+//        }
+            
+      
+        
+//        $carItemsData = [
+//            
+//            1 => [  'id' => 65,
+//                    'prodNome' => 'Smart TV LED 55" Sony Xbr-55x855d',
+//                    'preco' => 2999.99,
+//                    'precoPromo' => 2999.99,
+//                    'thumb' => '111.jpg',
+//                    'qtd' => 1,
+//                ],
+//            
+//            2 => [  'id' => 65,
+//                    'prodNome' => 'Smart TV LED 40',
+//                    'preco' => 999.99,
+//                    'precoPromo' => 999.99,
+//                    'thumb' => '111.jpg',
+//                    'qtd' => 1,
+//                ],
+//            
+//            3 => [  'id' => 65,
+//                    'prodNome' => 'Home Theater Sony',
+//                    'preco' => 999.99,
+//                    'precoPromo' => 99.99,
+//                    'thumb' => '111.jpg',
+//                    'qtd' => 1,
+//                ],
+//            
+//            4 => [  'id' => 65,
+//                    'prodNome' => 'Home Theater Sony',
+//                    'preco' => 999.99,
+//                    'precoPromo' => 99.99,
+//                    'thumb' => '111.jpg',
+//                    'qtd' => 1,
+//                ],
+//            5 => [  'id' => 65,
+//                    'prodNome' => 'Home Theater Sony',
+//                    'preco' => 999.99,
+//                    'precoPromo' => 99.99,
+//                    'thumb' => '111.jpg',
+//                    'qtd' => 1,
+//                ]
+//            
+//        ];
+        
+        $cartItemsStr = json_encode($cartItemsData);
         
         echo $cartItemsStr;
         

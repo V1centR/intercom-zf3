@@ -1,4 +1,3 @@
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <?= $this->headScript()
             ->appendFile($this->basePath('templates/'.TEMPLATE.'/js/jqzoom.js'))
 ?>
@@ -215,6 +214,7 @@
                              $("div#num_itens").text(qtd);
                             if(qtd >= 1){                               
                                 $("div#num_itens").show();
+                                $("div#cart-item-popup").css("display", "block");
                             }                            
                         });
 
@@ -557,9 +557,6 @@ $("#bzoom").zoom({
     autoplay : false
 });
 </script>
-<link rel="stylesheet" href="//static.wmobjects.com.br/webstore/style/product.min.css">
-<!--<script src="//static.wmobjects.com.br/webstore/js/product.min.js?5a9d353bdd6f833052e351d7b10dd92a"></script>-->
-<!--<script src="/js/orion/product.min.js"></script>-->
 
 <!--[if lt IE 9]>
 <!--<script src="//static.wmobjects.com.br/webstore/js/vendor/jquery/jquery-1.10.2.min.js"></script>-->

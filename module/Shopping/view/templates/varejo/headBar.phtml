@@ -2,7 +2,10 @@
     <script>
         $(document).ready(function () {
             
+//            $("div#cart-item-popup").css("display", "none");
             $("div#emptyAlert").hide();
+           // $("div#cart-item-popup").hide();
+            
             $.getJSON('/cart/qtd', function(data) {
                 
                 var qtd = parseInt(data.cartQtdItems);               
@@ -10,9 +13,13 @@
                 if(qtd >= 1){
                     $("div#num_itens").show();
                     $("div#emptyAlert").hide();
+                    $("div#cart-item-popup").css("display", "block");
+
                 } else {
                     console.log('carrinho vazio');
                     $("div#emptyAlert").show();
+                    $("div#cart-item-popup").hide();
+                    $("div#cart-item-popup").css("display", "none");
                 }                
             });
             
@@ -49,8 +56,8 @@
                 <div ng-controller="initDropDown" class="session-buttom" ng-model="showCartBtn" ng-mouseover="showSession()" ng-mouseleave="hideSession()" id="showCart" >
                 <div id="num_itens" class="num_itens"></div>
                 <span style="position: absolute; float: right; right: 23px; top: 18px;" class="glyphicon glyphicon-shopping-cart"></span>                
-                <div ng-cloak class="dropdown-default">
-                <!--<div ng-cloak ng-show="sessionIsVisible" class="dropdown-default cart-info">-->
+                <!--<div ng-cloak class="dropdown-default">-->
+                <div ng-cloak ng-show="sessionIsVisible" class="dropdown-default cart-info">
                     
                 <div class="empty-cart-info" id="emptyAlert">
                     Seu carrinho esta vazio!
@@ -59,17 +66,17 @@
                     </div>
                 </div>
                 
-                <div class="cart-item-popup" ng-repeat="itemData in cartData">
-                    <table>
+                <div class="cart-item-popup" id="cart-item-popup" ng-repeat="itemData in cartData">
+                    <table class="cart-item-list">
                         <tr>
                             <th style="width:80px;" rowspan="2">
-                                <div class="thumb-item-cart"><img src="<?php echo '/directory/' . DB_PROFILE . '/images/{{itemData.thumb}}'; ?>" width="64" /></div>                                
+                                <div class="thumb-item-cart"><img src="<?php echo '/directory/' . DB_PROFILE . '/images/'; ?>{{itemData.imgId}}.{{itemData.ext}}" width="64" /></div>                                
                             </th>
-                            <th class="tg-yw4l" colspan="2" style="font-size: 12px;">{{itemData.prodNome}}</th>
+                            <th colspan="2" style="font-size: 12px;"><a href=""><div style="width:208px;">{{itemData.prod_nome}}</div></a></th>
                         </tr>
                         <tr>
-                          <td class="tg-yw4l">Quantidade: {{itemData.qtd}}</td>
-                          <td class="preco-item">{{itemData.preco}}</td>
+                          <td class="tg-yw4l">Quantidade: {{itemData.quantidade}}</td>
+                          <td class="preco-item">{{itemData.precopromocional}}</td>
                         </tr>
                     </table>
                 </div>
@@ -83,7 +90,8 @@
                                     var c = 0;
                                     
                                     $http.get('/cart/queryCart')
-                                    .then(function(res){                                        
+                                    .then(function(res){
+                                        
                                        $scope.cartData = res.data;
                                         console.log(res);                                        
                                      });
@@ -100,21 +108,6 @@
                                     $scope.goCart = function () {
                                         //alert(1);
                                         window.location.href = '/checkout';
-                                    };
-
-                                    $scope.showCartBtn = function () {
-                                        $scope.cartIsVisible = true;
-                                        console.log('load exec ok');
-                                        $("div#cart").load("/cart/queryCart");
-                                        var timer = $interval(function () {
-                                            $scope.counter = "exec " + c + ".";
-                                            if (c == 50) {
-                                                $scope.cartIsVisible = false;
-                                                $interval.cancel(timer);
-                                                c = 0;
-                                            }
-                                            c++;
-                                        }, 100);
                                     };
                                 });
                             </script>

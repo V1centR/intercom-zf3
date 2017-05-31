@@ -187,59 +187,6 @@
             <!--        </div>-->
 
         </div>
-        <script>
-            angular.module('ui.bootstrap.app').controller('cartActions', function ($scope, $http) {
-
-                $scope.addCart = function (data) {
-
-                    var prod_id = data;
-                    var qtd_produto = $scope.qtde_prod;
-                    
-                    if(qtd_produto == null){                        
-                        qtd_produto = 1;
-                    }
-
-                    var request = $http({
-                        method: "post",
-                        url: "/cart/add",
-                        data: {
-                            prod_id: prod_id,
-                            qtde_prod: qtd_produto,
-                        },
-                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                    }).then(function successCallback(response) {
-               
-                        $.getJSON('/cart/qtd', function(data) {
-                            var qtd = parseInt(data.cartQtdItems);                           
-                             $("div#num_itens").text(qtd);
-                            if(qtd >= 1){                               
-                                $("div#num_itens").show();
-                                $("div#cart-item-popup").css("display", "block");
-                            }                            
-                        });
-
-                        console.log('cart exec ok');
-                        console.log('cart qtd: ' + qtd_produto);
-                       //console.log(cartItens);
-
-                    }, function errorCallback(response) {
-                        console.log('error');
-                        $scope.loading = false;
-                    });
-
-                    /* Check whether the HTTP Request is successful or not. */
-//                request.success(function (data) {
-//                    
-//                    $("span#num_itens").load("/cart/qtd");
-//                    $("div#cart").load("/cart/queryCart");
-//                    
-//                });
-//                request.error(function (data) {
-//                    document.getElementById("messageCadastrar1").textContent = "Houve um problema [" + data + "]";
-//                });
-                }; //fecha addCart
-            });
-        </script>
 
         <div class="product-demo-wrap">
             <div class="bzoom_wrap">

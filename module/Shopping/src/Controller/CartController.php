@@ -62,13 +62,13 @@ class CartController extends AbstractActionController {
 //            exit;
 //        }
 
-        if (!preg_match('/^[0-9]+$/', $prod_id)) {
-            $model = new ViewModel();
-            $model->setTemplate('error/404');
-            //$model->setTerminal(true);
-            return $model;
-            exit;
-        }
+//        if (!preg_match('/^[0-9]+$/', $prod_id)) {
+//            $model = new ViewModel();
+//            $model->setTemplate('error/404');
+//            //$model->setTerminal(true);
+//            return $model;
+//            exit;
+//        }
 
         //select user hash
         $userVisit = $this->entityManager->getRepository(Visitante::class)
@@ -157,7 +157,32 @@ class CartController extends AbstractActionController {
         $numItensCart = new Sessions($this->entityManager);
         $cartItensCount = $numItensCart->cartItens($cartId);
         
-        echo $cartItensCount;
+        //query cart 
+        $new_session = new Container('sessionVisitor');
+        $keyUser = $new_session->keyUser;
+        
+        //select products
+        $userVisit = $this->entityManager->getRepository(Visitante::class)
+                ->findOneBy(['sessao' => $keyUser]);
+        
+        $userId =  $userVisit->getId();
+        
+        //get carrinho info
+        $sqlCart = "SELECT carrinho.id, carrinhoitens.quantidade, get_view_produtos.nome as prod_nome, get_view_produtos.imagemId as imgId, get_view_produtos.ext, carrinhoitens.produtoId, precos.precounitario, precos.precopromocional, precos.percdesconto, precos.promocao
+                    FROM ((carrinhoitens INNER JOIN carrinho ON carrinhoitens.CarrinhoId = carrinho.id) 
+                    INNER JOIN get_view_produtos ON carrinhoitens.produtoId = get_view_produtos.produtoId)
+                    INNER JOIN precos ON carrinhoitens.produtoId = get_view_produtos.produtoId
+                    INNER JOIN marca ON get_view_produtos.prod_Marca = marca.id 
+                    WHERE carrinho.visitanteId = ".$userId." GROUP BY carrinhoitens.produtoid";
+            
+        $em = $this->entityManager->getConnection();
+        $query = $em->prepare($sqlCart);
+        $query->execute();
+        $cartItemsData = $query->fetchAll();
+        
+        $cartItemsData['qtdItems'] = $cartItensCount;
+        
+        echo json_encode($cartItemsData);
 
         $view = new ViewModel();
         $view->setTemplate('generic');

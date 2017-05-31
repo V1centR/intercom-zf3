@@ -46,10 +46,9 @@ class Sessions extends AbstractHelper {
         foreach ($queryNumItens as $dataNumItens) {
             $itens = $dataNumItens['qtd'];
         }
+       
 
-        $cartNumItens = ['cartQtdItems' => (int) number_format($itens, 0, '.', ',')];
-
-        return json_encode($cartNumItens);
+        return (int) number_format($itens, 0, '.', ',');
     }
 
 }

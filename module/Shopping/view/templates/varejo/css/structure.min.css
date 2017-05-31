@@ -283,12 +283,12 @@ profile .status-nota-fiscal-emitida{background-position:0 -2739px;height:36px;wi
 .topbar-search .search-icon{position:absolute;right:8%;top:18px}
 .topbar-search .input-box{margin-top:12px;padding-right:35px}
 .login{background-color:transparent;height:60px;position:relative;padding-right:19px;border-right:1px solid #1265B6;color:#FFF}
-.login .wrapper{line-height:60px;font-size:15px}
+/*.login .wrapper{line-height:60px;font-size:15px}
 .login .wrapper a{color:#FFF}
 .login .wrapper a:hover{color:#f6b428}
 .login .wrapper a:hover .icon{background-position:0 -5119px;height:19px;width:17px;display:inline-block}
 .login .wrapper a.wm-topbar-sign-up{color:#f6b428}
-.login .wrapper .color{color:#f6b428}
+.login .wrapper .color{color:#f6b428}*/
 .login .icon{background-position:0 -5381px;height:19px;width:17px;display:inline-block;margin-right:9px;position:relative;top:3px}
 .logged-in .login{display:none}
 

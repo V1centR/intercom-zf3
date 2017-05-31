@@ -2,26 +2,27 @@
     <script>
         $(document).ready(function () {
             
-//            $("div#cart-item-popup").css("display", "none");
-            $("div#emptyAlert").hide();
+//            $("div#cart-item-popup").css("display", "block");
+//            $("div#emptyAlert").hide();
            // $("div#cart-item-popup").hide();
             
-            $.getJSON('/cart/qtd', function(data) {
-                
-                var qtd = parseInt(data.cartQtdItems);               
-                    $("div#num_itens").text(qtd); 
-                if(qtd >= 1){
-                    $("div#num_itens").show();
-                    $("div#emptyAlert").hide();
-                    $("div#cart-item-popup").css("display", "block");
-
-                } else {
-                    console.log('carrinho vazio');
-                    $("div#emptyAlert").show();
-                    $("div#cart-item-popup").hide();
-                    $("div#cart-item-popup").css("display", "none");
-                }                
-            });
+//            $.getJSON('/cart/add', function(data) {
+//                
+//                var qtd = parseInt(data.cartQtdItems);
+//                
+//                    $("div#num_itens").text(qtd); 
+//                if(qtd >= 1){
+//                    $("div#num_itens").show();
+//                    $("div#emptyAlert").hide();
+//                    $("div#cart-item-popup").css("display", "block");
+//
+//                } else {
+//                    console.log('headBar: carrinho vazio');
+//                    $("div#emptyAlert").show();
+//                    $("div#cart-item-popup").hide();
+//                    $("div#cart-item-popup").css("display", "none");
+//                }                
+//            });
             
             $('button.close').click(function () {
                 $('form').trigger("reset");
@@ -59,15 +60,15 @@
                 <!--<div ng-cloak class="dropdown-default">-->
                 <div ng-cloak ng-show="sessionIsVisible" class="dropdown-default cart-info">
                     
-                <div class="empty-cart-info" id="emptyAlert">
+                <div ng-show="cartEmpty" class="empty-cart-info" id="emptyAlert">
                     Seu carrinho esta vazio!
                     <div style="font-size: 48px;">
                         <span class="glyphicon glyphicon-unchecked"></span>
                     </div>
                 </div>
                 
-                <div class="cart-item-popup" id="cart-item-popup" ng-repeat="itemData in cartData">
-                    <table class="cart-item-list">
+                <div ng-show="cartItems" class="cart-item-popup" id="cart-item-popup">
+                    <table class="cart-item-list">                       
                         <tr>
                             <th style="width:80px;" rowspan="2">
                                 <div class="thumb-item-cart"><img src="<?php echo '/directory/' . DB_PROFILE . '/images/'; ?>{{itemData.imgId}}.{{itemData.ext}}" width="64" /></div>                                
@@ -80,40 +81,183 @@
                         </tr>
                     </table>
                 </div>
-                
-            </div>                    
+            </div>
+            <script>
+                angular.module('ui.bootstrap.app').controller('initDropDown', function ($scope, $interval, $http) {
+                    var c = 0;
+                    var caseItems = [];
+
+                    $http.get('/cart/add').then(function(response){
+
+                        $scope.cartEmpty = false;
+                        $scope.cartItems = true;
+                       // console.log(response);
+                       // console.log('dados: ' + response.data[0].precounitario);
+
+                       $("div#num_itens").text(response.data.qtdItems).show();
+
+                       $('div#cart-item-popup').empty();
+
+                            angular.forEach(response.data, function(value, key){
+                               var qtd = parseInt(value.quantidade);
+                               
+                                if(key == 'qtdItems'){
+                                    return false;
+                                }
+                                
+                                $('div#cart-item-popup').append('<div style="font-size: 10px; margin-top:4px;">'+ value.prod_nome +' Qtd:'+ qtd +'</div>').show();
+                               
+                               caseItems[c] = value;
+                               c++;
+                               console.log(key + ': ' + value.prod_nome);
+
+                            });
+                       // $scope.cartData = caseItems;
+                       // console.log('caseItems: ' + caseItems[0].ext);
+                        
+                     });
+
+                    $scope.showSession = function () {
+                        $scope.sessionIsVisible = true;
+                    };
+
+                    $scope.hideSession = function () {
+                        //alert(1);
+                        $scope.sessionIsVisible = false;
+                    };
+
+                    $scope.goCart = function () {
+                        //alert(1);
+                        window.location.href = '/checkout';
+                    };
+                }).controller('cartActions', function ($scope, $http) {
+                    
+                    var c = 0;
+                    var caseItems = [];
+
+                    $scope.addCart = function (data) {
+
+                        var prod_id = data;
+                        var qtd_produto = $scope.qtde_prod;
+
+                        if(qtd_produto == null){                        
+                            qtd_produto = 1;
+                        }
+
+                        var request = $http({
+                            method: "post",
+                            url: "/cart/add",
+                            data: {
+                                prod_id: prod_id,
+                                qtde_prod: qtd_produto,
+                            },
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        }).then(function successCallback(response) {
+
+                            $('div#cart-item-popup').empty();
+
+                            angular.forEach(response.data, function(value, key){
+                               var qtd = parseInt(value.quantidade);
+                               
+                                if(key == 'qtdItems'){
+                                    return false;
+                                }
+                                
+                                $('div#cart-item-popup').append('<div style="font-size: 10px; margin-top:4px;">'+ value.prod_nome +' Qtd:'+ qtd +'</div>').show();
+                                $('div#cart-item-popup').fadeIn('fast');
+                                
+
+                               caseItems[c] = value;
+                               c++;
+                               console.log(key + ': ' + value.prod_nome);
+
+                            });
+
+//                            $scope.cartData = caseItems;
+//
+//                            console.log('caseItems product profile: ' + caseItems[0].ext);
+    //                        console.log(caseItems);
+    //                        console.log(response.data[0].prod_nome);
+    //                        console.log(response.data.qtdItems);
+    //                        
+//                            angular.forEach(response.data, function(value, key){
+//                                var qtd = parseInt(value.quantidade);
+//                                console.log(key + ': ' + value.prod_nome);
+//    //                            $('div#cart-item-popup').append('OK').show();
+//                              //  $('div#emptyAlert').append('<div style="font-size: 10px; margin-top:4px;">'+ value.prod_nome +' Qtd:'+ qtd +'</div>').show();
+//                            });
+    //                        
+    //                        $scope.cartData = response.data;
+
+                            var qtd = parseInt(response.data.qtdItems);
+
+                            $("div#num_itens").text(qtd).show();
+
+    //                        $http.get('/cart/queryCart')
+    //                                    .then(function(res){    
+    //                                        
+    //                                       $scope.cartData = res.data;
+    //                                        console.log(res);                                        
+    //                                     });
+
+
+    //                        $.getJSON('/cart/qtd', function(data) {
+    //                            var qtd = parseInt(data.cartQtdItems);                           
+    //                             $("div#num_itens").text(qtd);
+    //                            if(qtd >= 1){                               
+    //                                $("div#num_itens").show();
+    //                                $("div#cart-item-popup").css("display", "block");
+    //                                //$scope.queryCart();
+    //                            }                            
+    //                        });
+
+                           // console.log('cart exec ok');
+                            console.log('cart qtd: ' + qtd);
+                           //console.log(cartItens);
+
+                        }, function errorCallback(response) {
+                            console.log('error');
+                            $scope.loading = false;
+                        });
+
+                        /* Check whether the HTTP Request is successful or not. */
+    //                request.success(function (data) {
+    //                    
+    //                    $("span#num_itens").load("/cart/qtd");
+    //                    $("div#cart").load("/cart/queryCart");
+    //                    
+    //                });
+    //                request.error(function (data) {
+    //                    document.getElementById("messageCadastrar1").textContent = "Houve um problema [" + data + "]";
+    //                });
+                    }; //fecha addCart
+
+                    $scope.queryCart = function (data) {
+
+                         console.log('query Cart function ok');
+
+                         $.getJSON('/cart/qtd', function(data) {
+                                var qtd = parseInt(data.cartQtdItems);                           
+                                 $("div#num_itens").text(qtd);
+                                if(qtd >= 1){                               
+                                    $("div#num_itens").show();
+                                    $("div#cart-item-popup").css("display", "block");
+                                }                            
+                            });
+                    }
+                    
+                    
+                });
+            </script>
+            
+          
+                    
                     <div class="cart">                       
                         <span id="cartInfo">
-                            <script>
-                                
-                                angular.module('ui.bootstrap.app').controller('initDropDown', function ($scope, $interval, $http) {
-                                    var c = 0;
-                                    
-                                    $http.get('/cart/queryCart')
-                                    .then(function(res){
-                                        
-                                       $scope.cartData = res.data;
-                                        console.log(res);                                        
-                                     });
-                                    
-                                    $scope.showSession = function () {
-                                        $scope.sessionIsVisible = true;
-                                    };
-
-                                    $scope.hideSession = function () {
-                                        //alert(1);
-                                        $scope.sessionIsVisible = false;
-                                    };
-
-                                    $scope.goCart = function () {
-                                        //alert(1);
-                                        window.location.href = '/checkout';
-                                    };
-                                });
-                            </script>
+                            
                         </span>
                     </div>
-
+                </div>
                     <?php
                         $menuData =  $this->sessions()->checkSession();
 

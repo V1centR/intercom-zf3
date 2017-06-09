@@ -168,7 +168,7 @@ class CartController extends AbstractActionController {
         $userId =  $userVisit->getId();
         
         //get carrinho info
-        $sqlCart = "SELECT carrinhoitens.*, carrinho.visitanteId, get_view_produtos.nome as prod_nome, get_view_produtos.precounitario, get_view_produtos.precopromocional, get_view_produtos.imagemId as imgId, get_view_produtos.ext
+        $sqlCart = "SELECT carrinhoitens.*, carrinho.visitanteId, SUBSTRING(get_view_produtos.nome, 1, 55) as prod_nome, get_view_produtos.precounitario, get_view_produtos.precopromocional, get_view_produtos.imagemId as imgId, get_view_produtos.ext
                     FROM carrinhoitens
                     INNER JOIN get_view_produtos ON carrinhoitens.produtoId = get_view_produtos.produtoId
                     INNER JOIN carrinho ON carrinhoitens.carrinhoId = carrinho.id

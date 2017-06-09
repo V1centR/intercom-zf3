@@ -1,5 +1,6 @@
 <?= $this->headScript()
             ->appendFile($this->basePath('templates/'.TEMPLATE.'/js/accounting.min.js'))
+            ->appendFile($this->basePath('templates/'.TEMPLATE.'/js/angular-locale_pt-br.js'))
 ?>
 <span ng-controller="modalUsersAssistente">
     <script>
@@ -80,7 +81,7 @@
                             </tr>
                             <tr>
                                 <td class="tg-yw4l">Unidades: {{items.quantidade | number:0}}</td>
-                                <td class="preco-item">{{items.precopromocional}}</td>
+                                <td class="preco-item">{{items.precopromocional * items.quantidade | currency : 'R$ '}}</td>
                         </tr>
                     </table>
                 </div>
@@ -172,20 +173,6 @@
                             $scope.loading = false;
                         });
                     }; //fecha addCart
-
-                    $scope.queryCart = function (data) {
-
-                         console.log('query Cart function ok');
-
-                        $.getJSON('/cart/qtd', function(data) {
-                                var qtd = parseInt(data.cartQtdItems);                           
-                                 $("div#num_itens").text(qtd);
-                                if(qtd >= 1){                               
-                                    $("div#num_itens").show();
-                                    $("div#cart-item-popup").css("display", "block");
-                                }                            
-                        });
-                    }
                 });
             </script>
                     

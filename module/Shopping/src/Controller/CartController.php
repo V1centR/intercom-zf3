@@ -168,13 +168,13 @@ class CartController extends AbstractActionController {
         $userId =  $userVisit->getId();
         
         //get carrinho info
-        $sqlCart = "SELECT carrinho.id, carrinhoitens.quantidade, get_view_produtos.nome as prod_nome, get_view_produtos.imagemId as imgId, get_view_produtos.ext, carrinhoitens.produtoId, precos.precounitario, precos.precopromocional, precos.percdesconto, precos.promocao
-                    FROM ((carrinhoitens INNER JOIN carrinho ON carrinhoitens.CarrinhoId = carrinho.id) 
-                    INNER JOIN get_view_produtos ON carrinhoitens.produtoId = get_view_produtos.produtoId)
-                    INNER JOIN precos ON carrinhoitens.produtoId = get_view_produtos.produtoId
-                    INNER JOIN marca ON get_view_produtos.prod_Marca = marca.id 
-                    WHERE carrinho.visitanteId = ".$userId." GROUP BY carrinhoitens.produtoid";
-            
+        $sqlCart = "SELECT carrinhoitens.*, carrinho.visitanteId, get_view_produtos.nome as prod_nome, get_view_produtos.precounitario, get_view_produtos.precopromocional, get_view_produtos.imagemId as imgId, get_view_produtos.ext
+                    FROM carrinhoitens
+                    INNER JOIN get_view_produtos ON carrinhoitens.produtoId = get_view_produtos.produtoId
+                    INNER JOIN carrinho ON carrinhoitens.carrinhoId = carrinho.id
+                    WHERE carrinho.visitanteId = ".$userId."
+                    ORDER BY id DESC";
+        
         $em = $this->entityManager->getConnection();
         $query = $em->prepare($sqlCart);
         $query->execute();

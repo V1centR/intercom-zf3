@@ -1,6 +1,13 @@
+<?= $this->headScript()
+            ->appendFile($this->basePath('templates/'.TEMPLATE.'/js/accounting.min.js'))
+?>
 <span ng-controller="modalUsersAssistente">
     <script>
         $(document).ready(function () {
+            
+            
+            
+            
             
 //            $("div#cart-item-popup").css("display", "block");
 //            $("div#emptyAlert").hide();
@@ -54,12 +61,13 @@
                 </div>
                 <div class="wraper-right-icons">
 
-                <div ng-controller="initDropDown" class="session-buttom" ng-model="showCartBtn" ng-mouseover="showSession()" ng-mouseleave="hideSession()" id="showCart" >
+                <div ng-controller="initDropDown" class="session-buttom" ng-model="showCartBtn" ng-mouseover="showSession()" ng-mouseleave="hideSession()" >
                 <div id="num_itens" class="num_itens"></div>
                 <span style="position: absolute; float: right; right: 23px; top: 18px;" class="glyphicon glyphicon-shopping-cart"></span>                
                 <!--<div ng-cloak class="dropdown-default">-->
-                <div ng-cloak ng-show="sessionIsVisible" class="dropdown-default cart-info">
+                <div ng-cloak ng-show="sessionIsVisible"  class="dropdown-default cart-info">
                     
+                    <div style=" font-weight: bold; text-align: left; padding: 8px; background-color: #f5f5f5;"><h4>Seu Carrinho</h4></div>
                 <div ng-show="cartEmpty" class="empty-cart-info" id="emptyAlert">
                     Seu carrinho esta vazio!
                     <div style="font-size: 48px;">
@@ -67,78 +75,75 @@
                     </div>
                 </div>
                 
-                <div ng-show="cartItems" class="cart-item-popup" id="cart-item-popup">
-                    <table class="cart-item-list">                       
+                <div class="cart-item-popup" id="cart-item-popup">
+                    <table class="cart-item-list" id="cart-item-list" ng-repeat="items in cartData">
                         <tr>
                             <th style="width:80px;" rowspan="2">
-                                <div class="thumb-item-cart"><img src="<?php echo '/directory/' . DB_PROFILE . '/images/'; ?>{{itemData.imgId}}.{{itemData.ext}}" width="64" /></div>                                
+                                <div class="thumb-item-cart"><img src="<?php echo '/directory/' . DB_PROFILE . '/images/'; ?>{{items.imgId}}.{{items.ext}}" width="64" /></div>
                             </th>
-                            <th colspan="2" style="font-size: 12px;"><a href=""><div style="width:208px;">{{itemData.prod_nome}}</div></a></th>
-                        </tr>
-                        <tr>
-                          <td class="tg-yw4l">Quantidade: {{itemData.quantidade}}</td>
-                          <td class="preco-item">{{itemData.precopromocional}}</td>
+                                <th colspan="2" style="font-size: 12px;"><a href=""><div style="width:208px;">{{items.prod_nome | limitTo:limitProdName}}...</div></a></th>
+                            </tr>
+                            <tr>
+                                <td class="tg-yw4l">Unidades: {{items.quantidade | number:0}}</td>
+                                <td class="preco-item">{{items.precopromocional}}</td>
                         </tr>
                     </table>
                 </div>
             </div>
             <script>
-                angular.module('ui.bootstrap.app').controller('initDropDown', function ($scope, $interval, $http) {
-                    var c = 0;
-                    var caseItems = [];
+                angular.module('ui.bootstrap.app').run(function($rootScope,$http,$interval) {
 
-                    $http.get('/cart/add').then(function(response){
-
-                        $scope.cartEmpty = false;
-                        $scope.cartItems = true;
-                       // console.log(response);
-                       // console.log('dados: ' + response.data[0].precounitario);
-
-                       $("div#num_itens").text(response.data.qtdItems).show();
-
-                       $('div#cart-item-popup').empty();
-
-                            angular.forEach(response.data, function(value, key){
-                               var qtd = parseInt(value.quantidade);
-                               
-                                if(key == 'qtdItems'){
-                                    return false;
-                                }
+                        $rootScope.limitProdName = 55;
+                    
+                        $rootScope.getCart = function(){
+                            
+                            var c = 0;
+                            var caseItems = [];
+                            $http.get('/cart/add').then(function(response){
                                 
-                                $('div#cart-item-popup').append('<div style="font-size: 10px; margin-top:4px;">'+ value.prod_nome +' Qtd:'+ qtd +'</div>').show();
+                                console.log(response);
+                               $("div#num_itens").text(response.data.qtdItems).show();
                                
-                               caseItems[c] = value;
-                               c++;
-                               console.log(key + ': ' + value.prod_nome);
+                                    angular.forEach(response.data, function(value, key){
+                                       var qtd = parseInt(value.quantidade);
+                                        if(key == 'qtdItems'){
+                                            return false;
+                                        }
+                                       //accounting.formatMoney(4999.99, "€", 2, ".", ","); // €4.999,99
+                                       caseItems[c] = value;
+                                       c++;
+                                       console.log(key + ': ' + value.prod_nome);
 
-                            });
-                       // $scope.cartData = caseItems;
-                       // console.log('caseItems: ' + caseItems[0].ext);
+                                    });
+                                $rootScope.cartData = caseItems;
+                             });
+                        }; //fecha getCart
                         
-                     });
+                }).controller('initDropDown', function ($scope, $rootScope,$interval) {
+                    
+                    $rootScope.getCart();
 
                     $scope.showSession = function () {
                         $scope.sessionIsVisible = true;
                     };
 
                     $scope.hideSession = function () {
-                        //alert(1);
                         $scope.sessionIsVisible = false;
                     };
-
+                    
                     $scope.goCart = function () {
-                        //alert(1);
                         window.location.href = '/checkout';
                     };
-                }).controller('cartActions', function ($scope, $http) {
+                }).controller('cartActions', function ($scope, $rootScope, $http) {
                     
                     var c = 0;
                     var caseItems = [];
 
                     $scope.addCart = function (data) {
-
+                        
                         var prod_id = data;
                         var qtd_produto = $scope.qtde_prod;
+                        $('div.dropdown-default').css("display", "block");
 
                         if(qtd_produto == null){                        
                             qtd_produto = 1;
@@ -154,82 +159,21 @@
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                         }).then(function successCallback(response) {
 
-                            $('div#cart-item-popup').empty();
-
-                            angular.forEach(response.data, function(value, key){
-                               var qtd = parseInt(value.quantidade);
-                               
-                                if(key == 'qtdItems'){
-                                    return false;
-                                }
-                                
-                                $('div#cart-item-popup').append('<div style="font-size: 10px; margin-top:4px;">'+ value.prod_nome +' Qtd:'+ qtd +'</div>').show();
-                                $('div#cart-item-popup').fadeIn('fast');
-                                
-
-                               caseItems[c] = value;
-                               c++;
-                               console.log(key + ': ' + value.prod_nome);
-
-                            });
-
-//                            $scope.cartData = caseItems;
-//
-//                            console.log('caseItems product profile: ' + caseItems[0].ext);
-    //                        console.log(caseItems);
-    //                        console.log(response.data[0].prod_nome);
-    //                        console.log(response.data.qtdItems);
-    //                        
-//                            angular.forEach(response.data, function(value, key){
-//                                var qtd = parseInt(value.quantidade);
-//                                console.log(key + ': ' + value.prod_nome);
-//    //                            $('div#cart-item-popup').append('OK').show();
-//                              //  $('div#emptyAlert').append('<div style="font-size: 10px; margin-top:4px;">'+ value.prod_nome +' Qtd:'+ qtd +'</div>').show();
-//                            });
-    //                        
-    //                        $scope.cartData = response.data;
+                            $('table#cart-item-list').empty();
+                            
+                            $rootScope.getCart();
+                            $rootScope.showSession();
 
                             var qtd = parseInt(response.data.qtdItems);
 
                             $("div#num_itens").text(qtd).show();
-
-    //                        $http.get('/cart/queryCart')
-    //                                    .then(function(res){    
-    //                                        
-    //                                       $scope.cartData = res.data;
-    //                                        console.log(res);                                        
-    //                                     });
-
-
-    //                        $.getJSON('/cart/qtd', function(data) {
-    //                            var qtd = parseInt(data.cartQtdItems);                           
-    //                             $("div#num_itens").text(qtd);
-    //                            if(qtd >= 1){                               
-    //                                $("div#num_itens").show();
-    //                                $("div#cart-item-popup").css("display", "block");
-    //                                //$scope.queryCart();
-    //                            }                            
-    //                        });
-
-                           // console.log('cart exec ok');
-                            console.log('cart qtd: ' + qtd);
-                           //console.log(cartItens);
+                            
+                            console.log(cartItens);
 
                         }, function errorCallback(response) {
                             console.log('error');
                             $scope.loading = false;
                         });
-
-                        /* Check whether the HTTP Request is successful or not. */
-    //                request.success(function (data) {
-    //                    
-    //                    $("span#num_itens").load("/cart/qtd");
-    //                    $("div#cart").load("/cart/queryCart");
-    //                    
-    //                });
-    //                request.error(function (data) {
-    //                    document.getElementById("messageCadastrar1").textContent = "Houve um problema [" + data + "]";
-    //                });
                     }; //fecha addCart
 
                     $scope.queryCart = function (data) {
@@ -245,18 +189,9 @@
                                 }                            
                             });
                     }
-                    
-                    
                 });
             </script>
-            
-          
                     
-                    <div class="cart">                       
-                        <span id="cartInfo">
-                            
-                        </span>
-                    </div>
                 </div>
                     <?php
                         $menuData =  $this->sessions()->checkSession();

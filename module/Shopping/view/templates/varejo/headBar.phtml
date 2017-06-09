@@ -4,11 +4,6 @@
 <span ng-controller="modalUsersAssistente">
     <script>
         $(document).ready(function () {
-            
-            
-            
-            
-            
 //            $("div#cart-item-popup").css("display", "block");
 //            $("div#emptyAlert").hide();
            // $("div#cart-item-popup").hide();
@@ -102,19 +97,26 @@
                             $http.get('/cart/add').then(function(response){
                                 
                                 console.log(response);
-                               $("div#num_itens").text(response.data.qtdItems).show();
-                               
-                                    angular.forEach(response.data, function(value, key){
-                                       var qtd = parseInt(value.quantidade);
-                                        if(key == 'qtdItems'){
-                                            return false;
-                                        }
-                                       //accounting.formatMoney(4999.99, "€", 2, ".", ","); // €4.999,99
-                                       caseItems[c] = value;
-                                       c++;
-                                       console.log(key + ': ' + value.prod_nome);
+                                
+                                if(response.data.qtdItems >= 1){
+                                    $rootScope.cartEmpty = false;
+                                    $("div#num_itens").text(response.data.qtdItems).show();
+                                } else{
+                                    $rootScope.cartEmpty = true;
+                                    return false;
+                                }
+                                
+                                angular.forEach(response.data, function(value, key){
+                                   var qtd = parseInt(value.quantidade);
+                                    if(key == 'qtdItems'){
+                                        return false;
+                                    }
+                                   //accounting.formatMoney(4999.99, "€", 2, ".", ","); // €4.999,99
+                                   caseItems[c] = value;
+                                   c++;
+                                   console.log(key + ': ' + value.prod_nome);
 
-                                    });
+                                });
                                 $rootScope.cartData = caseItems;
                              });
                         }; //fecha getCart
@@ -157,18 +159,13 @@
                                 qtde_prod: qtd_produto,
                             },
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                            
                         }).then(function successCallback(response) {
 
                             $('table#cart-item-list').empty();
-                            
                             $rootScope.getCart();
-                            $rootScope.showSession();
-
                             var qtd = parseInt(response.data.qtdItems);
-
                             $("div#num_itens").text(qtd).show();
-                            
-                            console.log(cartItens);
 
                         }, function errorCallback(response) {
                             console.log('error');
@@ -180,14 +177,14 @@
 
                          console.log('query Cart function ok');
 
-                         $.getJSON('/cart/qtd', function(data) {
+                        $.getJSON('/cart/qtd', function(data) {
                                 var qtd = parseInt(data.cartQtdItems);                           
                                  $("div#num_itens").text(qtd);
                                 if(qtd >= 1){                               
                                     $("div#num_itens").show();
                                     $("div#cart-item-popup").css("display", "block");
                                 }                            
-                            });
+                        });
                     }
                 });
             </script>

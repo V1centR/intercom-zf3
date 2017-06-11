@@ -9,7 +9,6 @@ use Shopping\Entity\Produto;
 use Shopping\Helpers\Sessions;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Doctrine\ORM\Mapping as ORM;
 use Zend\Session\Container;
 
 class CartController extends AbstractActionController {

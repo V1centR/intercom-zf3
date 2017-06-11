@@ -10,11 +10,11 @@
 <div class="webstore department" class="ng-cloak">
 
     <?php
-    $preco_unit = $data_prod['precounitario'];
-    $preco_promocional = $data_prod['precopromocional'];
+    $preco_unit = $dataProd->precounitario;
+    $preco_promocional = $dataProd->precopromocional;
 
-    $preco_promo = substr($data_prod['precopromocional'], 0, -3);
-    $preco_promo_dec = substr($data_prod['precopromocional'], -2);
+    $preco_promo = substr($dataProd->precopromocional, 0, -3);
+    $preco_promo_dec = substr($dataProd->precopromocional, -2);
 
     $preco_parcelado = $preco_unit / 10;
     $preco_parcelado = number_format($preco_parcelado, 2, ",", ".");
@@ -50,7 +50,6 @@
 //        $soma += $stcs['nota'] * 10;
 //        $qtd_media++;
 //    }
-//
 //    @$media = $soma / $qtd_media;
 //    $media = number_format($media, 0, '', '');
 //
@@ -71,7 +70,7 @@
 
             <!--product name-->
             <h3 style="padding: 0px; margin: 0px;">
-            Smart TV LED 55" Sony Xbr-55x855d Ultra HD 4K Android com Conversor Digital Wi-Fi Integrado Motionflow 960 Triluminos 4k X-reality Pro
+                <?php echo $dataProd->nome; ?>
             </h3>            
             <!-- fecha product name-->
             
@@ -85,10 +84,10 @@
                 <div style=" text-align: center; font-size: 12px; font-weight: bold;">Ou 10x sem juros!</div>
                 
                 <!--qtd product input-->
-                <input ng-model="qtde_prod" type="text" name="qty" id="qtde_prod" placeholder="Qtd" class="form-control" onkeydown="return onlyNum()" style="width: 50px; position: relative; float: right; right:100px; margin-bottom: 10px; margin-top: 10px;" value="1">
+                <input ng-model="qtde_prod" required type="number" name="qty" id="qtde_prod" placeholder="Qtd" class="form-control" style="width: 70px; position: relative; float: right; right:100px; margin-bottom: 10px; margin-top: 10px;" value="1">
                 
                 <div class="btn-cart-session">
-                    <button class="btn btn-primary" id="addCart" ng-click="addCart('65')">Adicionar ao carrinho</button>
+                    <button class="btn btn-primary" id="addCart" ng-click="addCart(<?php echo $dataProd->produtoId;?>)">Adicionar ao carrinho</button>
                 </div>
                 
             </div>
@@ -158,26 +157,10 @@
                 <div style=" font-size: 26px; color: #888; font-weight: bold;">Ótimo!</div>
             </div>
             
-            
-            
             <hr size="1">
             <span style="font-size: 11px;"> Espaço reservado para variações do produto quando houver</span>
-            
             <div class="clear"></div>
             
-            
-            
-            
-            
-
-           
-            <div class="clear"></div>
-
-            
-
-
-            
-
             <!--        <div class="calc-ship">-->
             <!--            Calcular Frete:-->
             <!--            <div class="clear"></div>-->
@@ -195,25 +178,9 @@
                         <img class="bzoom_thumb_image" src="<?php echo '/directory/' . DB_PROFILE . '/images/111.jpg'; ?>" title="first img" />
                         <img class="bzoom_big_image" src="<?php echo '/directory/' . DB_PROFILE . '/images/111.jpg'; ?>"/>
                     </li>
-                    <li>
-                        <img class="bzoom_thumb_image" src="https://unsplash.it/375/500?image=203"/>
-                        <img class="bzoom_big_image" src="https://unsplash.it/750/1000?image=203"/>
-                    </li>
-                    <li>
-                        <img class="bzoom_thumb_image" src="https://unsplash.it/375/500?image=212"/>
-                        <img class="bzoom_big_image" src="https://unsplash.it/750/1000?image=212"/>
-                    </li>
-                    <li>
-                        <img class="bzoom_thumb_image" src="https://unsplash.it/375/500?image=220"/>
-                        <img class="bzoom_big_image" src="https://unsplash.it/750/1000?image=220"/>
-                    </li>
-                    <li>
-                        <img class="bzoom_thumb_image" src="https://unsplash.it/375/500?image=223"/>
-                        <img class="bzoom_big_image" src="https://unsplash.it/750/1000?image=223"/>
-                    </li>
                 </ul>
-                <div class="clear"></div>
             </div>
+            <div class="clear"></div>
         </div>
             <img src="<?php //echo '/directory/' . DB_PROFILE . '/images/444.jpg'; ?>" style="width: 300px;">
         </div>
@@ -224,20 +191,7 @@
         <div class="product-description-frame">
             <div class="product-description product-description-title">Descrição do produto</div>
             <div class="description-text">
-                <strong>A Smart TV 43LH6000, da LG</strong>, possui tela LED de 43”, em formato Widescreen (16:9), com resolução de imagem Full HD (1920x1080 pixels), taxa de atualização de quadros do painel com frequência de 60 Hz e painel IPS que tornam os movimentos na tela mais naturais. O espectador obtém o máximo de qualidade em entretenimento em toda forma de programação, seja assistindo filmes e seriados, jogando videogames de última geração com conexão HDMI ou até curtindo a programação local.
-                <div class="description-text-topic"> WebOS 3.0</div>
-                A webOS 3.0 é uma plataforma de fácil navegação desenvolvida para o usuário acessar as funcionalidades do sistema de multitarefas, como alternar conteúdos e descobrir novidades através das recomendações da programação.
-                <div class="description-text-topic">Painel IPS</div>
-                O Painel IPS garante uma experiência diferenciada para um público que precisa estar atento a todos os detalhes, em qualquer ângulo que o usuário estiver da tela.
-                <div class="description-text-topic">Tecnologia Intel WiDi</div>
-                A tecnologia Intel WiDi é um recurso de conexão sem fio que conecta aparelhos compatíveis a Smart TV, com qualidade de uso e exportando a resolução de imagem.
-                <div class="description-text-topic">Smart Share</div>
-                As tecnologias Smart Share e Smart Mobile Link oferecem ao usuário uma experiência alternativa para acessar a tela do smartphone ou tablet espelhando a tela destes dispositivos diretamente na Smart TV.
-                <div class="description-text-topic">Parceria E.I. Plus</div>
-                A LG possui uma parceria exclusiva com o canal Esporte Interativo, que oferece ao consumidor acesso ao aplicativo, onde é possível acompanhar os diversos campeonatos ao redor do mundo, de graça e por 1 ano (*ativação até 31/12/16).
-                <div class="description-text-topic">Entradas Multimídia</div>
-                A TV vem equipada com 2 portas USB e 3 entradas HDMI, que permitem ao usuário conectar videogames de última geração, notebooks, aparelhos de DVD e Blu-ray, entre outros dispositivos para desfrutar do conteúdo em alta resolução, com brilho e contrastes intensos.
-
+                <?php echo nl2br($dataProd->prod_desc); ?>
             </div>
         </div>
 

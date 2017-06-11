@@ -13,24 +13,31 @@ use Shopping\Repository as Repo;
 class ProdutoController extends AbstractActionController {
 
 
+    /**
+     * Entity manager.
+     * @var Doctrine/EntityManager
+     */
+    private $entityManager;
+
+    public function __construct($entityManager) {
+        $this->entityManager = $entityManager;
+    }
 
     public function indexAction() {
         
-        //futuramente estes dados virão do banco de dados
-        $data_prod = [
-            'precounitario' => 1999.99,
-            'precopromocional' => 999.99,
-            'prod_peso' => 1200,
-            'prod_altura' => 30,
-            'prod_largura' => 180,
-            'prod_comprimento' => 200,
-            'prod_id' => 88                
-        ];        
+        $prodId = (int)$this->params()->fromRoute('id');
+        
+//        $prodData = $this->entityManager->getRepository(Visitante::class)
+//                ->findOneBy(['sessao' => $hash_user]);
+        
+        $em = $this->entityManager->getConnection();
+        $queryProd = "SELECT * FROM get_view_produtos WHERE id = $prodId";
+        $query = $em->prepare($queryProd);
+        $query->execute();
+        $prodData = $query->fetchAll(\PDO::FETCH_OBJ);
         
         $view = new ViewModel([
-
-            'teste' => 'template ok',
-            'data_prod' => $data_prod
+            'dataProd' => $prodData[0]
         ]);
         $view->setTemplate('product-profile');
         //$view->setTerminal(true);

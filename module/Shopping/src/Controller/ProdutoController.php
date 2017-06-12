@@ -36,12 +36,18 @@ class ProdutoController extends AbstractActionController {
         $query->execute();
         $prodData = $query->fetchAll(\PDO::FETCH_OBJ);
         
+        if(count($prodData) == 0){
+           $model = new ViewModel();
+           $model->setTemplate('error/404');
+           return $model;
+           exit;
+        }
+        
         $view = new ViewModel([
             'dataProd' => $prodData[0]
         ]);
         $view->setTemplate('product-profile');
         //$view->setTerminal(true);
-
         return $view;
     }
 

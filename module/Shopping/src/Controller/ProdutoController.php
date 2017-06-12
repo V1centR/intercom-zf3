@@ -5,13 +5,13 @@ namespace Shopping\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Shopping\Index;
+use Shopping\Entity\Produtoimagem;
 
 use Zend\Session\Container;
 use Shopping\Repository as Repo;
 
 
 class ProdutoController extends AbstractActionController {
-
 
     /**
      * Entity manager.
@@ -27,24 +27,28 @@ class ProdutoController extends AbstractActionController {
         
         $prodId = (int)$this->params()->fromRoute('id');
         
-//        $prodData = $this->entityManager->getRepository(Visitante::class)
-//                ->findOneBy(['sessao' => $hash_user]);
-        
+        //get product info
         $em = $this->entityManager->getConnection();
         $queryProd = "SELECT * FROM get_view_produtos WHERE id = $prodId";
         $query = $em->prepare($queryProd);
         $query->execute();
         $prodData = $query->fetchAll(\PDO::FETCH_OBJ);
         
+        
         if(count($prodData) == 0){
            $model = new ViewModel();
            $model->setTemplate('error/404');
            return $model;
            exit;
+           
+        } else {
+            $prodGalery = $this->entityManager->getRepository(Produtoimagem::class)
+                ->findBy(['produtoid' => $prodData[0]->id]);
         }
         
         $view = new ViewModel([
-            'dataProd' => $prodData[0]
+            'dataProd' => $prodData[0],
+            'prodGalery' => $prodGalery
         ]);
         $view->setTemplate('product-profile');
         //$view->setTerminal(true);

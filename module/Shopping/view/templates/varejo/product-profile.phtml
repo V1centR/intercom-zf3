@@ -166,10 +166,17 @@
         <div class="product-demo-wrap">
             <div class="bzoom_wrap">
                 <ul id="bzoom">
-                    <li>
-                        <img class="bzoom_thumb_image" src="<?php echo '/directory/' . DB_PROFILE . '/images/'.$dataProd->img_id.'.'.$dataProd->ext; ?>" title="first img" />
-                        <img class="bzoom_big_image" src="<?php echo '/directory/' . DB_PROFILE . '/images/'.$dataProd->img_id.'.'.$dataProd->ext; ?>"/>
-                    </li>
+                    <?php
+                        
+                        foreach ($prodGalery as $imgData) {
+                            
+                            echo '                                
+                            <li>
+                                <img class="bzoom_thumb_image" src="/directory/'.DB_PROFILE.'/images/'.$imgData->getImagemId()->getId().'.'.$imgData->getImagemId()->getExt().'" title="first img" />
+                                <img class="bzoom_big_image" src="/directory/'.DB_PROFILE.'/images/'.$imgData->getImagemId()->getId().'.'.$imgData->getImagemId()->getExt().'"/>
+                            </li>';
+                        }
+                    ?>
                 </ul>
             </div>
             <div class="clear"></div>

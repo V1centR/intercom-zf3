@@ -10,33 +10,34 @@
 <div class="webstore department" class="ng-cloak">
 
     <?php
-    $preco_unit = $dataProd->precounitario;
-    $preco_promocional = $dataProd->precopromocional;
 
-    $preco_promo = substr($dataProd->precopromocional, 0, -3);
-    $preco_promo_dec = substr($dataProd->precopromocional, -2);
+        $preco_unit = $dataProd->precounitario;
+        $preco_promocional = $dataProd->precopromocional;
 
-    $preco_parcelado = $preco_unit / 10;
-    $preco_parcelado = number_format($preco_parcelado, 2, ",", ".");
-
-    if ($preco_promocional == 0.00) {
-
-        $preco_final = $preco_unit;
-
-        $preco_promo = number_format(substr($preco_unit, 0, -3), 0, ",", ".");
-        $preco_promo_dec = substr($preco_unit, -2);
-        $hide = 'style="display:none"';
+        $preco_promo = substr($dataProd->precopromocional, 0, -3);
+        $preco_promo_dec = substr($dataProd->precopromocional, -2);
 
         $preco_parcelado = $preco_unit / 10;
         $preco_parcelado = number_format($preco_parcelado, 2, ",", ".");
-    } else {
-        $hide = '';
-        $preco_promo = number_format(substr($preco_promocional, 0, -3), 0, ",", ".");
-        $preco_parcelado = $preco_promocional / 10;
-        $preco_parcelado = number_format($preco_parcelado, 2, ",", ".");
-        $preco_final = $preco_promocional;
-    }
-    $preco_promo_format = number_format($preco_unit, 2, ",", ".");
+
+        if ($preco_promocional == 0.00) {
+
+            $preco_final = $preco_unit;
+
+            $preco_promo = number_format(substr($preco_unit, 0, -3), 0, ",", ".");
+            $preco_promo_dec = substr($preco_unit, -2);
+            $hide = 'style="display:none"';
+
+            $preco_parcelado = $preco_unit / 10;
+            $preco_parcelado = number_format($preco_parcelado, 2, ",", ".");
+        } else {
+            $hide = '';
+            $preco_promo = number_format(substr($preco_promocional, 0, -3), 0, ",", ".");
+            $preco_parcelado = $preco_promocional / 10;
+            $preco_parcelado = number_format($preco_parcelado, 2, ",", ".");
+            $preco_final = $preco_promocional;
+        }
+        $preco_promo_format = number_format($preco_unit, 2, ",", ".");
 
 // echo $preco_promo.'.'.$preco_promo_dec;
     $preco_funcao = number_format($preco_promocional, 2, ",", ".");
@@ -65,7 +66,6 @@
 
     <div class="container-product">
         
-        
         <div class="price-qty-frame" ng-controller="cartActions">
 
             <!--product name-->
@@ -76,9 +76,8 @@
             
             <hr size="1">
             
-            
             <div class="price-info-frame">
-                <div class="price-info-promo">De R$ <strike><?php echo $preco_promo_format; ?></strike> <br> Por </div>            
+                <div class="price-info-promo" <?php echo $hide;?>>De R$ <strike><?php echo $preco_promo_format; ?></strike> <br> Por </div>            
 
                 <div class="price-info">R$ <?php echo $preco_promo . ','; ?><span style="font-size: 20px;"><?php echo $preco_promo_dec; ?></span></div>
                 <div style=" text-align: center; font-size: 12px; font-weight: bold;">Ou 10x sem juros!</div>
@@ -95,13 +94,11 @@
             <div class="price-info-frame" style="padding-top: 22px;">
                
                 <div class="payment-options">
-
                     
                 <!-- ####formas de pagamento##################-->
                 <div class="payment-items">
                     
                     <ul>
-                        
                         <a href="#">
                         <li>
                             <div class="price-opt-icon">
@@ -134,11 +131,8 @@
                             </div>
                         </li>
                         </a>
-                        
-                        
                     </ul>
                     <div class="clear"></div>
-                    
                 </div>
                 <!--##########################################-->
             </div>
@@ -197,7 +191,7 @@
 
         <hr size="1">
 
-        <div class="product-description product-description-title"">Características do produto</div>
+        <div class="product-description product-description-title">Características do produto</div>
 
         <div class="clear"></div>
 

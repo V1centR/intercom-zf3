@@ -89,9 +89,81 @@
                 
             </div>
             
-            <div class="price-info-frame" style="padding-top: 22px;">
+            <div class="price-info-frame">
                
-                <div class="payment-options">
+                <div class="">
+                    
+                <!-- ####formas de pagamento##################-->
+                <div>
+                
+                    <div style="border: 1px dotted #f00; width: 250px; position: relative; float: right; padding: 8px;">
+                        <span><b>Opções</b></span><br>
+                    
+                        
+                        <?php 
+                        
+                      
+                            foreach($prodOptions as $dataOptions){
+                                
+                                $typeVar = $dataOptions->getVariacaoid()->getId();
+//                                $typeVar = $dataOptions->getVariacaoPropriedadeId()->getPropriedadeid()->getId();
+                               // echo $typeVar.'<br>';
+                                
+                                if($typeVar == 4){
+                                    
+                                    echo $typeVar.'<br>';
+                                }
+                                
+                                foreach ($prodOptions as $typeOpt) {                                    
+                                    
+                                    if($typeOpt->getVariacaoPropriedadeId()->getPropriedadeid()->getId() == $typeVar){
+                                        
+                                      //  echo $dataOptions->getId().'<br>';
+                                        echo $typeVar.'<br>';
+                                        
+                                    }
+                                    
+                                }
+                            }
+                        
+                        
+                        ?>
+                       
+                        <select class="form-control" style="width: 120px;">
+                            <option>Selecione...</option>
+                            <option>46</option>
+                            <option>55</option>
+                        </select>
+                    </div>
+                    
+                    
+                    <div class="clear"></div>
+                </div>
+                <!--##########################################-->
+            </div>
+            </div><!--fecha price-info-frame-->
+            
+            <div class="price-info-frame" style="width: 200px; text-align: center; padding-top: 22px;">
+                Avaliações<br>
+                <div style=" font-size: 22px; color: #FFD700">
+                <span class="glyphicon glyphicon-star"></span>
+                <span class="glyphicon glyphicon-star"></span>
+                <span class="glyphicon glyphicon-star"></span>
+                <span class="glyphicon glyphicon-star"></span>
+                <span class="glyphicon glyphicon-star"></span>
+                <span style=" font-size: 24px; color: #888; font-weight: bold;">4.5</span>
+                </div>
+                <div style=" font-size: 26px; color: #888; font-weight: bold;">Ótimo!</div>
+                
+                
+                
+                
+                
+            </div>
+            <div class="clear"></div>
+            <hr size="1">
+            
+            <div class="payment-options">
                     
                 <!-- ####formas de pagamento##################-->
                 <div class="payment-items">
@@ -130,27 +202,15 @@
                         </li>
                         </a>
                     </ul>
+                   
                     <div class="clear"></div>
                 </div>
                 <!--##########################################-->
             </div>
-            </div><!--fecha price-info-frame-->
             
-            <div class="price-info-frame" style="width: 200px; text-align: center; padding-top: 22px;">
-                Avaliações<br>
-                <div style=" font-size: 22px; color: #FFD700">
-                <span class="glyphicon glyphicon-star"></span>
-                <span class="glyphicon glyphicon-star"></span>
-                <span class="glyphicon glyphicon-star"></span>
-                <span class="glyphicon glyphicon-star"></span>
-                <span class="glyphicon glyphicon-star"></span>
-                <span style=" font-size: 24px; color: #888; font-weight: bold;">4.5</span>
-                </div>
-                <div style=" font-size: 26px; color: #888; font-weight: bold;">Ótimo!</div>
-            </div>
             
-            <hr size="1">
-            <span style="font-size: 11px;"> Espaço reservado para variações do produto quando houver</span>
+            
+            
             <div class="clear"></div>
             
             <!--        <div class="calc-ship">-->

@@ -172,6 +172,7 @@ class CartController extends AbstractActionController {
                     INNER JOIN get_view_produtos ON carrinhoitens.produtoId = get_view_produtos.produtoId
                     INNER JOIN carrinho ON carrinhoitens.carrinhoId = carrinho.id
                     WHERE carrinho.visitanteId = ".$userId."
+                    GROUP BY carrinhoitens.produtoId
                     ORDER BY id DESC";
         
         $em = $this->entityManager->getConnection();

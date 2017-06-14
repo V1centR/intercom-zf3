@@ -6,6 +6,9 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Shopping\Index;
 use Shopping\Entity\Produtoimagem;
+use Shopping\Entity\Variacoesproduto;
+use Shopping\Entity\Variacaopropriedade;
+use Shopping\Entity\Valoresvariacao;
 
 use Zend\Session\Container;
 use Shopping\Repository as Repo;
@@ -26,6 +29,7 @@ class ProdutoController extends AbstractActionController {
     public function indexAction() {
         
         $prodId = (int)$this->params()->fromRoute('id');
+        $prodOptions = [];
         
         //get product info
         $em = $this->entityManager->getConnection();
@@ -44,11 +48,20 @@ class ProdutoController extends AbstractActionController {
         } else {
             $prodGalery = $this->entityManager->getRepository(Produtoimagem::class)
                 ->findBy(['produtoid' => $prodData[0]->id]);
+            
+            $prodVars = $this->entityManager->getRepository(Variacoesproduto::class)
+                ->findBy(['produtoid' => $prodData[0]->id]);
+            
+            $prodRegisterVars = $this->entityManager->getRepository(Valoresvariacao::class)
+                ->findBy(['produtoid' => $prodData[0]->id]);
+            
         }
         
         $view = new ViewModel([
             'dataProd' => $prodData[0],
-            'prodGalery' => $prodGalery
+            'prodGalery' => $prodGalery,
+            'prodRegisterVars' => $prodRegisterVars,
+            'prodOptions' => $prodVars,
         ]);
         $view->setTemplate('product-profile');
         //$view->setTerminal(true);

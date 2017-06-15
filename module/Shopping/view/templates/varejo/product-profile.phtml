@@ -1,5 +1,6 @@
-<?= $this->headScript()
-            ->appendFile($this->basePath('templates/'.TEMPLATE.'/js/jqzoom.js'))
+<?=
+        $this->headScript()
+        ->appendFile($this->basePath('templates/' . TEMPLATE . '/js/jqzoom.js'))
 ?>
 <?=
         $this->headLink()
@@ -8,34 +9,33 @@
 ?>
 <div class="webstore department" class="ng-cloak">
     <?php
+    $preco_unit = $dataProd->precounitario;
+    $preco_promocional = $dataProd->precopromocional;
 
-        $preco_unit = $dataProd->precounitario;
-        $preco_promocional = $dataProd->precopromocional;
+    $preco_promo = substr($dataProd->precopromocional, 0, -3);
+    $preco_promo_dec = substr($dataProd->precopromocional, -2);
 
-        $preco_promo = substr($dataProd->precopromocional, 0, -3);
-        $preco_promo_dec = substr($dataProd->precopromocional, -2);
+    $preco_parcelado = $preco_unit / 10;
+    $preco_parcelado = number_format($preco_parcelado, 2, ",", ".");
+
+    if ($preco_promocional == 0.00) {
+
+        $preco_final = $preco_unit;
+
+        $preco_promo = number_format(substr($preco_unit, 0, -3), 0, ",", ".");
+        $preco_promo_dec = substr($preco_unit, -2);
+        $hide = 'style="display:none"';
 
         $preco_parcelado = $preco_unit / 10;
         $preco_parcelado = number_format($preco_parcelado, 2, ",", ".");
-
-        if ($preco_promocional == 0.00) {
-
-            $preco_final = $preco_unit;
-
-            $preco_promo = number_format(substr($preco_unit, 0, -3), 0, ",", ".");
-            $preco_promo_dec = substr($preco_unit, -2);
-            $hide = 'style="display:none"';
-
-            $preco_parcelado = $preco_unit / 10;
-            $preco_parcelado = number_format($preco_parcelado, 2, ",", ".");
-        } else {
-            $hide = '';
-            $preco_promo = number_format(substr($preco_promocional, 0, -3), 0, ",", ".");
-            $preco_parcelado = $preco_promocional / 10;
-            $preco_parcelado = number_format($preco_parcelado, 2, ",", ".");
-            $preco_final = $preco_promocional;
-        }
-        $preco_promo_format = number_format($preco_unit, 2, ",", ".");
+    } else {
+        $hide = '';
+        $preco_promo = number_format(substr($preco_promocional, 0, -3), 0, ",", ".");
+        $preco_parcelado = $preco_promocional / 10;
+        $preco_parcelado = number_format($preco_parcelado, 2, ",", ".");
+        $preco_final = $preco_promocional;
+    }
+    $preco_promo_format = number_format($preco_unit, 2, ",", ".");
 
 // echo $preco_promo.'.'.$preco_promo_dec;
     $preco_funcao = number_format($preco_promocional, 2, ",", ".");
@@ -63,7 +63,7 @@
 
 
     <div class="container-product">
-        
+
         <div class="price-qty-frame" ng-controller="cartActions">
 
             <!--product name-->
@@ -71,148 +71,133 @@
                 <?php echo $dataProd->nome; ?>
             </h3>            
             <!-- fecha product name-->
-            
+
             <hr size="1">
-            
+
             <div class="price-info-frame">
-                <div class="price-info-promo" <?php echo $hide;?>>De R$ <strike><?php echo $preco_promo_format; ?></strike> <br> Por </div>            
+                <div class="price-info-promo" <?php echo $hide; ?>>De R$ <strike><?php echo $preco_promo_format; ?></strike> <br> Por </div>            
 
                 <div class="price-info">R$ <?php echo $preco_promo . ','; ?><span style="font-size: 20px;"><?php echo $preco_promo_dec; ?></span></div>
                 <div style=" text-align: center; font-size: 12px; font-weight: bold;">Ou 10x sem juros!</div>
-                
+
                 <!--qtd product input-->
                 <input ng-model="qtde_prod" required type="number" name="qty" id="qtde_prod" placeholder="Qtd" class="form-control" style="width: 70px; position: relative; float: right; right:100px; margin-bottom: 10px; margin-top: 10px;" value="1">
-                
+
                 <div class="btn-cart-session">
-                    <button class="btn btn-primary" id="addCart" ng-click="addCart(<?php echo $dataProd->produtoId;?>)">Adicionar ao carrinho</button>
+                    <button class="btn btn-primary" id="addCart" ng-click="addCart(<?php echo $dataProd->produtoId; ?>)">Adicionar ao carrinho</button>
                 </div>
-                
             </div>
-            
+
             <div class="price-info-frame">
-               
                 <div class="">
-                    
-                <!-- ####formas de pagamento##################-->
-                <div>
-                
-                    <div style="border: 1px dotted #f00; width: 250px; position: relative; float: right; padding: 8px;">
-                        <span><b>Opções</b></span><br>
-                    
-                        
-                        <?php 
-                        
-                      
-                            foreach($prodOptions as $dataOptions){
-                                
-                                $typeVar = $dataOptions->getVariacaoid()->getId();
-//                                $typeVar = $dataOptions->getVariacaoPropriedadeId()->getPropriedadeid()->getId();
-                               // echo $typeVar.'<br>';
-                                
-                                if($typeVar == 4){
-                                    
-                                    echo $typeVar.'<br>';
-                                }
-                                
-                                foreach ($prodOptions as $typeOpt) {                                    
-                                    
-                                    if($typeOpt->getVariacaoPropriedadeId()->getPropriedadeid()->getId() == $typeVar){
-                                        
-                                      //  echo $dataOptions->getId().'<br>';
-                                        echo $typeVar.'<br>';
-                                        
+
+                    <!-- ####formas de pagamento##################-->
+                    <div>
+                        <div style="-webkit-border-radius: 8px;-moz-border-radius: 8px;border-radius: 8px; width: 250px; position: relative; float: right; padding: 8px; background-color: #f5f5f5;">
+                            <span><b>Opções do produto <span class="glyphicon glyphicon-asterisk"></span></b></span><br>
+
+                            <div style="margin-top: 10px;">
+                                <?php
+                                foreach ($prodVars as $dataOptions) {
+
+                                    $setLabel = 0;
+                                    $typeVar = $dataOptions->getVariacaoid()->getId();
+
+                                    foreach ($prodRegisterVars as $typeOpt) {
+
+                                        $typeOptData = $typeOpt->getVariacaoPropriedadeId()->getPropriedadeid()->getId();
+
+                                        if ($typeVar == $typeOptData) {
+
+                                            if ($setLabel == 0) {
+                                                echo '<div style="margin-top:20px;">';
+                                                echo $typeOpt->getVariacaopropriedadeid()->getPropriedadeid()->getNome() . ':';
+                                                echo '<select class="form-control" style="width: 120px; position:relative; float:right;">';
+                                            }
+
+                                            echo '<option>' . $typeOpt->getVariacaopropriedadeid()->getNome() . '</option>';
+                                            $setLabel++;
+                                        }
                                     }
-                                    
+                                    echo '</select>';
+                                    echo '</div>';
+                                    echo '<div class="clear"></div>';
+                                    $setLabel = 0;
                                 }
-                            }
-                        
-                        
-                        ?>
-                       
-                        <select class="form-control" style="width: 120px;">
-                            <option>Selecione...</option>
-                            <option>46</option>
-                            <option>55</option>
-                        </select>
+                                ?>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
                     </div>
-                    
-                    
-                    <div class="clear"></div>
+                    <!--###/formas de pagamento####-->
                 </div>
-                <!--##########################################-->
-            </div>
             </div><!--fecha price-info-frame-->
-            
+
             <div class="price-info-frame" style="width: 200px; text-align: center; padding-top: 22px;">
                 Avaliações<br>
                 <div style=" font-size: 22px; color: #FFD700">
-                <span class="glyphicon glyphicon-star"></span>
-                <span class="glyphicon glyphicon-star"></span>
-                <span class="glyphicon glyphicon-star"></span>
-                <span class="glyphicon glyphicon-star"></span>
-                <span class="glyphicon glyphicon-star"></span>
-                <span style=" font-size: 24px; color: #888; font-weight: bold;">4.5</span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span style=" font-size: 24px; color: #888; font-weight: bold;">4.5</span>
                 </div>
-                <div style=" font-size: 26px; color: #888; font-weight: bold;">Ótimo!</div>
-                
-                
-                
-                
-                
+                <div style=" font-size: 26px; color: #888; font-weight: bold;">Ótimo!</div> 
             </div>
             <div class="clear"></div>
             <hr size="1">
-            
+
             <div class="payment-options">
-                    
+
                 <!-- ####formas de pagamento##################-->
                 <div class="payment-items">
-                    
+
                     <ul>
                         <a href="#">
-                        <li>
-                            <div class="price-opt-icon">
-                                <span class="glyphicon glyphicon-credit-card"></span>
-                            </div>
-                            <div class="price-opt-label">
-                                Formas de pagamento
-                            </div>
-                        </li>
-                        </a>
-                        
-                        <a href="#">
-                        <li>
-                            <div class="price-opt-icon">
-                                <span class="glyphicon glyphicon-globe"></span>
-                            </div>
-                            <div class="price-opt-label">
-                                Calcular frete
-                            </div>
-                        </li>
+                            <li>
+                                <div class="price-opt-icon">
+                                    <span class="glyphicon glyphicon-credit-card"></span>
+                                </div>
+                                <div class="price-opt-label">
+                                    Formas de pagamento
+                                </div>
+                            </li>
                         </a>
 
                         <a href="#">
-                         <li>
-                            <div class="price-opt-icon">
-                                <span class="glyphicon glyphicon-transfer"></span>
-                            </div>
-                            <div class="price-opt-label">
-                                Política de troca
-                            </div>
-                        </li>
+                            <li>
+                                <div class="price-opt-icon">
+                                    <span class="glyphicon glyphicon-globe"></span>
+                                </div>
+                                <div class="price-opt-label">
+                                    Calcular frete
+                                </div>
+                            </li>
+                        </a>
+
+                        <a href="#">
+                            <li>
+                                <div class="price-opt-icon">
+                                    <span class="glyphicon glyphicon-transfer"></span>
+                                </div>
+                                <div class="price-opt-label">
+                                    Política de troca
+                                </div>
+                            </li>
                         </a>
                     </ul>
-                   
+
                     <div class="clear"></div>
                 </div>
                 <!--##########################################-->
             </div>
-            
-            
-            
-            
+
+
+
+
             <div class="clear"></div>
-            
+
             <!--        <div class="calc-ship">-->
             <!--            Calcular Frete:-->
             <!--            <div class="clear"></div>-->
@@ -227,293 +212,269 @@
             <div class="bzoom_wrap">
                 <ul id="bzoom">
                     <?php
-                        
-                        foreach ($prodGalery as $imgData) {
-                            
-                            echo '                                
+                    foreach ($prodGalery as $imgData) {
+
+                        echo '                                
                             <li>
-                                <img class="bzoom_thumb_image" src="/directory/'.DB_PROFILE.'/images/'.$imgData->getImagemId()->getId().'.'.$imgData->getImagemId()->getExt().'" title="first img" />
-                                <img class="bzoom_big_image" src="/directory/'.DB_PROFILE.'/images/'.$imgData->getImagemId()->getId().'.'.$imgData->getImagemId()->getExt().'"/>
+                                <img class="bzoom_thumb_image" src="/directory/' . DB_PROFILE . '/images/' . $imgData->getImagemId()->getId() . '.' . $imgData->getImagemId()->getExt() . '" title="first img" />
+                                <img class="bzoom_big_image" src="/directory/' . DB_PROFILE . '/images/' . $imgData->getImagemId()->getId() . '.' . $imgData->getImagemId()->getExt() . '"/>
                             </li>';
-                        }
+                    }
                     ?>
                 </ul>
             </div>
             <div class="clear"></div>
         </div>
-            <img src="<?php //echo '/directory/' . DB_PROFILE . '/images/444.jpg'; ?>" style="width: 300px;">
-        </div>
+        <img src="<?php //echo '/directory/' . DB_PROFILE . '/images/444.jpg';  ?>" style="width: 300px;">
+    </div>
 
     <div class="clear"></div>
-        <hr size="1" style="margin-top: 0px;">
+    <hr size="1" style="margin-top: 0px;">
 
-        <div class="product-description-frame">
-            <div class="product-description product-description-title">Descrição do produto</div>
-            <div class="description-text">
-                <?php echo nl2br($dataProd->prod_desc); ?>
-            </div>
+    <div class="product-description-frame">
+        <div class="product-description product-description-title">Descrição do produto</div>
+        <div class="description-text">
+<?php echo nl2br($dataProd->prod_desc); ?>
+        </div>
+    </div>
+
+    <hr size="1">
+
+    <div class="product-description product-description-title">Características do produto</div>
+
+    <div class="clear"></div>
+
+    <div class="table-description">
+
+        <div class="table-row-negative">
+            <div class="table-row-item1"> Conexões e Entradas</div>
+            <div class="table-row-item2"> LAN (Rede)</div>
+            <div class="clear"></div>
+        </div>
+        <div class="table-row">
+            <div class="table-row-item1"> Conexões e Entradas</div>
+            <div class="table-row-item2"> HDMI</div>
+            <div class="clear"></div>
         </div>
 
-        <hr size="1">
-
-        <div class="product-description product-description-title">Características do produto</div>
-
-        <div class="clear"></div>
-
-        <div class="table-description">
-
-            <div class="table-row-negative">
-                <div class="table-row-item1"> Conexões e Entradas</div>
-                <div class="table-row-item2"> LAN (Rede)</div>
-                <div class="clear"></div>
-            </div>
-            <div class="table-row">
-                <div class="table-row-item1"> Conexões e Entradas</div>
-                <div class="table-row-item2"> HDMI</div>
-                <div class="clear"></div>
-            </div>
-
-            <div class="table-row-negative">
-                <div class="table-row-item1"> Conexões e Entradas</div>
-                <div class="table-row-item2"> USB</div>
-                <div class="clear"></div>
-            </div>
-            <div class="table-row">
-                <div class="table-row-item1"> Conexões e Entradas</div>
-                <div class="table-row-item2"> LAN (Rede)</div>
-                <div class="clear"></div>
-            </div>
-
-            <div class="table-row-negative">
-                <div class="table-row-item1"> Informações adicionais</div>
-                <div class="table-row-item2">
-                    Espessura: 7,94<br>
-                    Diagonal Visual: 107,9<br>
-                    Energia em Standby: 0,1084<br>
-                    Consumo Standby (kwh/mês): 0,078<br>
-                    Label Size: 0,07
-                </div>
-                <div class="clear"></div>
-            </div>
-            <div class="table-row">
-                <div class="table-row-item1"> Referência do Modelo</div>
-                <div class="table-row-item2"> 43LH6000</div>
-                <div class="clear"></div>
-            </div>
+        <div class="table-row-negative">
+            <div class="table-row-item1"> Conexões e Entradas</div>
+            <div class="table-row-item2"> USB</div>
+            <div class="clear"></div>
+        </div>
+        <div class="table-row">
+            <div class="table-row-item1"> Conexões e Entradas</div>
+            <div class="table-row-item2"> LAN (Rede)</div>
+            <div class="clear"></div>
         </div>
 
-
-        <div class="comments">
-
-            <div style="font-size: 26px;">Avaliações do produto!</div>
-
-
-            <div class="comment-slot">
-                <div class="comments-title">Produto muito bom! <span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span> </div>
-                <div class="comment-text">O smartphone tem memória interna de 16 GB que possibilita armazenar diversas fotos, documentos, músicas e vídeos. Caso haja a necessidade de mais espaço, o aparelho possui leitor de cartão no formato MicroSD, que consegue expandir essa memória até 128GB.</div>
-                <div class="comment-author">Miguel Carvalho - S Bernardo do Campo - 22/04/2017</div>
-                <hr size="1">
+        <div class="table-row-negative">
+            <div class="table-row-item1"> Informações adicionais</div>
+            <div class="table-row-item2">
+                Espessura: 7,94<br>
+                Diagonal Visual: 107,9<br>
+                Energia em Standby: 0,1084<br>
+                Consumo Standby (kwh/mês): 0,078<br>
+                Label Size: 0,07
             </div>
-
-            <div class="comment-slot">
-                <div class="comments-title">Produto muito bom! <span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span></div>
-                <div class="comment-text">O smartphone tem memória interna de 16 GB que possibilita armazenar diversas fotos, documentos, músicas e vídeos. Caso haja a necessidade de mais espaço, o aparelho possui leitor de cartão no formato MicroSD, que consegue expandir essa memória até 128GB.</div>
-                <div class="comment-author">Miguel Carvalho - S Bernardo do Campo - 22/04/2017</div>
-
-                <hr size="1">
-            </div>
-
-            <div class="comment-slot">
-                <div class="comments-title">Produto muito bom! <span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span></div>
-                <div class="comment-text">O smartphone tem memória interna de 16 GB que possibilita armazenar diversas fotos, documentos, músicas e vídeos. Caso haja a necessidade de mais espaço, o aparelho possui leitor de cartão no formato MicroSD, que consegue expandir essa memória até 128GB.</div>
-                <div class="comment-author">Miguel Carvalho - S Bernardo do Campo - 22/04/2017</div>
-
-                <hr size="1">
-            </div>
-
-            <div class="comment-slot">
-                <div class="comments-title">Produto muito bom! <span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span></div>
-                <div class="comment-text">O smartphone tem memória interna de 16 GB que possibilita armazenar diversas fotos, documentos, músicas e vídeos. Caso haja a necessidade de mais espaço, o aparelho possui leitor de cartão no formato MicroSD, que consegue expandir essa memória até 128GB.</div>
-                <div class="comment-author">Miguel Carvalho - S Bernardo do Campo - 22/04/2017</div>
-
-                <hr size="1">
-            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="table-row">
+            <div class="table-row-item1"> Referência do Modelo</div>
+            <div class="table-row-item2"> 43LH6000</div>
+            <div class="clear"></div>
+        </div>
+    </div>
 
 
+    <div class="comments">
+
+        <div style="font-size: 26px;">Avaliações do produto!</div>
+
+
+        <div class="comment-slot">
+            <div class="comments-title">Produto muito bom! <span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span> </div>
+            <div class="comment-text">O smartphone tem memória interna de 16 GB que possibilita armazenar diversas fotos, documentos, músicas e vídeos. Caso haja a necessidade de mais espaço, o aparelho possui leitor de cartão no formato MicroSD, que consegue expandir essa memória até 128GB.</div>
+            <div class="comment-author">Miguel Carvalho - S Bernardo do Campo - 22/04/2017</div>
+            <hr size="1">
+        </div>
+
+        <div class="comment-slot">
+            <div class="comments-title">Produto muito bom! <span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span></div>
+            <div class="comment-text">O smartphone tem memória interna de 16 GB que possibilita armazenar diversas fotos, documentos, músicas e vídeos. Caso haja a necessidade de mais espaço, o aparelho possui leitor de cartão no formato MicroSD, que consegue expandir essa memória até 128GB.</div>
+            <div class="comment-author">Miguel Carvalho - S Bernardo do Campo - 22/04/2017</div>
+
+            <hr size="1">
+        </div>
+
+        <div class="comment-slot">
+            <div class="comments-title">Produto muito bom! <span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span></div>
+            <div class="comment-text">O smartphone tem memória interna de 16 GB que possibilita armazenar diversas fotos, documentos, músicas e vídeos. Caso haja a necessidade de mais espaço, o aparelho possui leitor de cartão no formato MicroSD, que consegue expandir essa memória até 128GB.</div>
+            <div class="comment-author">Miguel Carvalho - S Bernardo do Campo - 22/04/2017</div>
+
+            <hr size="1">
+        </div>
+
+        <div class="comment-slot">
+            <div class="comments-title">Produto muito bom! <span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span></div>
+            <div class="comment-text">O smartphone tem memória interna de 16 GB que possibilita armazenar diversas fotos, documentos, músicas e vídeos. Caso haja a necessidade de mais espaço, o aparelho possui leitor de cartão no formato MicroSD, que consegue expandir essa memória até 128GB.</div>
+            <div class="comment-author">Miguel Carvalho - S Bernardo do Campo - 22/04/2017</div>
+
+            <hr size="1">
         </div>
 
 
     </div>
-    <!--    fecha container-->
 
 
-    <?php
+</div>
+<!--    fecha container-->
 
-    function filterUrl($string, $slug = false) {
-        $string = strtolower($string);
-        $ascii['a'] = range(224, 230);
-        $ascii['e'] = range(232, 235);
-        $ascii['i'] = range(236, 239);
-        $ascii['o'] = array_merge(range(242, 246), array(240, 248));
-        $ascii['u'] = range(249, 252);
-        $ascii['b'] = array(223);
-        $ascii['c'] = array(231);
-        $ascii['d'] = array(208);
-        $ascii['n'] = array(241);
-        $ascii['y'] = array(253, 255);
-        foreach ($ascii as $key => $item) {
-            $acentos = '';
-            foreach ($item AS $codigo)
-                $acentos .= chr($codigo);
-            $troca[$key] = '/[' . $acentos . ']/i';
-        }
-        $string = preg_replace(array_values($troca), array_keys($troca), $string);
 
-        if ($slug) {
+<?php
 
-            $string = preg_replace('/[^a-z0-9]/i', $slug, $string);
-
-            $string = preg_replace('/' . $slug . '{2,}/i', $slug, $string);
-            $string = trim($string, $slug);
-        }
-        return $string;
+function filterUrl($string, $slug = false) {
+    $string = strtolower($string);
+    $ascii['a'] = range(224, 230);
+    $ascii['e'] = range(232, 235);
+    $ascii['i'] = range(236, 239);
+    $ascii['o'] = array_merge(range(242, 246), array(240, 248));
+    $ascii['u'] = range(249, 252);
+    $ascii['b'] = array(223);
+    $ascii['c'] = array(231);
+    $ascii['d'] = array(208);
+    $ascii['n'] = array(241);
+    $ascii['y'] = array(253, 255);
+    foreach ($ascii as $key => $item) {
+        $acentos = '';
+        foreach ($item AS $codigo)
+            $acentos .= chr($codigo);
+        $troca[$key] = '/[' . $acentos . ']/i';
     }
-    ?>
+    $string = preg_replace(array_values($troca), array_keys($troca), $string);
+
+    if ($slug) {
+
+        $string = preg_replace('/[^a-z0-9]/i', $slug, $string);
+
+        $string = preg_replace('/' . $slug . '{2,}/i', $slug, $string);
+        $string = trim($string, $slug);
+    }
+    return $string;
+}
+?>
 
 
-    <script>
+<script>
 
 
-        function onlyNum(e) {
-            var tecla = (window.event) ? event.keyCode : e.which;
-            if ((tecla > 47 && tecla < 58))
-                return true;
-            else {
-                if (tecla == 8 || tecla == 0)
-                    return true;
-                else
-                    return false;
-            }
-        }
+    function onlyNum(e) {
+    var tecla = (window.event) ? event.keyCode : e.which;
+    if ((tecla > 47 && tecla < 58))
+            return true;
+    else {
+    if (tecla == 8 || tecla == 0)
+            return true;
+    else
+            return false;
+    }
+    }
 
 
-        var modal_test = angular.module('ui.bootstrap.app');
+    var modal_test = angular.module('ui.bootstrap.app');
+    modal_test.controller('consultaList', function ($scope, $http) {
 
-        modal_test.controller('consultaList', function ($scope, $http) {
+    $scope.formaPagamentoModal = false;
+    $scope.modalFormaPagamento = function () {
 
-            $scope.formaPagamentoModal = false;
-            $scope.modalFormaPagamento = function () {
+    $scope.tab = 1;
+    $scope.formaPagamentoModal = !$scope.showModal;
+    };
+    $scope.modalFrete = function () {
 
-                $scope.tab = 1;
-                $scope.formaPagamentoModal = !$scope.showModal;
-            };
+    $scope.CalcFreteModal = !$scope.showModal;
+    };
+    $scope.modalPoliticaTroca = function () {
 
+    $scope.politicaTrocaModal = !$scope.showModal;
+    };
+    $scope.modalAvaliar = function () {
 
+    $scope.avaliacaoModal = !$scope.showModal;
+    };
+    $scope.calcFrete = function () {
 
-            $scope.modalFrete = function () {
+    var cep = $("input#cep_dest").val();
+    var cep_lenght = cep.length;
+    $scope.peso = '<?php echo round($data_prod['prod_peso']); ?>';
+    $scope.altura = '<?php echo $data_prod['prod_altura']; ?>';
+    $scope.largura = '<?php echo $data_prod['prod_largura']; ?>';
+    $scope.comp = '<?php echo $data_prod['prod_comprimento']; ?>';
+    $scope.prod_id = '<?php echo $data_prod['prod_id']; ?>';
+    $scope.preco = '<?php //echo round($preco_final);   ?>';
+    if (cep == '') {
 
-                $scope.CalcFreteModal = !$scope.showModal;
-            };
+    alert('Campo cep é obrigatório!');
+    return false;
+    } else if (cep_lenght < 8) {
 
+    alert('O CEP digitado é inválido!');
+    return false;
+    }
 
-            $scope.modalPoliticaTroca = function () {
+    var request = $http({
+    method: "post",
+            url: "/frete",
+            data: {
 
-                $scope.politicaTrocaModal = !$scope.showModal;
-            };
+            prod_id: $scope.prod_id,
+                    peso: $scope.peso,
+                    altura: $scope.altura,
+                    largura: $scope.largura,
+                    comp: $scope.comp,
+                    cep: cep,
+                    preco: $scope.preco
 
-            $scope.modalAvaliar = function () {
+            },
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    });
+    /* Check whether the HTTP Request is successful or not. */
+    request.success(function (data) {
 
-                $scope.avaliacaoModal = !$scope.showModal;
-            };
-
-
-
-
-
-            $scope.calcFrete = function () {
-
-                var cep = $("input#cep_dest").val();
-                var cep_lenght = cep.length;
-
-
-                $scope.peso = '<?php echo round($data_prod['prod_peso']); ?>';
-                $scope.altura = '<?php echo $data_prod['prod_altura']; ?>';
-                $scope.largura = '<?php echo $data_prod['prod_largura']; ?>';
-                $scope.comp = '<?php echo $data_prod['prod_comprimento']; ?>';
-                $scope.prod_id = '<?php echo $data_prod['prod_id']; ?>';
-                $scope.preco = '<?php //echo round($preco_final);  ?>';
-
-
-
-                if (cep == '') {
-
-                    alert('Campo cep é obrigatório!');
-                    return false;
-
-                } else if (cep_lenght < 8) {
-
-                    alert('O CEP digitado é inválido!');
-                    return false;
-
-                }
-
-                var request = $http({
-                    method: "post",
-                    url: "/frete",
-                    data: {
-
-                        prod_id: $scope.prod_id,
-                        peso: $scope.peso,
-                        altura: $scope.altura,
-                        largura: $scope.largura,
-                        comp: $scope.comp,
-                        cep: cep,
-                        preco: $scope.preco
-
-                    },
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                });
-
-
-                /* Check whether the HTTP Request is successful or not. */
-                request.success(function (data) {
-
-                    //alert(data);
+    //alert(data);
 
 
 
-                    document.getElementById("result_frete").innerHTML = data;
-                    // $("span#num_itens").load("/cart/qtd");
-                    // $("div#cart").load("/cart/queryCart");
+    document.getElementById("result_frete").innerHTML = data;
+    // $("span#num_itens").load("/cart/qtd");
+    // $("div#cart").load("/cart/queryCart");
 
 
 
-                });
-                request.error(function (data) {
-                    //document.getElementById("messageCadastrar1").textContent = "Houve um problema [" + data + "]";
-                });
-            };
-
-        });
-
-    </script>
+    });
+    request.error(function (data) {
+    //document.getElementById("messageCadastrar1").textContent = "Houve um problema [" + data + "]";
+    });
+    };
+    });
+</script>
 
 </div>
 </div>
 </div>
 <script type="text/javascript">
-$("#bzoom").zoom({
-    
-    zoom_area_width: 400,        
-    thumb_image_width: 400,
-    thumb_image_height: 400,
-    source_image_width: 500,
-    source_image_height: 500,
-    autoplay_interval :3000,
-    small_thumbs : 4,
-    speed: 500,
-    autoplay : false
-});
+    $("#bzoom").zoom({
+
+    zoom_area_width: 400,
+            thumb_image_width: 400,
+            thumb_image_height: 400,
+            source_image_width: 500,
+            source_image_height: 500,
+            autoplay_interval :3000,
+            small_thumbs : 4,
+            speed: 500,
+            autoplay : false
+            });
 </script>
 
 <!--[if lt IE 9]>

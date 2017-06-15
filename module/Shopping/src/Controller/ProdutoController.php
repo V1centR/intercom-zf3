@@ -46,22 +46,29 @@ class ProdutoController extends AbstractActionController {
            exit;
            
         } else {
+            
             $prodGalery = $this->entityManager->getRepository(Produtoimagem::class)
                 ->findBy(['produtoid' => $prodData[0]->id]);
             
             $prodVars = $this->entityManager->getRepository(Variacoesproduto::class)
                 ->findBy(['produtoid' => $prodData[0]->id]);
             
-            $prodRegisterVars = $this->entityManager->getRepository(Valoresvariacao::class)
-                ->findBy(['produtoid' => $prodData[0]->id]);
+            if(count($prodVars) != null){
+
+                $prodRegisterVars = $this->entityManager->getRepository(Valoresvariacao::class)
+                ->findBy(['produtoid' => $prodData[0]->id]);                
+            } else {
             
+                 $prodRegisterVars = 0;
+                 $prodVars = 0;
+            }
         }
         
         $view = new ViewModel([
             'dataProd' => $prodData[0],
             'prodGalery' => $prodGalery,
             'prodRegisterVars' => $prodRegisterVars,
-            'prodOptions' => $prodVars,
+            'prodVars' => $prodVars,
         ]);
         $view->setTemplate('product-profile');
         //$view->setTerminal(true);

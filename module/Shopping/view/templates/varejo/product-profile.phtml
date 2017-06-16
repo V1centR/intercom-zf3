@@ -294,45 +294,30 @@
             <div class="clear"></div>
         </div>
     </div>
-
-
+    
     <div class="comments">
+        <div style="font-size: 26px;">Avaliações do produto</div>
+        <?php
+        
+            foreach ($productEvaluation as $evaluationData) {
+                
+                $rating = $evaluationData->getNota();
+                $stars = '';
+                
+                for($i=1;$i<=$rating;$i++){
+                    $stars .= '<span style="color:#FFD700" class="glyphicon glyphicon-star"></span>';
+                }
 
-        <div style="font-size: 26px;">Avaliações do produto!</div>
-
-
-        <div class="comment-slot">
-            <div class="comments-title">Produto muito bom! <span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span> </div>
-            <div class="comment-text">O smartphone tem memória interna de 16 GB que possibilita armazenar diversas fotos, documentos, músicas e vídeos. Caso haja a necessidade de mais espaço, o aparelho possui leitor de cartão no formato MicroSD, que consegue expandir essa memória até 128GB.</div>
-            <div class="comment-author">Miguel Carvalho - S Bernardo do Campo - 22/04/2017</div>
-            <hr size="1">
-        </div>
-
-        <div class="comment-slot">
-            <div class="comments-title">Produto muito bom! <span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span></div>
-            <div class="comment-text">O smartphone tem memória interna de 16 GB que possibilita armazenar diversas fotos, documentos, músicas e vídeos. Caso haja a necessidade de mais espaço, o aparelho possui leitor de cartão no formato MicroSD, que consegue expandir essa memória até 128GB.</div>
-            <div class="comment-author">Miguel Carvalho - S Bernardo do Campo - 22/04/2017</div>
-
-            <hr size="1">
-        </div>
-
-        <div class="comment-slot">
-            <div class="comments-title">Produto muito bom! <span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span></div>
-            <div class="comment-text">O smartphone tem memória interna de 16 GB que possibilita armazenar diversas fotos, documentos, músicas e vídeos. Caso haja a necessidade de mais espaço, o aparelho possui leitor de cartão no formato MicroSD, que consegue expandir essa memória até 128GB.</div>
-            <div class="comment-author">Miguel Carvalho - S Bernardo do Campo - 22/04/2017</div>
-
-            <hr size="1">
-        </div>
-
-        <div class="comment-slot">
-            <div class="comments-title">Produto muito bom! <span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star"></span></div>
-            <div class="comment-text">O smartphone tem memória interna de 16 GB que possibilita armazenar diversas fotos, documentos, músicas e vídeos. Caso haja a necessidade de mais espaço, o aparelho possui leitor de cartão no formato MicroSD, que consegue expandir essa memória até 128GB.</div>
-            <div class="comment-author">Miguel Carvalho - S Bernardo do Campo - 22/04/2017</div>
-
-            <hr size="1">
-        </div>
-
-
+                echo '
+                        <div class="comment-slot">
+                            <div class="comments-title">'.$evaluationData->getTitulo().' '.$stars.' </div>
+                            <div class="comment-text">'.$evaluationData->getComentario().'</div>
+                            <div class="comment-author">'.$evaluationData->getPessoaid()->getNomefantasia().' - '.$evaluationData->getLocal().' - '.$evaluationData->getData()->format('d/m/Y').'</div>
+                            <hr size="1">
+                        </div>
+                    ';
+            }
+        ?>
     </div>
 
 

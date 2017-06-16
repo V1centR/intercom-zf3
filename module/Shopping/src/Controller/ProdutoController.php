@@ -9,6 +9,7 @@ use Shopping\Entity\Produtoimagem;
 use Shopping\Entity\Variacoesproduto;
 use Shopping\Entity\Variacaopropriedade;
 use Shopping\Entity\Valoresvariacao;
+use Shopping\Entity\Produtoavaliacao;
 
 use Zend\Session\Container;
 use Shopping\Repository as Repo;
@@ -53,6 +54,9 @@ class ProdutoController extends AbstractActionController {
             $prodVars = $this->entityManager->getRepository(Variacoesproduto::class)
                 ->findBy(['produtoid' => $prodData[0]->id]);
             
+            //product evaluation
+            $prodEval = $this->evalProduct($prodData[0]->id);
+            
             if(count($prodVars) != null){
 
                 $prodRegisterVars = $this->entityManager->getRepository(Valoresvariacao::class)
@@ -69,15 +73,19 @@ class ProdutoController extends AbstractActionController {
             'prodGalery' => $prodGalery,
             'prodRegisterVars' => $prodRegisterVars,
             'prodVars' => $prodVars,
+            'productEvaluation' => $prodEval,
         ]);
         $view->setTemplate('product-profile');
         //$view->setTerminal(true);
         return $view;
     }
     
-    public function rateProduct(){
+    public function evalProduct($prodId){
         
+        $prodEval = $this->entityManager->getRepository(Produtoavaliacao::class)
+                ->findBy(['produtoid' => $prodId]);
         
+        return $prodEval;
     }
 
 

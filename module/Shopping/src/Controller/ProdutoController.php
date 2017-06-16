@@ -74,6 +74,11 @@ class ProdutoController extends AbstractActionController {
         //$view->setTerminal(true);
         return $view;
     }
+    
+    public function rateProduct(){
+        
+        
+    }
 
 
     public function indexActionOLD() {

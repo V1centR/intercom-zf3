@@ -46,7 +46,11 @@
                     
                     <div style=" font-weight: bold; text-align: left; padding: 8px; background-color: #f5f5f5;">
                         <h4>Seu Carrinho</h4>
-                        <span>Checkout</span>
+                        <div style="">
+                            <button name="checkout" class="btn-primary" style="font-size: 11px; border-radius: 4px; position: relative; float: right; top: -30px;">
+                                Finalizar compra <span class="glyphicon glyphicon-chevron-right"></span>
+                            </button>
+                        </div>
                     </div>
                 <div ng-show="cartEmpty" class="empty-cart-info" id="emptyAlert">
                     Seu carrinho esta vazio!

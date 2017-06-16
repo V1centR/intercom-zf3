@@ -84,7 +84,7 @@
                 <input ng-model="qtde_prod" required type="number" name="qty" id="qtde_prod" placeholder="Qtd" class="form-control" style="width: 70px; position: relative; float: right; right:100px; margin-bottom: 10px; margin-top: 10px;" value="1">
 
                 <div class="btn-cart-session">
-                    <button class="btn btn-primary" id="addCart" ng-click="addCart(<?php echo $dataProd->produtoId; ?>)">Adicionar ao carrinho</button>
+                    <button class="btn btn-primary" id="addCart" ng-click="addCart(<?php echo $dataProd->produtoId; ?>)">Adicionar ao carrinho <span class="glyphicon glyphicon-circle-arrow-down"></span></button>
                 </div>
             </div>
 
@@ -134,6 +134,9 @@
                             </div>
                         </div>
                         <div class="clear"></div>
+                        <div style=" text-align: center; margin-top: 5px;">
+                        <button class="btn btn-primary" id="addCart" ng-click="">Finalizar compra <span class="glyphicon glyphicon-chevron-right"></span></button>
+                    </div>
                     </div>
                     <!--###/formas de pagamento####-->
                 </div>

@@ -11,11 +11,13 @@ use Shopping\Controller\AtendController;
 use Shopping\Controller\CartController;
 use Shopping\Controller\Factory\CartControllerFactory;
 use Shopping\Controller\Factory\IndexControllerFactory;
+use Shopping\Controller\Factory\FooterFactory;
 use Shopping\Controller\Factory\MenuFactory;
 use Shopping\Controller\Factory\ServiceFactory;
 use Shopping\Controller\Factory\UsersControllerFactory;
 use Shopping\Controller\Factory\SessionFactory;
 use Shopping\Controller\Factory\ProdFactory;
+use Shopping\Controller\Factory\CategoryControllerFactory;
 use Shopping\Controller\ProdutoController;
 use Shopping\Controller\UsersController;
 use Zend\Router\Http\Literal;
@@ -128,6 +130,20 @@ return [
                         'action' => 'index',
                     ],
                 ],
+            ],            
+            'category' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/category[/:id]',
+                    'constraints' => [
+                        'controller' => '[a-z_-]+',
+                        'id'     => '[a-z0-9_-]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\CategoryController::class,
+                        'action' => 'index',
+                    ],
+                ],
             ],
         ],
     ],
@@ -138,11 +154,13 @@ return [
             Controller\UsersController::class => UsersControllerFactory::class,
             Controller\ProdutoController::class => ProdFactory::class,
             Controller\CartController::class => CartControllerFactory::class,
+            Controller\CategoryController::class => CategoryControllerFactory::class,
         ],
 
         'invokables' => [
             //'Shopping\Controller\Index' => \Shopping\Controller\IndexController::class,
            // 'Shopping\Controller\Atend' => \Shopping\Controller\AtendController::class
+//            'Shopping\Controller\Category' => \Shopping\Controller\CategoryController::class
         ],
 
          'aliases' => [
@@ -156,10 +174,12 @@ return [
         'factories' => [
           //  \Shopping\Helpers\Menu::class => InvokableFactory::class,
             \Shopping\Helpers\Menu::class => MenuFactory::class,
-            \Shopping\Helpers\Sessions::class => SessionFactory::class
+            \Shopping\Helpers\Sessions::class => SessionFactory::class,
+            \Shopping\Helpers\Footer::class => FooterFactory::class
         ],
         'aliases' => [
             'mainMenu' =>   \Shopping\Helpers\Menu::class,
+            'footer' => \Shopping\Helpers\Footer::class,
             'sessions' => \Shopping\Helpers\Sessions::class,
         ]
     ],
@@ -177,11 +197,13 @@ return [
             'error/404'               => __DIR__ . '/../view/templates/'.TEMPLATE.'/error/404.phtml',
             'error/index'             => __DIR__ . '/../view/templates/'.TEMPLATE.'/error/index.phtml',
             'menu' => __DIR__ . '/../view/templates/'.TEMPLATE.'/menu.phtml',
+            'footer' => __DIR__ . '/../view/templates/'.TEMPLATE.'/footer.phtml',
             'headBar' => __DIR__ . '/../view/templates/'.TEMPLATE.'/headBar.phtml',
             'shopping/index/iso' => __DIR__ . '/../view/templates/'.TEMPLATE.'/iso.phtml',
 //            'shopping/index/logout' => __DIR__ . '/../view/templates/'.TEMPLATE.'/iso.phtml',
             'generic' => __DIR__ . '/../view/templates/'.TEMPLATE.'/generic.phtml',
             'product-profile' => __DIR__ . '/../view/templates/'.TEMPLATE.'/product-profile.phtml',
+            'category' => __DIR__ . '/../view/templates/'.TEMPLATE.'/category.phtml',
         ],
 
         'template_path_stack' => [

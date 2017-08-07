@@ -4,8 +4,6 @@ namespace Shopping\Helpers;
 
 use Zend\View\Helper\AbstractHelper;
 use Shopping\Entity\Categorias;
-use Shopping\Helpers\Sessions;
-use Doctrine\ORM\Mapping as ORM;
 
 class Menu extends AbstractHelper
 {

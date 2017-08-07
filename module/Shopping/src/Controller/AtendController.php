@@ -212,11 +212,6 @@ class AtendController extends AbstractActionController
         }
 
 
-
-
-
-
-
         $view = new ViewModel();
         $view->setTemplate('templates/orion/generic.phtml');
         $view->setTerminal(true);

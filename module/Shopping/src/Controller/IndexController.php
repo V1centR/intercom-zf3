@@ -3,14 +3,9 @@
 namespace Shopping\Controller;
 
 use Shopping\Entity\Banners;
-use Shopping\Entity\Categorias;
-use Shopping\Entity\Usuario;
 use Shopping\Entity\Visitante;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Doctrine\ORM\Mapping as ORM;
-use Zend\Http\Header\SetCookie;
-use Zend\Session\Container;
 
 class IndexController extends AbstractActionController
 {
@@ -55,18 +50,57 @@ class IndexController extends AbstractActionController
         $hash_user = $_COOKIE['uc'];
         $userVisit = $this->entityManager->getRepository(Visitante::class)
             ->findOneBy(['sessao' => $hash_user]);
+        
+        $sequencesPack = [];
+        
+        for($i=0;$i<=5;$i++){
+            
+            $sequencesPack[] = self::gerador(1,60);
+        }
 
-        echo count($userVisit);
-        print_r($userVisit);
+        
+        foreach ($sequencesPack as $data1) {
+            
+            echo "<br>";
+            
+            foreach ($data1 as $sequence) {
+                echo $sequence." ";                
+            }
+        }
+        exit;
+        
+//        $valor = 2400.99;
+//        echo 'R$: '.number_format($valor,2,",",".");
+        
 
         $view = new ViewModel(array(
 //            'logo_shop' => $testOk,
-
-
         ));
 
        // $view->setTemplate('iso')->setTerminal(true);
 
         return $view;
+    }
+    
+    public function gerador($start,$end){
+        
+        $times = 0;
+        $randomico = [];
+            
+            while($times <= 5){
+                $alter = rand($start, $end);
+                $search = in_array($alter,$randomico);
+
+                if(!$search){                    
+                   $randomico[] = $alter;                  
+                }else{
+                    $times--;
+                }
+                $times++;
+            }
+            
+            sort($randomico);
+        
+        return $randomico;
     }
 }

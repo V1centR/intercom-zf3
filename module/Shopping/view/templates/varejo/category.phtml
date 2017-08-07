@@ -1,0 +1,132 @@
+<?= $this->headLink()
+    ->appendStylesheet($this->basePath('templates/'.TEMPLATE.'/css/category.css'))
+?>
+<div class="content">
+    
+    <!--breadcrumb--> 
+    <div style=" margin: 10px 0px 10px 0px;">
+       <ul class="breadcrumb">
+            <li class="completed"><a href="javascript:void(0);">Personal Contact</a></li>
+            <li class="active"><a href="javascript:void(0);">Educational/Experience</a></li>
+            <li><a href="javascript:void(0);">Photo Upload</a></li>
+            <li><a href="javascript:void(0);">Payment</a></li>
+	</ul>
+    </div>
+    
+    
+  <div class="clear"></div>
+  
+  
+  <aside class="menu-left">
+      <ul class="nav nav-pills nav-stacked">
+      <?php
+
+        foreach ($categoryContainer['category'] as $categoryIndex) {
+            
+            echo '<li role="presentation" class="active"><a href="#"><span style="font-weight: bold;">'.$categoryIndex['nome'].'</span><span class="badge" style="position:relative; float: right;">'.$categoryIndex['qtd'].'</span></a></a></li>';
+
+            foreach ($categoryContainer['subCategory'] as $subCategory) {
+
+                if($categoryIndex['cat_pai_id'] == $subCategory['id_cat']){
+                    echo '<li role="presentation" style="border-bottom: 1px solid #f5f5f5"><a href="#">- '.$subCategory['nome'].'<span class="badge" style="position:relative; float: right;">'.$subCategory['cat_num_itens'].'</span></a></li>';
+
+                }
+            }
+        }    
+    ?>
+          </ul>
+  </aside>
+    
+    
+  <div class="main-content">
+    
+      <img src="https://static.wmobjects.com.br/arquivos/tvi-aniversario-walmart-260717.jpg" width="1060">
+      
+      
+      
+      
+    <div class="percycle" data-widget="department" data-processed="true">
+      <style>/*.home .percycle .showcase{ height: 340px }*/ .search .mb20{ margin-bottom: 20px } .skupage .mt20{ margin-top: 20px } .percycle .product-list.shelf-multiline .column { margin-bottom: 20px; } @media only screen and (min-width: 83.4375em) { .department .percycle .hl-product { width: 23.9782%; } .department .percycle .hl-product:nth-of-type(4n) { margin-right: 0; } } @media only screen and (max-width: 78.6875em) { .department .percycle .shelf-product-item { margin-right: 2.76243%; width: 48.6188%; } .department .percycle .shelf-product-item:nth-of-type(2n) { margin-right: 0; } } @media only screen and (max-width: 83.375em) and (min-width: 78.75em) { .department .percycle .shelf-product-item { width: 32.4251%; } .department .percycle .shelf-product-item:nth-of-type(3n) { margin-right: 0; } .department .percycle .shelf-product-item:nth-child(n+4) { display: none; visibility: hidden; } } @media only screen and (min-width: 83.4375em) { .search .percycle .hl-product { width: 23.9782%; } .search .percycle .hl-product:nth-of-type(4n) { margin-right: 0; } } @media only screen and (max-width: 78.6875em) { .search .percycle .shelf-product-item { margin-right: 2.76243%; width: 48.6188%; } .search .percycle .shelf-product-item:nth-of-type(2n) { margin-right: 0; } } @media only screen and (max-width: 83.375em) and (min-width: 78.75em) { .search .percycle .shelf-product-item { width: 32.4251%; } .search .percycle .shelf-product-item:nth-of-type(3n) { margin-right: 0; } .search .percycle .shelf-product-item:nth-child(n+4) { display: none; visibility: hidden; } } @media (min-width: 78.75em) and (max-width: 83.375em) { .skupage .percycle .product-list.shelf-singleline .column { float: left; margin-right: 1.3624%; width: 23.9782%; } .skupage .percycle .product-list.shelf-singleline .column:nth-of-type(5n) { float: right; margin-right: 0; } .skupage .percycle .product-list.shelf-singleline .column:nth-child(4n) { margin-right: 0; } .skupage .percycle .product-list.shelf-singleline .column:nth-child(5n) { display: none; } } @media (min-width: 83.4375em) { .skupage .percycle .product-list.shelf-singleline .column { float: left; margin-right: 1.08696%; width: 19.1304%; } .skupage .percycle .product-list.shelf-singleline .column:nth-of-type(5n) { float: right; margin-right: 0; } } #percycle-content { background-color: #fff; border: 1px solid #ccc; height: 90px; margin: 0 auto 20px; width: 728px; } #percycle-list-product { display:block; clear: both; } .percycle-product { float:left; height: 90px; position: relative; width: 33% } .percycle-product img { left: 5px; position: absolute; top: 5px; } .percycle-product div { margin: 0 5px 0 95px; text-align: left; } .percycle-product .percycle-title { color: #2196f3; font-size: 13px; height: 35px; margin: 10px 0 5px; overflow: hidden; } .percycle-product .percycle-price { color: #4caf50; font-size: 14px; } .percycle #featuredOffers { padding: 15px; } .percycleSearch { /* border-bottom: 1px solid rgb(238, 238, 238); margin-bottom: 20px; */ } .percycle_banner728 { background-color: #fafafa; display: block; height: 132px; padding-top: 20px; width: 100%; }</style>
+      <div class="wm-recommend clearfix ">
+        <div class="product-list shelf-multiline">
+          <section class="shelf">
+            <h2 class="shelf-title"><span class="wm-icon icon-megaphone icon-title"></span>Produtos Patrocinados</h2>
+            
+          </section>
+        </div>
+      </div>
+    </div>
+    <div class="carousel-brands arrow-small border-shadow owl-carousel owl-theme" data-realmedia-creative="Middle" style="opacity: 1; display: block;">
+      <div class="owl-wrapper-outer">
+        <div class="owl-wrapper" style="width: 2534px; left: 0px; display: block; transform: translate3d(0px, 0px, 0px);">
+          <div class="owl-item" style="width: 181px;">
+            <div class="bannerLazy x54 loaded" data-oas-position="x54"><a class="banner-item" href="https://oasc14.247realmedia.com/RealMedia/ads/click_lx.ads/wm-desktop/eletrodomesticos/L27/1250667713/x54/Walmart/wm-eletrodomesticos-marcas/cm-electrolux-eletrodom.html/1?utmi_p=wm-desktop/eletrodomesticos&amp;utmi_cp=wm-eletrodomesticos-marcas&amp;utmi_pc=x54-cm-electrolux-eletrodom"><img src="https://www.walmart.com.br/arquivos/140x64-eletroclux-1202.png" border="0"></a></div>
+          </div>
+          <div class="owl-item" style="width: 181px;">
+            <div class="bannerLazy x56 loaded" data-oas-position="x56"><a class="banner-item" href="https://oasc14.247realmedia.com/RealMedia/ads/click_lx.ads/wm-desktop/eletrodomesticos/L27/419709192/x56/Walmart/wm-eletrodomesticos-marcas/cm-brastemp.html/1?utmi_p=wm-desktop/eletrodomesticos&amp;utmi_cp=wm-eletrodomesticos-marcas&amp;utmi_pc=x56-cm-brastemp"><img src="https://static.wmobjects.com.br/arquivos/brastemp.jpg" border="0"></a></div>
+          </div>
+          <div class="owl-item" style="width: 181px;">
+            <div class="bannerLazy x65 loaded" data-oas-position="x65"><a class="banner-item" href="https://oasc14.247realmedia.com/RealMedia/ads/click_lx.ads/wm-desktop/eletrodomesticos/L27/745766805/x65/Walmart/wm-eletrodomesticos-marcas/cs-lg-0104.html/1?utmi_p=wm-desktop/eletrodomesticos&amp;utmi_cp=wm-eletrodomesticos-marcas&amp;utmi_pc=x65-cs-lg-0104"><img src="https://static.wmobjects.com.br/arquivos/140x64_lg.png" border="0"></a></div>
+          </div>
+          <div class="owl-item" style="width: 181px;">
+            <div class="bannerLazy x64 loaded" data-oas-position="x64"><a class="banner-item" href="https://oasc14.247realmedia.com/RealMedia/ads/click_lx.ads/wm-desktop/eletrodomesticos/L27/1544455760/x64/Walmart/wm-eletrodomesticos-marcas/cm-samsung-2612.html/1?utmi_p=wm-desktop/eletrodomesticos&amp;utmi_cp=wm-eletrodomesticos-marcas&amp;utmi_pc=x64-cm-samsung-2612"><img src="https://static.wmobjects.com.br/arquivos/140x64_samsung-2612.png" border="0"></a></div>
+          </div>
+          <div class="owl-item" style="width: 181px;">
+            <div class="bannerLazy x59 loaded" data-oas-position="x59"><a class="banner-item" href="https://oasc14.247realmedia.com/RealMedia/ads/click_lx.ads/wm-desktop/eletrodomesticos/L27/2078376959/x59/Walmart/wm-eletrodomesticos-marcas/cm-consul.html/1?utmi_p=wm-desktop/eletrodomesticos&amp;utmi_cp=wm-eletrodomesticos-marcas&amp;utmi_pc=x59-cm-consul"><img src="https://www.walmart.com.br/arquivos/140x64_consul.JPG" border="0"></a></div>
+          </div>
+          <div class="owl-item" style="width: 181px;">
+            <div class="bannerLazy x67" data-oas-position="x67"></div>
+          </div>
+          <div class="owl-item" style="width: 181px;">
+            <div class="bannerLazy x68" data-oas-position="x68"></div>
+          </div>
+        </div>
+      </div>
+      <div class="owl-controls clickable">
+        <div class="owl-buttons">
+          <div class="owl-prev"></div>
+          <div class="owl-next"></div>
+        </div>
+      </div>
+    </div>
+    
+    
+      
+    
+  
+    <div id="category-description" class="category-description">
+      <article class="description-content more-content">
+        <div class="description-main">
+          <h2>Eletrodomésticos </h2>
+          <p>Aqui você encontra linhas completas de fogões, <a href="https://www.walmart.com.br/categoria/eletrodomesticos/refrigeradores/?fq=c:144/148/" title="Geladeiras">geladeiras</a>, freezers, climatizadores de ar e outras opções para sua casa ficar mais aconchegante e sua cozinha um lugar especial onde as receitas mais incríveis ganham vida. Não deixe de conferir eletrodomésticos pelo <a href="https://www.walmart.com.br/especial/liquida-geral?fq=H:28407" title="Liquida Geral">menor preço</a> no Walmart.com</p>
+          <p><strong>Micro-ondas: escolha de acordo com a função</strong></p>
+          <p>O micro-ondas deve ser escolhido pensando nas funções mais utilizadas em sua cozinha. Para trabalhar em conjunto com o freezer, use a função de descongelamento. Para quem utiliza como acessório no preparo de receitas, a <a href="http://www.walmart.com.br/categoria/eletrodomesticos/micro-ondas/?fq=C:144/147/&amp;fq=spec_fct_60086:Fun%C3%A7%C3%A3o%20Grill">função grill</a> é indispensável. E, para quem precisa de agilidade e uso simples, funções pré-programadas permitem concentrar uma série de atividades em um único botão! </p>
+          <p><strong>Refrigeradores e freezers: atenção ao espaço, funções e congelamento </strong></p>
+          <p>Sua próxima <strong>geladeira</strong> pode ser o espaçoso side by side ou ainda um inverse, que simplifica o uso colocando as prateleiras que você mais utiliza na parte de cima. Com os modelos <a href="http://www.walmart.com.br/categoria/eletrodomesticos/refrigeradores/?fq=C:144/148/&amp;fq=spec_fct_60058:Frost%20Free">frost free</a> você não precisa descongelar nunca. O dispenser de água e gelo ajuda a economizar energia, pois a porta permanece fechada por mais tempo. Os compartimentos de congelamento rápido deixam as bebidas no ponto em alguns minutos. Já os freezers horizontais e verticais são ideais para os congelados. </p>
+        </div>
+        <div class="description-complement">
+          <p><strong>Fogões, cooktops, fornos e lava-louças: perfeitos para suas receitas</strong></p>
+          <p>O <a href="http://www.walmart.com.br/categoria/eletrodomesticos/fogoes/?fq=C:144/155/"><strong>fogão</strong></a> é ainda uma solução completa: com acendimento automático e forno cheio de recursos como timer, grill e sistema autolimpante, bocas de tamanhos variados, válvulas de segurança para cortar o gás, entre outras funções importantes. </p>
+          <p>Se você optar pelo <a href="http://www.walmart.com.br/categoria/eletrodomesticos/cooktops/?fq=C:144/3083/">cooktop</a> saiba que os modelos por indução só funcionam com panelas magnéticas especiais, diferente dos modelos a gás ou elétricos. Você precisará escolher um forno independente de mesa, de embutir, a gás ou elétrico. </p>
+          <p>Completa o conjunto uma boa lava-louça, que deve poder dar conta da quantidade de serviços (pratos, xícaras e talheres) de um almoço de domingo em família. </p>
+          <p><strong>Área de lazer combina com churrasco</strong></p>
+          <p>Ainda quando o assunto são as receitas, um bom churrasco hoje pode contar com a versatilidade de churrasqueiras elétricas, a potência dos modelos a gás ou a tradição e sabor de churrasqueiras a carvão.<strong> </strong></p>
+          <p><strong>Adegas: um toque de sofisticação </strong></p>
+          <p>A <a href="http://www.walmart.com.br/categoria/eletrodomesticos/adegas-para-vinho/?fq=C:144/150/">adega climatizada</a> mantém seus vinhos na temperatura certa para consumo e ajuda a preservar e incrementar a experiência de sua degustação.</p>
+          <p> </p>
+          <p><strong>Coifas e depuradores: sua cozinha sempre limpa</strong></p>
+          <p>Os depuradores funcionam como filtros que captam a gordura e a armazenam em seu próprio sistema. Já as <a href="http://www.walmart.com.br/categoria/eletrodomesticos/coifas-e-depuradores/?fq=C:144/1310/&amp;fq=spec_fct_62647:Coifa">coifas</a> precisam de saída de ar. Ambos têm designs modernos e funções que indicam o momento de manutenção ou troca de peças. </p>
+          <p><strong>Área de serviço de primeira</strong></p>
+          <p>Quando o assunto é <a href="http://www.walmart.com.br/categoria/eletrodomesticos/lavadoras-de-roupas/?fq=C:144/151/"><strong>máquina de lavar</strong></a>, há opções básicas como o prático <strong>tanquinho</strong>, indicado para quem lava pouca roupa, assim como as <strong>máquinas automáticas</strong>, que funcionam sozinhas durante o dia inteiro para quando você chegar em casa encontrar as roupas já limpinhas, ou as <strong>lava e seca</strong>, que, além de todas as facilidades dos programas automáticos, ainda realizam a completa secagem dos tecidos. Para complementar a área de serviços, uma <strong>secadora de roupas</strong> deixa suas roupas secas rapidamente. </p>
+          <p><strong>Climatize o seu ambiente</strong></p>
+          <p>Na hora de escolher sua forma de climatizar, leve em conta que a os de janela são mais simples de instalar, no entanto, os <a href="http://www.walmart.com.br/categoria/eletrodomesticos/split/?fq=C:144/145/3040/">splits</a> são bem mais silenciosos. Já os portáteis são práticos e podem ser utilizados em vários cômodos da casa. Como solução mais em conta, os climatizadores amenizam a temperatura em cidades não muito quentes. Você pode optar também por um <a href="https://www.walmart.com.br/categoria/eletrodomesticos/ar-condicionado/?fq=C:144/145/" title="Ar Condicionado">ar condicionado</a> para refrescar sua casa!</p>
+        </div>
+        <div class="description-see-more"><button class="btn-see-more"><span class="label">Mostrar mais [+]</span></button></div>
+      </article>
+    </div>
+  </div>
+</div>
+<div class="clear"></div>
+
+<script src="//static.wmobjects.com.br/webstore/js/global.min.js?d1c7bb68f0219212ef8818d1f42e442a"></script>
+<script src="//static.wmobjects.com.br/webstore/js/department.min.js"></script>

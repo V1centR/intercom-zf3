@@ -25,17 +25,14 @@ class CategoryController extends AbstractActionController
         $this->entityManager = $entityManager;
     }
     
-    public function indexAction() {       
-        
+    public function indexAction() {
         
         $conn = $this->entityManager->getConnection();
         $categoryContainer = [];
         $criteria = [];
-        $uniqueSql = '';
         $set = 0;
 
         // get produtos #############
-//        $sql = "SELECT * FROM get_categoria WHERE idCategoria = '1'";
         $sql = "SELECT
                     g.cat_pai_id,
                     g.nome,
@@ -72,9 +69,7 @@ class CategoryController extends AbstractActionController
         $subCategory = $stmt->fetchAll();
         
         $categoryContainer['category'] = $category;
-        $categoryContainer['subCategory'] = $subCategory;
-        
-        
+        $categoryContainer['subCategory'] = $subCategory;        
         
         
         $view = new ViewModel([
